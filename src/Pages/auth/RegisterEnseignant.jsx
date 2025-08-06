@@ -57,9 +57,7 @@ const handleFileChange = (e) => {
       >
         {/* Partie gauche (Présentation) */}
         <Grid
-          sx={{
-            backgroundColor: '#cce7f5',
-            display: 'flex',
+          sx={{backgroundColor: '#cce7f5',display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',

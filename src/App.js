@@ -14,21 +14,25 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Page d'accueil directement visible sans login */}
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+
+        {/* Pages de création de compte */}
         <Route path="/register" element={<RegisterEnseignant />} />
         <Route path="/registerEtudiant" element={<RegisterEtudiant />} />
-        {/* Route avec Layout comme wrapper */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
+
+        {/* Pages protégées sous Layout */}
+        <Route path="/app" element={<Layout />}>
           <Route path="AddQuizDevoirs" element={<AddQuizDevoir />} />
-           <Route path="EvaluerQuizDevoirs" element={<EvaluateQuizDevoirs />} />
-           <Route path="Ressources" element={<Ressources />} />
-            <Route path="visioconférence" element={<Visioconférence />} />
-            <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
-          {/* Ajoute ici d'autres routes si nécessaire */}
+          <Route path="EvaluerQuizDevoirs" element={<EvaluateQuizDevoirs />} />
+          <Route path="Ressources" element={<Ressources />} />
+          <Route path="visioconférence" element={<Visioconférence />} />
+          <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
         </Route>
-        {/* Redirection ou page 404 */}
-        <Route path="*" element={<Navigate to="/home" />} />
+
+        {/* Redirection en cas d'erreur */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );

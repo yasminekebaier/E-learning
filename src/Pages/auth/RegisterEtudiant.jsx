@@ -53,15 +53,16 @@ const [formData, setFormData] = useState({
 
   return (
 
-    <Grid sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, bgcolor: '#C6EFF2',justifyContent:"space-between" }}>
+    <Grid sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, bgcolor: '#C6EFF2'
+    ,justifyContent:"space-between" ,height: '100vh'}}>
       
       {/* Left panel */}
-      <Box sx={{  width: '40%', p: 4, display: 'flex', flexDirection: 'column', justifyContent: 'center',marginLeft:"30px" ,alignItems:"center"}}>
-          <Box
-                    component="img"
+      <Box sx={{  width: '40%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center',marginLeft:"30px", 
+       alignItems:"center"}}>
+          <Box component="img"
                     src={loginEtudiant}
                     alt="illustration"
-                    sx={{ width: '70%', maxWidth: 250, mb: 3 }}
+                    sx={{ width: '70%', maxWidth: 250 ,border:"2 px solid red"}}
                   />
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           Bienvenue sur <span style={{ color: '#4C5BD4' }}>KeySafe</span> 🎓
@@ -87,7 +88,15 @@ const [formData, setFormData] = useState({
       </Box>
 
       {/* Right panel */}
-      <Box sx={{ width:"60%", p: 4 ,bgcolor: 'white'}}>
+      <Box   sx={{
+    width: "60%",
+    p: 4,
+    bgcolor: 'white',
+    height: '100vh', // ou 'calc(100vh - marge)'
+    overflowY: 'auto', // pour scroller si le contenu dépasse
+    boxSizing: 'border-box'
+  }}
+>
         <Paper elevation={4} sx={{ p: 4, borderRadius: 4 }}>
           
           {/* Stepper en haut */}
@@ -117,19 +126,23 @@ const [formData, setFormData] = useState({
                 <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
                 <Grid item xs={12} md={6} width={"45%"}>
                   <TextField label="Nom et prénom du parent" fullWidth required
+                  size="small" InputProps={{sx: {borderRadius: '12px'}}}
                   onChange={(e) => setFormData({ ...formData, nomParent: e.target.value })} />
                 </Grid>
                 <Grid item xs={12} md={6} width={"45%"}>
                   <TextField label="Nom et prénom de l'élève" fullWidth required
+                  size="small" InputProps={{sx: {borderRadius: '12px'}}}
                   onChange={(e) => setFormData({ ...formData, nomEleve: e.target.value })} />
                 </Grid>
                 </Box>
                 <Grid item xs={12} md={6}>
-                  <TextField label="Numéro de téléphone de parent" fullWidth required placeholder="+216 21 345 678" 
+                  <TextField label="Numéro de téléphone de parent" fullWidth required placeholder="+216 21 345 678"
+                  size="small" InputProps={{sx: {borderRadius: '12px'}}} 
                   onChange={(e) => setFormData({ ...formData, emailParent: e.target.value })}/>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <TextField label="Email de parent" type="email" fullWidth required placeholder="exemple@exemple.com"
+                  size="small" InputProps={{sx: {borderRadius: '12px'}}}
                   onChange={(e) => setFormData({ ...formData, telParent: e.target.value })} />
                 </Grid>
                 <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
@@ -139,7 +152,9 @@ const [formData, setFormData] = useState({
                     type={showPassword ? 'text' : 'password'}
                     fullWidth
                     required
+                    size="small" 
                     InputProps={{
+                      sx: {borderRadius: '12px'},
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton onClick={handleClickShowPassword} edge="end">
@@ -157,7 +172,9 @@ const [formData, setFormData] = useState({
                     type={showConfirmPassword ? 'text' : 'password'}
                     fullWidth
                     required
+                     size="small" 
                     InputProps={{
+                      sx: {borderRadius: '12px'},
                       endAdornment: (
                         <InputAdornment position="end">
                           <IconButton onClick={handleClickShowConfirmPassword} edge="end">
@@ -174,9 +191,11 @@ const [formData, setFormData] = useState({
                   <TextField
                     label="Date de naissance de l'élève"
                     type="date"
+                     size="small" InputProps={{sx: {borderRadius: '12px'}}}
                     InputLabelProps={{ shrink: true }}
                     fullWidth
                     required
+                    
                  onChange={(e) => setFormData({ ...formData, naissance: e.target.value })} />
                 </Grid>
                 <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
@@ -186,6 +205,7 @@ const [formData, setFormData] = useState({
                     label="Situation de l'élève"
                     fullWidth
                     required
+                     size="small" InputProps={{sx: {borderRadius: '12px'}}}
                     onChange={(e) => setFormData({ ...formData, situation: e.target.value })}
                   >
                     {situations.map((option) => (
@@ -199,6 +219,7 @@ const [formData, setFormData] = useState({
                     label="Niveau scolaire"
                     fullWidth
                     required
+                     size="small" InputProps={{sx: {borderRadius: '12px'}}}
                     onChange={(e) => setFormData({ ...formData, niveau: e.target.value })}
                   >
                     {niveaux.map((option) => (
@@ -209,7 +230,7 @@ const [formData, setFormData] = useState({
                 </Box>
               </Grid>
                        {/* Boutons de navigation */}
-    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+    <Box sx={{ mt: 7, display: 'flex', justifyContent: 'space-between' }}>
       <Button
         variant="contained"
         onClick={handleBack}
@@ -217,6 +238,7 @@ const [formData, setFormData] = useState({
           backgroundColor: '#ffc1cc',
           color: '#000',
           borderRadius: '20px',
+          textTransform:"none",
           px: 4,
           fontWeight: 'bold',
           '&:hover': { backgroundColor: '#ffb0b8' }
@@ -232,6 +254,7 @@ const [formData, setFormData] = useState({
           backgroundColor: '#ffc1cc',
           color: '#000',
           borderRadius: '20px',
+          textTransform:"none",
           px: 4,
           fontWeight: 'bold',
           '&:hover': { backgroundColor: '#ffb0b8' }
@@ -251,26 +274,41 @@ const [formData, setFormData] = useState({
         Validation des informations
       </Typography>
 
-      <Grid container spacing={2} sx={{display:"flex",flexDirection:"column"}}>
-        {[
-          { label: "Nom et prénom du parent", value: formData.nomParent },
-          { label: "Nom et prénom de l'élève", value: formData.nomEleve },
-          { label: "Email du parent", value: formData.emailParent },
-          { label: "Numéro de téléphone", value: formData.telParent },
-          { label: "Situation de l'élève", value: formData.situation },
-          { label: "Date de naissance de l'élève", value: formData.naissance },
-          { label: "Niveau scolaire", value: formData.niveau }
-        ].map((item, index) => (
-          <React.Fragment key={index}>
-            <Grid item xs={6}>
-              <Typography fontWeight="bold" color="#080D50">{item.label}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography color="#234aa0">{item.value || '—'}</Typography>
-            </Grid>
-          </React.Fragment>
-        ))}
-      </Grid>
+ <Grid container spacing={2}>
+  {[
+    { label: "Nom et prénom du parent :", value: formData.nomParent },
+    { label: "Nom et prénom de l'élève :", value: formData.nomEleve },
+    { label: "Email du parent :", value: formData.emailParent },
+    { label: "Numéro de téléphone :", value: formData.telParent },
+    { label: "Situation de l'élève :", value: formData.situation },
+    { label: "Date de naissance de l'élève :", value: formData.naissance },
+    { label: "Niveau scolaire :", value: formData.niveau }
+  ].map((item, index) => (
+    <Grid
+      key={index}
+      item
+      xs={12}
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '10px 15px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        border: '1px solid #ccc'
+      }}
+    >
+      <Typography fontWeight="bold" color="#080D50">
+        {item.label}
+      </Typography>
+      <Typography color="#234aa0">
+        {item.value || '—'}
+      </Typography>
+    </Grid>
+  ))}
+</Grid>
+
+
 
       <Box mt={4} px={2}>
         <Typography variant="subtitle2" color="#234aa0" fontWeight="bold" gutterBottom>
@@ -293,6 +331,7 @@ const [formData, setFormData] = useState({
           color: '#000',
           borderRadius: '20px',
           px: 4,
+          textTransform:"none",
           fontWeight: 'bold',
           '&:hover': { backgroundColor: '#ffb0b8' }
         }}
@@ -309,6 +348,7 @@ const [formData, setFormData] = useState({
           borderRadius: '20px',
           px: 4,
           fontWeight: 'bold',
+          textTransform:"none",
           '&:hover': { backgroundColor: '#ffb0b8' }
         }}
       >
