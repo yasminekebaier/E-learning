@@ -3,6 +3,7 @@ import { Box, Button, Container, Grid, Typography, TextField, Paper } from "@mui
 import keysafe from '../assets/keysafe.jpg';
 import apropos from '../assets/apropos.png';
 import NosServices from "../Components/NosServices";
+import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <Box sx={{minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
@@ -24,7 +25,8 @@ const Home = () => {
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
           <Button variant="contained" sx={{ bgcolor: "#ee983dff", color: "white",textTransform:"none",borderRadius:"20px" }}>Inscription</Button>
-          <Button variant="outlined" sx={{borderRadius:"20px", borderColor: "#ee983dff", color: "#ee983dff",textTransform:"none" }}>Connexion</Button>
+          <Link to={"/LoginEtudiant"}><Button variant="outlined" sx={{borderRadius:"20px", borderColor: "#ee983dff", color: "#ee983dff",textTransform:"none" }}>
+            Connexion</Button></Link>
         </Box>
       </Box>
 

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Grid,
-  Typography,
+import { useDispatch } from 'react-redux';
+import {Box,Grid,Typography,
   TextField,
   Button,
   InputAdornment,
@@ -17,27 +15,48 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import loginEtudiant from "../../assets/loginEtudiant.png";
 import { GridCheckCircleIcon } from '@mui/x-data-grid';
+import { RegisterAction } from '../../redux/actions/userActions';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-const situations = ['Enfant scolarisé', 'Enfant non scolarisé'];
-const niveaux = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
+const situations = ["SCOLARISEE","NON_SCOLARISEE"];
+const niveaux = [" PRIMAIRE","SECONDAIRE","AUTRE"];
 
 const steps = ['Info élève', 'Vérification', 'Paiement'];
 
 const RegisterEtudiant = () => {
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 const [formData, setFormData] = useState({
-  nomParent: '',
-  nomEleve: '',
+  nom_prenom_parent: '',
+  nom_prenom_eleve: '',
   emailParent: '',
-  telParent: '',
+  phone: '',
   password: '',
   confirmPassword: '',
-  naissance: '',
-  situation: '',
-  niveau: ''
+  date_naissance: '',
+  Situation_Eleve : '',
+  Niveau_SCOLAIRE: ''
 });
+const handleRegister = async () => {
+  if (formData.password  !== formData.confirmPassword) {
+    alert("Les mots de passe ne correspondent pas !");
+    return;
+  }
+
+  try {
+    console.log(formData)
+    const resultAction = await dispatch(RegisterAction(formData));
+    const result = unwrapResult(resultAction); // optionnel si tu veux accéder directement aux données
+
+    console.log("Inscription réussie :", result);
+    // ici tu peux rediriger, afficher un message de succès, etc.
+  } catch (err) {
+    console.error("Erreur lors de l'inscription :", err);
+    alert("Une erreur est survenue. Veuillez réessayer.");
+  }
+};
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
@@ -76,7 +95,7 @@ const [formData, setFormData] = useState({
         </Typography>
         <ul style={{ paddingLeft: 20 }}>
           <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Accès à des jeux et exercices pour apprendre à lire</li>
-          <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Un parcours personnalisé selon ton niveau</li>
+          <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Un parcours personnalisé selon ton Niveau_SCOLAIRE</li>
           <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} />Apprends tout en t’amusant !</li>
         </ul>
         </Box>
@@ -127,12 +146,12 @@ const [formData, setFormData] = useState({
                 <Grid item xs={12} md={6} width={"45%"}>
                   <TextField label="Nom et prénom du parent" fullWidth required
                   size="small" InputProps={{sx: {borderRadius: '12px'}}}
-                  onChange={(e) => setFormData({ ...formData, nomParent: e.target.value })} />
+                  onChange={(e) => setFormData({ ...formData, nom_prenom_parent: e.target.value })} />
                 </Grid>
                 <Grid item xs={12} md={6} width={"45%"}>
                   <TextField label="Nom et prénom de l'élève" fullWidth required
                   size="small" InputProps={{sx: {borderRadius: '12px'}}}
-                  onChange={(e) => setFormData({ ...formData, nomEleve: e.target.value })} />
+                  onChange={(e) => setFormData({ ...formData, nom_prenom_eleve: e.target.value })} />
                 </Grid>
                 </Box>
                 <Grid item xs={12} md={6}>
@@ -143,7 +162,7 @@ const [formData, setFormData] = useState({
                 <Grid item xs={12} md={6}>
                   <TextField label="Email de parent" type="email" fullWidth required placeholder="exemple@exemple.com"
                   size="small" InputProps={{sx: {borderRadius: '12px'}}}
-                  onChange={(e) => setFormData({ ...formData, telParent: e.target.value })} />
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
                 </Grid>
                 <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
                 <Grid width={"45%"} xs={12} md={6} >
@@ -163,7 +182,7 @@ const [formData, setFormData] = useState({
                         </InputAdornment>
                       )
                     }}
-                 onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+                 onChange={(e) => setFormData({ ...formData, password : e.target.value })} />
                 </Grid>
                 
                 <Grid width={"45%"} item xs={12} md={6}>
@@ -189,24 +208,24 @@ const [formData, setFormData] = useState({
                 
                 <Grid item xs={12} md={6}>
                   <TextField
-                    label="Date de naissance de l'élève"
+                    label="Date de date_naissance de l'élève"
                     type="date"
                      size="small" InputProps={{sx: {borderRadius: '12px'}}}
                     InputLabelProps={{ shrink: true }}
                     fullWidth
                     required
                     
-                 onChange={(e) => setFormData({ ...formData, naissance: e.target.value })} />
+                 onChange={(e) => setFormData({ ...formData, date_naissance: e.target.value })} />
                 </Grid>
                 <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
                 <Grid width={"45%"} item xs={12} md={3}>
                   <TextField
                     select
-                    label="Situation de l'élève"
+                    label="Situation_Eleve  de l'élève"
                     fullWidth
                     required
                      size="small" InputProps={{sx: {borderRadius: '12px'}}}
-                    onChange={(e) => setFormData({ ...formData, situation: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, Situation_Eleve : e.target.value })}
                   >
                     {situations.map((option) => (
                       <MenuItem key={option} value={option}>{option}</MenuItem>
@@ -216,7 +235,7 @@ const [formData, setFormData] = useState({
                 <Grid width={"45%"}  item xs={12} md={3}>
                   <TextField
                     select
-                    label="Niveau scolaire"
+                    label="Niveau_SCOLAIRE scolaire"
                     fullWidth
                     required
                      size="small" InputProps={{sx: {borderRadius: '12px'}}}
@@ -431,20 +450,21 @@ const [formData, setFormData] = useState({
         <span style={{ marginRight: 8 }}>‹</span> Précédent
       </Button>
 
-      <Button
-        variant="contained"
-        onClick={() => alert('Paiement validé !')}
-        sx={{
-          backgroundColor: '#ffc1cc',
-          color: '#000',
-          borderRadius: '20px',
-          px: 4,
-          fontWeight: 'bold',
-          '&:hover': { backgroundColor: '#ffb0b8' }
-        }}
-      >
-        Valider <span style={{ marginLeft: 8 }}>›</span>
-      </Button>
+     <Button
+  variant="contained"
+  onClick={handleRegister}
+  sx={{
+    backgroundColor: '#ffc1cc',
+    color: '#000',
+    borderRadius: '20px',
+    px: 4,
+    fontWeight: 'bold',
+    '&:hover': { backgroundColor: '#ffb0b8' }
+  }}
+>
+  Valider <span style={{ marginLeft: 8 }}>›</span>
+</Button>
+
     </Box>
   </>
 )}

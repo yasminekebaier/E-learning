@@ -9,6 +9,8 @@ import RegisterEnseignant from './Pages/auth/RegisterEnseignant';
 import Visioconférence from './Pages/VisioConférence/Visioconférence';
 import VisioconférenceEtudiant from './Pages/VisioConférence/VisioconférenceEtudiant';
 import RegisterEtudiant from './Pages/auth/RegisterEtudiant';
+import LoginEtudiant from './Pages/auth/LoginEtudiant';
+import Profile from './Pages/Profile';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         {/* Pages de création de compte */}
         <Route path="/register" element={<RegisterEnseignant />} />
         <Route path="/registerEtudiant" element={<RegisterEtudiant />} />
+        <Route path="/LoginEtudiant" element={<LoginEtudiant/>} />
 
         {/* Pages protégées sous Layout */}
         <Route path="/app" element={<Layout />}>
@@ -29,6 +32,8 @@ function App() {
           <Route path="Ressources" element={<Ressources />} />
           <Route path="visioconférence" element={<Visioconférence />} />
           <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
+          <Route path="profile" element={<Profile />} />
+          
         </Route>
 
         {/* Redirection en cas d'erreur */}
