@@ -11,32 +11,68 @@ import VisioconférenceEtudiant from './Pages/VisioConférence/VisioconférenceE
 import RegisterEtudiant from './Pages/auth/RegisterEtudiant';
 import LoginEtudiant from './Pages/auth/LoginEtudiant';
 import Profile from './Pages/Profile';
+import MesDevoirs from './Pages/Devoirs/MesDevoirs';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Page d'accueil directement visible sans login */}
+        {/* Pages publiques */}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-
-        {/* Pages de création de compte */}
         <Route path="/register" element={<RegisterEnseignant />} />
         <Route path="/registerEtudiant" element={<RegisterEtudiant />} />
-        <Route path="/LoginEtudiant" element={<LoginEtudiant/>} />
+        <Route path="/LoginEtudiant" element={<LoginEtudiant />} />
 
-        {/* Pages protégées sous Layout */}
-        <Route path="/app" element={<Layout />}>
-          <Route path="AddQuizDevoirs" element={<AddQuizDevoir />} />
-          <Route path="EvaluerQuizDevoirs" element={<EvaluateQuizDevoirs />} />
+        {/* Pages protégées */}
+        <Route
+          path="/app"
+          element={
+            <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE"]}>
+              <Layout />
+            </PrivateRoute>
+          }
+        >
+          {/* Sous-pages accessibles pour tous les rôles */}
           <Route path="Ressources" element={<Ressources />} />
           <Route path="visioconférence" element={<Visioconférence />} />
           <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
-          <Route path="profile" element={<Profile />} />
-          
+          <Route path="profile" element={ <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE"]}>
+               <Profile />
+              </PrivateRoute>} />
+
+          {/* Sous-pages réservées aux enseignants */}
+          <Route
+            path="AddQuizDevoirs"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
+                <AddQuizDevoir />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Sous-pages réservées aux étudiants */}
+          <Route
+            path="EvaluerQuizDevoirs"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
+                <EvaluateQuizDevoirs />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="devoirs"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+                <MesDevoirs />
+              </PrivateRoute>
+            }
+          />
         </Route>
 
-        {/* Redirection en cas d'erreur */}
+        {/* Redirection en cas de route inconnue */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

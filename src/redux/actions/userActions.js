@@ -1,6 +1,6 @@
 import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
-import qs from "qs"; // npm install qs
 import axios from "axios";
+
 export const RegisterAction = createAsyncThunk(
     "auth/register",
     async (formData, {}) => {
@@ -20,7 +20,6 @@ export const RegisterAction = createAsyncThunk(
     }
   );
 
-
 export const LoginAction = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
@@ -28,13 +27,10 @@ export const LoginAction = createAsyncThunk(
       console.log("[FRONT] LoginAction → Données envoyées :", formData);
       const response = await axios.post(
         "http://localhost:8085/auth/signin",
-        qs.stringify({
-          username: formData.username,
-          password: formData.password
-        }),
+      formData,
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json"
           }
         }
       );
@@ -46,30 +42,42 @@ export const LoginAction = createAsyncThunk(
     }
   }
 );
- export const FetchUserProfile = createAsyncThunk(
-    "user/fetchProfile",
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await axios.get(
-                "http://localhost:8085/User/getone/",
-                {
-                    withCredentials: true,
-                }
-            );
-         
-            return response.data;
-        } catch (error) {
-            // Rejeter avec un message d'erreur clair en cas d'échec
-            const errorMessage = error.response?.data?.message || "Impossible de récupérer le profil.";
-            return rejectWithValue(errorMessage);
+export const FetchUserProfile = createAsyncThunk(
+  "user/fetchProfile",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const token = localStorage.getItem("token");
+      const userId = state.user.CurrentUser?.id; // récupère l'ID de l'utilisateur connecté
+
+      if (!userId) {
+        return rejectWithValue("Utilisateur non connecté");
+      }
+
+      const response = await axios.get(
+        `http://localhost:8085/User/getone/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Impossible de récupérer le profil.";
+      return rejectWithValue(errorMessage);
     }
+  }
 );
+
  export const LogoutAction = createAsyncThunk(
       "user/logout",
       async (_, { rejectWithValue }) => {
         try {
           const token = localStorage.getItem("token");
+          console.log("📌 Token envoyé pour le logout:", token);
           const response = await axios.get("http://localhost:8085/auth/signout", {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -170,7 +170,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
               borderRadius: '20px',
               textTransform: 'none',
               fontWeight: 'bold',
-              '&:hover': { backgroundColor: '#ffb0b8' }
+              '&:hover': { backgroundColor: 'orange' }
             }}
           >
             Se connecter
