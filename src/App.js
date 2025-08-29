@@ -13,6 +13,7 @@ import LoginEtudiant from './Pages/auth/LoginEtudiant';
 import Profile from './Pages/Profile';
 import MesDevoirs from './Pages/Devoirs/MesDevoirs';
 import PrivateRoute from './Components/PrivateRoute';
+import MesMatiére from './Pages/Matiéres/MesMatiére';
 
 function App() {
   return (
@@ -70,7 +71,16 @@ function App() {
               </PrivateRoute>
             }
           />
+            <Route
+            path="matieres"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+                <MesMatiére />
+              </PrivateRoute>
+            }/>
         </Route>
+       
+        
 
         {/* Redirection en cas de route inconnue */}
         <Route path="*" element={<Navigate to="/" />} />

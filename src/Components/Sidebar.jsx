@@ -34,9 +34,11 @@ const Sidebar = ({ onMenuClick }) => {
     { text: t('Gérer des quiz et devoirs'), icon: <AssignmentIcon />, path: '/app/AddQuizDevoirs', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Evaluer des quiz et devoirs'), icon: <AssignmentTurnedInIcon />, path: '/app/EvaluerQuizDevoirs', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('VisioConférence'), icon: <AssignmentTurnedInIcon />, path: '/app/visioconférence', roles: ['ROLE_ENSEIGNANT'] },
+    { text: t('Mes devoirs'), icon: <PictureInPictureIcon />, path: '/app/devoirs', roles: ['ROLE_ELEVE'] },
+    { text: t('Mes matiéres'), icon: <PictureInPictureIcon />, path: '/app/matieres', roles: ['ROLE_ELEVE'] },
     { text: t('Compte'), icon: <AccountCircleIcon />, path: '/app/profile', roles: ['ROLE_ENSEIGNANT','ROLE_ELEVE'] },
     { text: t('Paramétre'), icon: <SettingsIcon />, path: '/app/Paramétre', roles: ['ROLE_ENSEIGNANT','ROLE_ELEVE'] },
-    { text: t('Mes devoirs'), icon: <PictureInPictureIcon />, path: '/app/devoirs', roles: ['ROLE_ELEVE'] },
+    
   ];
 
   // Filtrer le menu selon le rôle de l'utilisateur

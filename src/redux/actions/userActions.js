@@ -91,5 +91,24 @@ export const FetchUserProfile = createAsyncThunk(
         }
       }
     );
+     export const ConfirmUser = createAsyncThunk(
+      "user/logout",
+      async (_, { rejectWithValue }) => {
+        try {
+          const token = localStorage.getItem("token");
+          console.log("📌 Token envoyé pour le logout:", token);
+          const response = await axios.get("http://localhost:8085/User/confirm?email=testensignant@gmail.com", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        
+        );
+          return response.data;
+        } catch (error) {
+          return rejectWithValue(error.response?.data?.message || error.message);
+        }
+      }
+    );
 
 
