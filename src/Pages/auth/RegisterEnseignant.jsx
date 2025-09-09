@@ -16,23 +16,30 @@ import {
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import loginamelll from "../../assets/loginamell.png";
-const specialties = ['Français', 'Mathématiques', 'Sciences', 'Anglais', 'Arabe'];
+import { RegisterEnseignantAction } from '../../redux/actions/userActions';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+
+const specialties = [" MATH","PHYSICS","CHEMISTRY","BIOLOGY","INFORMATICS",
+    "HISTORY",
+    "LITERATURE"];
 const steps = ['Informations de l’enseignant', 'Vérification'];
 
 const RegisterEnseignant = () => {
+   const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => setActiveStep((prev) => prev + 1);
   const handleBack = () => setActiveStep((prev) => prev - 1);
   const [formData, setFormData] = useState({
   fullName: '',
-  matricule: '1234567890',
+  Matricule: '',
   specialty: '',
   phone: '',
   email: '',
   password: '',
   confirmPassword: '',
-  cvFile: null,
+  file: null,
 });
 
 const handleChange = (e) => {
@@ -41,8 +48,45 @@ const handleChange = (e) => {
 };
 
 const handleFileChange = (e) => {
-  setFormData({ ...formData, cvFile: e.target.files[0] });
+  setFormData({ ...formData, file: e.target.files[0] });
 };
+const handleRegister = async () => {
+  if (formData.password !== formData.confirmPassword) {
+    alert("Les mots de passe ne correspondent pas !");
+    return;
+  }
+
+  try {
+    const data = new FormData();
+
+    // Ajouter les champs séparément pour Spring Boot
+    data.append("nom_prenom_ensignant", formData.fullName);
+    data.append("matricule", formData.Matricule);
+    data.append("speciality", formData.specialty);
+    data.append("password", formData.password);
+    data.append("phone", formData.phone);
+    data.append("email", formData.email);
+
+    // Ajouter le fichier CV
+    if (formData.file) {
+      data.append("file", formData.file);
+    }
+
+    console.log("Données envoyées :", [...data.entries()]);
+
+    const resultAction = await dispatch(RegisterEnseignantAction(data));
+    const result = unwrapResult(resultAction);
+
+    console.log("Inscription réussie :", result);
+    alert("Inscription réussie !");
+  } catch (err) {
+    console.error("Erreur lors de l'inscription :", err);
+    alert("Une erreur est survenue. Veuillez réessayer.");
+  }
+};
+
+
+
 
 
   return (
@@ -131,7 +175,7 @@ const handleFileChange = (e) => {
           {activeStep === 0 && (
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField label="Nom et prénom *" name="fullName" value={formData.fullName} onChange={handleChange} fullWidth />
-              <TextField label="Matricule *" name="matricule" value={formData.matricule} onChange={handleChange} fullWidth />
+              <TextField label="Matricule *" name="Matricule" value={formData.matricule} onChange={handleChange} fullWidth />
               <FormControl fullWidth>
                 <InputLabel>Spécialité(s) *</InputLabel>
                 <Select name="specialty" value={formData.specialty} onChange={handleChange} label="Spécialité(s)">
@@ -166,7 +210,7 @@ const handleFileChange = (e) => {
                 <Typography><strong>Numéro de téléphone:</strong> {formData.phone}</Typography>
                 <Typography><strong>Email académique:</strong> {formData.email}</Typography>
                 <Typography><strong>Mot de passe:</strong> {formData.password}</Typography>
-                <Typography><strong>CV:</strong> {formData.cvFile ? formData.cvFile.name : 'Non fourni'}</Typography>
+                <Typography><strong>CV:</strong> {formData.file ? formData.file.name : 'Non fourni'}</Typography>
               </Box>
               <Box mt={2} bgcolor="#e3f2fd" p={2} borderRadius="8px">
                 <Typography variant="body2">
@@ -174,8 +218,10 @@ const handleFileChange = (e) => {
                 </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
-                <Button variant="outlined" onClick={handleBack}>← Précédent</Button>
-                <Button variant="contained" color="primary">Valider</Button>
+                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#080D50",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
+                <Button variant="contained" color="#080D50"
+                 onClick={handleRegister}
+                 sx={{backgroundColor:"#080D50",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
               </Box>
             </>
           )}

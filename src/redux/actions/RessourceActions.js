@@ -24,7 +24,7 @@ export const fetchRessources = createAsyncThunk(
       }
     }
   }
-);
+)
 export const AddRessources = createAsyncThunk(
   "Ressources/createRessources",
   async (RessourceData, { rejectWithValue }) => {
@@ -49,7 +49,7 @@ export const AddRessources = createAsyncThunk(
           }
       }
   }
-);
+)
 export const DeleteRessourcesAction =createAsyncThunk(
   "Ressources/deleteRessources",
   async ({ RessourcesIdToDelete }, { rejectWithValue }) => {
@@ -73,7 +73,7 @@ export const DeleteRessourcesAction =createAsyncThunk(
 })
 export const UpdateRessourceAction = createAsyncThunk(
   "Ressource/updateRessource",
-  async ({ RessourceId, typeRes, titreRes ,Matiere,Niveau}, { rejectWithValue }) => {
+  async ({ RessourceId, typeRes, titreRes ,Matiere,niveau}, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -82,7 +82,7 @@ export const UpdateRessourceAction = createAsyncThunk(
       };
       const response = await axios.put(
         `http://localhost:8085/Ressource/update/${RessourceId}`,
-        { typeRes, titreRes ,Matiere,Niveau},
+        { typeRes, titreRes ,Matiere,niveau},
         config
       );
       return response.data;
@@ -94,4 +94,4 @@ export const UpdateRessourceAction = createAsyncThunk(
       }
     }
   }
-);
+)

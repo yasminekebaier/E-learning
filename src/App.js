@@ -14,6 +14,12 @@ import Profile from './Pages/Profile';
 import MesDevoirs from './Pages/Devoirs/MesDevoirs';
 import PrivateRoute from './Components/PrivateRoute';
 import MesMatiére from './Pages/Matiéres/MesMatiére';
+import Inscription from './Pages/auth/Inscription';
+import ListEleve from './Pages/Admin/ListEleve';
+import ListEnseignant from './Pages/Admin/ListEnseignant';
+import Acceuil from './Pages/Admin/Acceuil';
+import ListAdmin from './Pages/Admin/ListAdmin';
+import GestionMatiere from './Pages/Admin/GestionMatiere';
 
 function App() {
   return (
@@ -25,12 +31,13 @@ function App() {
         <Route path="/register" element={<RegisterEnseignant />} />
         <Route path="/registerEtudiant" element={<RegisterEtudiant />} />
         <Route path="/LoginEtudiant" element={<LoginEtudiant />} />
+        <Route path="/inscription" element={<Inscription />} />
 
         {/* Pages protégées */}
         <Route
           path="/app"
           element={
-            <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE"]}>
+            <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
               <Layout />
             </PrivateRoute>
           }
@@ -39,9 +46,8 @@ function App() {
           <Route path="Ressources" element={<Ressources />} />
           <Route path="visioconférence" element={<Visioconférence />} />
           <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
-          <Route path="profile" element={ <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE"]}>
-               <Profile />
-              </PrivateRoute>} />
+ 
+
 
           {/* Sous-pages réservées aux enseignants */}
           <Route
@@ -52,7 +58,63 @@ function App() {
               </PrivateRoute>
             }
           />
-
+              <Route
+            path="profile"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
+              <Profile/>
+              </PrivateRoute>
+            }
+          />
+{/* Sous-pages réservées aux administrateur */}
+ <Route
+            path="eleves"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+                <ListEleve/>
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="enseignants"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+                <ListEnseignant/>
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="acceuiladmin"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <Acceuil/>
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="admin"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <ListAdmin/>
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="profile"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <Profile/>
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="gestionmatiere"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <GestionMatiere/>
+              </PrivateRoute>
+            }
+          />
           {/* Sous-pages réservées aux étudiants */}
           <Route
             path="EvaluerQuizDevoirs"
@@ -78,6 +140,14 @@ function App() {
                 <MesMatiére />
               </PrivateRoute>
             }/>
+             <Route
+            path="profile"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+              <Profile/>
+              </PrivateRoute>
+            }
+          />
         </Route>
        
         

@@ -24,9 +24,16 @@ const Home = () => {
           <Typography variant="body1" sx={{ cursor: "pointer" }}>Enseignants</Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button variant="contained" sx={{ bgcolor: "#ee983dff", color: "white",textTransform:"none",borderRadius:"20px" }}>Inscription</Button>
-          <Link to={"/LoginEtudiant"}><Button variant="outlined" sx={{borderRadius:"20px", borderColor: "#ee983dff", color: "#ee983dff",textTransform:"none" }}>
-            Connexion</Button></Link>
+            <Link to={"/inscription"}>
+          <Button variant="contained" sx={{ bgcolor: "#ee983dff", color: "white",textTransform:"none",borderRadius:"20px" }}>
+            Inscription
+           </Button>
+          </Link>
+          <Link to={"/LoginEtudiant"}>
+          <Button variant="outlined" sx={{borderRadius:"20px", borderColor: "#ee983dff", color: "#ee983dff",textTransform:"none" }}>
+            Connexion
+            </Button>
+            </Link>
         </Box>
       </Box>
 

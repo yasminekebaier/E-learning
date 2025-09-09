@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Button, Typography, TextField, Select, MenuItem, InputLabel, FormControl,
-  InputAdornment, IconButton, Dialog, DialogTitle, DialogContent, DialogActions
+  InputAdornment, IconButton, Dialog, DialogTitle, DialogContent, DialogActions,
+  Grid
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import EditIcon from "@mui/icons-material/Edit";
@@ -20,7 +21,8 @@ import PaginationComponent from '../../Components/Global/PaginationComponent';
 import { ButtonComponent } from '../../Components/Global/ButtonComponent';
 import DeleteModel from '../../Components/Global/DeleteModel';
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteRessourcesAction, fetchRessources } from "../../redux/actions/RessourceActions" // ✅ Vérifie le chemin exact
+import { DeleteRessourcesAction, fetchRessources, UpdateRessourceAction } from "../../redux/actions/RessourceActions" // ✅ Vérifie le chemin exact
+import UpdateModal from '../../Components/Global/UpdateModel';
 
 // Pour les icônes selon le type
 const getTypeIcon = (type) => {
@@ -45,7 +47,7 @@ const getTypeIcon = (type) => {
 
 const Ressources = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  
 
   // --- Récupération des données depuis Redux ---
   const { ressources, loading } = useSelector((state) => state.ressources);
@@ -58,6 +60,7 @@ console.log("liste des ressources",ressources)
   const [openDelete, setOpenDelete] = useState(false);
 const [RessourcesIdToDelete, setRessourcesIdToDelete] = useState(null)
   const [RessourcesName, setRessourcesName] = useState(null)
+  const dispatch = useDispatch()
   const itemsPerPage = 5;
 const RessourceId=ressources.id
   // --- Charger les ressources au montage ---
@@ -93,7 +96,13 @@ const RessourceId=ressources.id
   const paginatedRows = rowsWithIcons.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePageChange = (_e, value) => setCurrentPage(value);
- 
+ const [openUpdate, setopenUpdate] = useState(false);
+  const [ResId, setResId] = useState(null);
+    const [updatedtitreRes, setUpdatedtitreRes] = useState('');
+    const [updatedTypeRes, setUpdatetypeRes] = useState('');
+    const [UpdatedNiveau, setUpdateNiveau] = useState('');
+    
+        const handleCloseUpdate= () => setopenUpdate(false)
  const handleCloseDelete = () => setOpenDelete(false)
      const handleOpenDelete = (id,titreRes) => {
       setRessourcesIdToDelete(id);
@@ -110,6 +119,23 @@ const RessourceId=ressources.id
         console.error('Erreur lors de la suppression de l\'employé :');
       }
     };
+     const handleOpenUpdate = (id, titreRes, typeRes,Niveau) => {
+      setResId(id);
+      setUpdatedtitreRes(titreRes);
+      setUpdateNiveau(Niveau)
+      setUpdatetypeRes(typeRes)
+      
+      setopenUpdate(true);
+    };
+      const updateRessource = async () => {
+          try {
+            await dispatch(UpdateRessourceAction({ ResId, Title: updatedtitreRes, Type: updatedTypeRes ,HoursNumber:UpdatedNiveau}));
+           /*  toast.success("Task updated succesfully "); */
+            handleCloseUpdate()
+          } catch (error) {
+            
+          }
+        };
   // --- Colonnes du tableau ---
   const columns = [
     { id: 'typeRes', label: "Type", align: 'center' },
@@ -132,6 +158,7 @@ const RessourceId=ressources.id
     {
       icon: <EditIcon sx={{ color: "#f9a825" }} />,
       tooltip: t('Modifier'),
+      onClick: (row) => handleOpenUpdate(row.id, row.titreRes)
     },
   ];
 
@@ -271,6 +298,59 @@ const RessourceId=ressources.id
           <ButtonComponent onClick={handleDeleteConfirm} text={t("Supprimer")} color="#E1000F" />
         </Box>
       </DeleteModel>
+      <UpdateModal
+  open={openUpdate}
+  handleClose={handleCloseUpdate}
+  title={t("Modifier cette Ressource")}
+  icon={<EditIcon />}
+>
+  <Box >
+  <Grid container sx={{marginTop:"30px"}}>
+    <Grid item xs={12}>
+      <Typography variant="h4">{t("Titre")}</Typography>
+    </Grid>
+    
+      <TextField
+        fullWidth
+        variant="outlined"
+        id="titreRes"
+        name="titreRes"
+        type="text"
+        margin="normal"
+        value={updatedtitreRes}
+        onChange={(e) => setUpdatedtitreRes(e.target.value)}
+      />
+    </Grid>
+ 
+   <Typography variant="h4" marginTop="10px">Type</Typography>
+  <TextField
+    fullWidth
+    id="typeRes"
+    margin="normal"
+    name="typeRes"
+    variant="outlined"
+    value={updatedTypeRes}
+    onChange={(e) => setUpdatetypeRes(e.target.value)}
+  />
+  <Typography variant="h4" marginTop="10px">{t("Niveau")}</Typography>
+  <TextField
+    fullWidth
+    id="niveau"
+    margin="normal"
+    name="niveau"
+    type='number'
+   variant="outlined"
+    value={UpdatedNiveau}
+    onChange={(e) => setUpdateNiveau(e.target.value)}
+  />
+ 
+  <Box sx={{textAlign:'center', marginTop:"30px"}}>
+  <ButtonComponent
+    text={t("Modifier")}
+    color={"#1A9BC3"}
+    onClick={updateRessource}/></Box>
+  </Box>
+</UpdateModal>
     </>
   );
 };

@@ -1,21 +1,42 @@
-import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const RegisterAction = createAsyncThunk(
     "auth/register",
-    async (formData, {}) => {
+    async (formData ,{ rejectWithValue }) => {
       try {
-        console.log("[FRONT] LoginAction → Données envoyées :", formData);
         const response = await axios.post(
           "http://localhost:8085/User/registerStudent",
-          formData
+          formData, {
+         headers: { "Content-Type": "multipart/form-data" } 
+        }
     
         );
         console.log("Data to dispatch", response.data);
         return response.data;
       } catch (error) {
-        console.log("[FRONT] LoginAction → ERROR :", error?.response?.data || error.message);
-        return isRejectedWithValue(error.message);
+        console.log("[FRONT] resgisterAction → ERROR :", error?.response?.data || error.message);
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+
+  export const RegisterEnseignantAction = createAsyncThunk(
+    "auth/registerenseigant",
+    async (formData ,{ rejectWithValue }) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:8085/User/registerTeacher",
+          formData, {
+         headers: { "Content-Type": "multipart/form-data" } 
+        }
+    
+        );
+        console.log("Data to dispatch", response.data);
+        return response.data;
+      } catch (error) {
+        console.log("[FRONT] resgisterAction → ERROR :", error?.response?.data || error.message);
+        return rejectWithValue(error.message);
       }
     }
   );
@@ -92,12 +113,12 @@ export const FetchUserProfile = createAsyncThunk(
       }
     );
      export const ConfirmUser = createAsyncThunk(
-      "user/logout",
-      async (_, { rejectWithValue }) => {
+      "user/confirmuser",
+      async (email,{ rejectWithValue }) => {
         try {
           const token = localStorage.getItem("token");
-          console.log("📌 Token envoyé pour le logout:", token);
-          const response = await axios.get("http://localhost:8085/User/confirm?email=testensignant@gmail.com", {
+          console.log("📌 Token envoyé pour la validation:", token);
+          const response = await axios.get(`http://localhost:8085/User/confirm?email=${email}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -110,5 +131,23 @@ export const FetchUserProfile = createAsyncThunk(
         }
       }
     );
+    export const FetchAllUsers = createAsyncThunk(
+      "user/fetchAll",
+      async (_,{rejectWithValue }) => {
+        try {
+         const token = localStorage.getItem("token");
+          console.log("📌 Token envoyé pour le logout:", token);
+          const response = await axios.get("http://localhost:8085/User/listusers", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+       );
+       return response.data;
+      }catch (error) {
+          const errorMessage =
+            error.response?.data?.message || "Impossible de récupérer le profil.";
+          return rejectWithValue(errorMessage);
+        }})
 
 

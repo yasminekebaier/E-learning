@@ -1,0 +1,144 @@
+import React from "react";
+import { Grid, Card, CardContent, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import keysafe from "../../assets/keysafe.jpg";
+import teacherImg from "../../assets/loginamell.png";
+import adminImg from "../../assets/admin.png";
+import studentImg from "../../assets/loginEtudiant.png";
+import booksImg from "../../assets/insrip.png";
+
+const roles = [
+  {
+    id: 1,
+    label: "ENSEIGNANT",
+    img: teacherImg,
+    link: "/register",
+  },
+  {
+    id: 2,
+    label: "ADMINISTRATEUR",
+    img: adminImg,
+    link: "/inscription/admin",
+  },
+  {
+    id: 3,
+    label: "ÉLÈVE",
+    img: studentImg,
+    link: "/registerEtudiant",
+  },
+];
+
+const Inscription = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
+  return (
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        minHeight: "100vh",
+        padding: "20px",
+        position: "relative",
+      }}
+    >
+      {/* Logo en haut à gauche */}
+      <img
+        src={keysafe}
+        alt="Logo"
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          height: "60px",
+        }}
+      />
+
+      {/* Titre */}
+      <Typography
+        variant="h3"
+        sx={{
+          marginBottom: 5,
+          fontWeight: "bold",
+          fontSize: "18px",
+        }}
+      >
+        Lire à son rythme : une clé pour la réussite
+      </Typography>
+
+      {/* Cartes */}
+      <Grid
+        container
+        spacing={4}
+        justifyContent="center"
+        alignItems="center"
+        sx={{ maxWidth: "800px" }}
+      >
+        {roles.map((role) => (
+          <Grid item xs={12} sm={4} key={role.id}>
+            <Card
+              sx={{
+                borderRadius: "16px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                padding: "10px",
+                textAlign: "center",
+                backgroundColor: "#fff",
+                transition: "transform 0.3s",
+                "&:hover": { transform: "scale(1.05)" },
+              }}
+            >
+              <CardContent>
+                <img
+                  src={role.img}
+                  alt={role.label}
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    objectFit: "contain",
+                    marginBottom: "10px",
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "orange",
+                    textTransform: "none",
+                    color: "#000",
+                    fontWeight: "bold",
+                    borderRadius: "25px",
+                    padding: "8px 16px",
+                    boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
+                    "&:hover": { backgroundColor: "orange" },
+                  }}
+                  fullWidth
+                  onClick={() => handleNavigate(role.link)}
+                >
+                  {role.label}
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Image pile de livres */}
+      <img
+        src={booksImg}
+        alt="Books"
+        style={{
+          position: "absolute",
+          bottom: 20,
+          right: 40,
+          height: "70%",
+        }}
+      />
+    </Grid>
+  );
+};
+
+export default Inscription;

@@ -165,7 +165,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
             onClick={handleLogin}
             sx={{
               mt: 3,
-              backgroundColor: '#ffc1cc',
+              backgroundColor: 'orange',
               color: '#000',
               borderRadius: '20px',
               textTransform: 'none',

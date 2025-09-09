@@ -16,8 +16,7 @@ import { toast } from 'react-toastify';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 const Navbar = () => {
-  // Exemple de username (tu peux le récupérer dynamiquement)
-  const username = "Amel Abid";
+
     // Séparation des états des menus
   const [userMenu, setUserMenu] = useState(null);
 const [langMenu, setLangMenu] = useState(null);
@@ -38,7 +37,7 @@ const [langMenu, setLangMenu] = useState(null);
   const { t, i18n } = useTranslation();
    const dispatch = useDispatch();
   const CurrentUser = useSelector((state) => state.user.CurrentUser);
-  const userusername= CurrentUser?.username|| CurrentUser?.user?.username;
+  const username= CurrentUser?.username|| CurrentUser?.user?.username;
   const userEmail   = CurrentUser?.email   || CurrentUser?.user?.email;
   const userRole    = CurrentUser?.role    || CurrentUser?.user?.role;
    // Déconnexion
@@ -125,7 +124,7 @@ const [langMenu, setLangMenu] = useState(null);
                     border: '2px solid #227FBF',
                     bgcolor: '#eaf6fb',
                   }}
-                  src= "https://i.pravatar.cc/150?img=3"/* {
+                  src= ""/* {
                     userImage
                       ? `http://localhost:3000/uploads/users/${encodeURIComponent(userImage)}?t=${Date.now()}`
                       : undefined
@@ -144,23 +143,8 @@ const [langMenu, setLangMenu] = useState(null);
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {userusername}
+                    {username}
                   </Typography>
-                  {userRole && (
-                    <Typography
-                      sx={{
-                        color: '#227FBF',
-                        fontWeight: 500,
-                        fontSize: '0.97rem',
-                        lineHeight: 1.1,
-                        mt: '1px',
-                        letterSpacing: 0.3,
-                        textTransform: 'capitalize',
-                      }}
-                    >
-                      {userRole}
-                    </Typography>
-                  )}
                 </Box>
                 <Box sx={{ ml: 1, display: 'flex', alignItems: 'center' }}>
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="#227FBF">

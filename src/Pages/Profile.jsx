@@ -20,8 +20,8 @@ const ProfilePaper = styled(Paper)({
   borderRadius: "38px",
   backgroundColor: "rgba(255, 255, 255, 0.97)",
   boxShadow: "0 16px 48px rgba(25, 118, 210, 0.12)",
-  maxWidth: "1250px",
-  minWidth: "1050px",
+  maxWidth: "900px",
+  minWidth: "900px",
   width: "100%",
   margin: "0 auto",
   transition: "box-shadow 0.2s",
@@ -47,9 +47,12 @@ const Profile = () => {
     (state) => state.user
   );
 
-  useEffect(() => {
+ useEffect(() => {
+  if (!CurrentUser) { // seulement si on n'a pas encore chargé l'utilisateur
     dispatch(FetchUserProfile());
-  }, [dispatch]);
+  }
+}, [dispatch, CurrentUser]);
+
 
   const userData = CurrentUser;
 
@@ -71,7 +74,7 @@ const Profile = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={8}>
-              <Typography variant="h6" sx={{ mb: 2, color: "#6b48ff" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "#080D50" }}>
                 {t("Informations Personnelles")}
               </Typography>
               <Divider sx={{ mb: 2 }} />

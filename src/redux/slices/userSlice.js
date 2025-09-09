@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction } from "../actions/userActions";
+import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction } from "../actions/userActions";
 
 const initialState = {
   CurrentUser: null,
@@ -7,7 +7,8 @@ const initialState = {
   error: false,
   successMessage: null,
   errorMessage: null,
-  token: localStorage.getItem("token") || null, // garder le token si déjà connecté
+  token: localStorage.getItem("token") || null,
+  users: [],            // <-- Ajout pour stocker tous les utilisateurs
 };
 
 const userSlice = createSlice({
@@ -32,6 +33,22 @@ const userSlice = createSlice({
         state.errorMessage = action.payload;
         state.CurrentUser = null;
       })
+ // REGISTERENSEIGNANT
+        .addCase(RegisterEnseignantAction.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(RegisterEnseignantAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.CurrentUser = action.payload;
+        state.error = false;
+      })
+      .addCase(RegisterEnseignantAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload;
+        state.CurrentUser = null;
+      })
 
       // LOGIN
       .addCase(LoginAction.pending, (state) => {
@@ -39,18 +56,14 @@ const userSlice = createSlice({
         state.error = false;
       })
       .addCase(LoginAction.fulfilled, (state, action) => {
-  state.loading = false;
-  state.CurrentUser = action.payload.user || action.payload;
-
-  // On stocke le JWT principal
-  state.token = action.payload?.token || null;
-
-  state.error = false;
-
-  if (state.token) {
-    localStorage.setItem("token", state.token);
-  }
-})
+        state.loading = false;
+        state.CurrentUser = action.payload.user || action.payload;
+        state.token = action.payload?.token || null;
+        state.error = false;
+        if (state.token) {
+          localStorage.setItem("token", state.token);
+        }
+      })
       .addCase(LoginAction.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
@@ -66,14 +79,13 @@ const userSlice = createSlice({
       })
       .addCase(FetchUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.CurrentUser = action.payload.data || action.payload; // harmonisation
+        state.CurrentUser = action.payload.data || action.payload;
         state.error = false;
       })
       .addCase(FetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload;
-        // ⚠️ On ne vide plus le CurrentUser ici → sinon déco forcée
       })
 
       // LOGOUT
@@ -92,7 +104,46 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload;
+      })
+
+    .addCase(FetchAllUsers.pending, (state) => {
+  state.loading = true;
+  state.error = false;
+})
+.addCase(FetchAllUsers.fulfilled, (state, action) => {
+  state.loading = false;
+  state.users = action.payload; // <-- Tous les utilisateurs, pas seulement les élèves
+  state.error = false;
+})
+
+.addCase(FetchAllUsers.rejected, (state, action) => {
+  state.loading = false;
+  state.error = true;
+  state.errorMessage = action.payload;
+  state.users = [];
+})
+      // CONFIRM USER (Activation du compte)
+      .addCase(ConfirmUser.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.successMessage = null;
+      })
+      .addCase(ConfirmUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.successMessage = action.payload.message || "Compte activé avec succès ✅";
+
+        // Mettre à jour la liste des utilisateurs si nécessaire
+        state.users = state.users.map(user =>
+          user.email === action.meta.arg ? { ...user, situation: "ACTIF" } : user
+        );
+      })
+      .addCase(ConfirmUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload || "Erreur lors de l'activation ❌";
       });
+
   },
 });
 
