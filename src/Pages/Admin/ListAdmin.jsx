@@ -21,6 +21,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { FetchAllUsers, ConfirmUser } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import UpdateModal from "../../Components/Global/UpdateModel";
+import { ButtonComponent } from "../../Components/Global/ButtonComponent";
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import CustomModal from "../../Components/Global/ModelComponent";
 
 const ListAdmin = () => {
   const { t } = useTranslation();
@@ -31,7 +34,7 @@ const ListAdmin = () => {
   const [sortOption, setSortOption] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -110,13 +113,18 @@ const ListAdmin = () => {
 
   return (
     <>
-      <StyledPaper elevation={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography
-            sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}
-          >
-            {t("Liste des administrateurs")}
-          </Typography>
+  <StyledPaper elevation={3}>
+    <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
+         <Typography sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}> {t("Liste des administrateurs")}
+           </Typography>
+           
+      <ButtonComponent
+            text={t('Ajouter un administrateur')}
+            icon={<AddCircleOutline />}
+            color="orange"
+            onClick={() => setOpenAddModal(true)}
+          />
+         
         </Box>
 
         {/* Barre de recherche */}
@@ -183,7 +191,16 @@ const ListAdmin = () => {
           />
         </Box>
       </StyledPaper>
-
+<CustomModal
+ open={openAddModal}
+        handleClose={() => setOpenAddModal(false)}
+        title={t("Ajouter un administrateur")}  icon={<AddCircleOutline />}>
+        <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+           <TextField label="Nom et prénom" fullWidth />
+           <TextField label="Email" fullWidth />   
+         </Box>
+       
+</CustomModal>
       {/* Modal pour modifier l'admin */}
       <UpdateModal
         open={openModal}

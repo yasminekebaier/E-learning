@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction } from "../actions/userActions";
+import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction, AddAdmin } from "../actions/userActions";
 
 const initialState = {
   CurrentUser: null,
@@ -139,6 +139,27 @@ const userSlice = createSlice({
         );
       })
       .addCase(ConfirmUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload || "Erreur lors de l'activation ❌";
+      })
+      //addAdmin
+      .addCase(AddAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.successMessage = null;
+      })
+      .addCase(AddAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.successMessage = action.payload.message || "Compte activé avec succès ✅";
+
+        // Mettre à jour la liste des utilisateurs si nécessaire
+        state.users = state.users.map(user =>
+          user.email === action.meta.arg ? { ...user, situation: "ACTIF" } : user
+        );
+      })
+      .addCase(AddAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload || "Erreur lors de l'activation ❌";

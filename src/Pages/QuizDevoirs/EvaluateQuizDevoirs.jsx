@@ -18,13 +18,17 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import PeopleIcon from '@mui/icons-material/People';
+import EvaluationModal from "../../Components/Global/EvaluationModal";
 const EvaluateQuizDevoirs = () => {
   const { t } = useTranslation();
+const [openModal, setOpenModal] = useState(false);
+const [selectedRow, setSelectedRow] = useState(null);
 
   // Colonnes du tableau
   const columns = [
     { id: "titre", label: "Devoir" },
     { id: "type", label: "Type" },
+    { id: "Etudiant", label: "Nom de l'etudiant" },
     { id: "classe", label: "Classe" },
     { id: "dateLimite", label: "Date limite" },
     { id: "soumissions", label: "Soumissions" },
@@ -55,6 +59,7 @@ const EvaluateQuizDevoirs = () => {
       id: 1,
       titre: "Contrôle de mathématiques",
       type: "Quiz",
+      Etudiant: "Yasmine keba",
       classe: "Terminale S2",
       dateLimite: "2025-05-25",
       soumissions: "25/30",
@@ -126,11 +131,15 @@ const EvaluateQuizDevoirs = () => {
       tooltip: "Voir",
       onClick: (row) => alert(`Voir : ${row.titre}`),
     },
-    {
-      icon: <EditIcon color="success" />,
-      tooltip: "Évaluer",
-      onClick: (row) => alert(`Évaluer : ${row.titre}`),
-    },
+   {
+  icon: <EditIcon color="success" />,
+  tooltip: "Évaluer",
+  onClick: (row) => {
+    setSelectedRow(row);
+    setOpenModal(true);
+  },
+}
+
   ];
 
   return (
@@ -219,6 +228,17 @@ const EvaluateQuizDevoirs = () => {
         color="primary"
         size="medium"
       />
+      {/* Modal d'évaluation */}
+      <EvaluationModal
+  open={openModal}
+  handleClose={() => setOpenModal(false)}
+  selectedRow={selectedRow}
+  onSubmit={(evaluation) => {
+    console.log("Évaluation soumise :", evaluation);
+    // Ici tu appelleras ton API pour enregistrer la note
+  }}
+/>
+
     </StyledPaper>
   );
 };

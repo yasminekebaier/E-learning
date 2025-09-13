@@ -8,7 +8,7 @@ export const RegisterAction = createAsyncThunk(
         const response = await axios.post(
           "http://localhost:8085/User/registerStudent",
           formData, {
-         headers: { "Content-Type": "multipart/form-data" } 
+         headers: { "Content-Type": "application/json" } 
         }
     
         );
@@ -149,5 +149,24 @@ export const FetchUserProfile = createAsyncThunk(
             error.response?.data?.message || "Impossible de récupérer le profil.";
           return rejectWithValue(errorMessage);
         }})
+         export const AddAdmin = createAsyncThunk(
+    "auth/AddAdmin",
+    async (formData ,{ rejectWithValue }) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:8085/User/AddAdmin",
+          formData, {
+         headers: { "Content-Type": "multipart/form-data" } 
+        }
+    
+        );
+        console.log("Data to dispatch", response.data);
+        return response.data;
+      } catch (error) {
+        console.log("[FRONT] resgisterAction → ERROR :", error?.response?.data || error.message);
+        return rejectWithValue(error.message);
+      }
+    }
+  );
 
 

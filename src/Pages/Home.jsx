@@ -43,8 +43,7 @@ const Home = () => {
         <Box >
          <Typography variant="h4" fontWeight="bold" color="#234aa0"> KeySafe !</Typography>
         <Typography  sx={{ maxWidth: 600, mx: "auto", mt: 2 ,color:"#080D50",fontWeight:"600",fontSize:"20px"}}>
-          Une plateforme d’apprentissage en ligne destinée aux élèves ayant des besoins particuliers
-          tels que l'hyperactivité, les troubles dyslexiques ainsi que la cécité et la surdicécité.
+   Une plateforme d’apprentissage en ligne destinée aux collaborateurs du secteur industriel, facilitant leur participation aux formations grâce à des contenus fiables et interactifs.
         </Typography>
         <Button variant="contained" sx={{ mt: 4, bgcolor: "#ee983dff", color: "white",borderRadius:"20px",textTransform:"none"}}>
           Commencer
@@ -63,10 +62,7 @@ const Home = () => {
                       "&:hover": { boxShadow: 12}}} >
         <Typography variant="h4" fontWeight="bold" color="#234aa0">Aperçu de KeySafe !</Typography>
         <Typography variant="body1" sx={{ maxWidth: 700, mx: "auto", mt: 2 }}>
-          C’est une plateforme e-learning dédiée aux enfants hyperactifs, dyslexiques, aveugles et sourds-muets.
-          Elle offre un environnement d’apprentissage adapté avec des outils pédagogiques interactifs.
-          Les utilisateurs peuvent accéder à des cours personnalisés, utiliser des supports adaptés comme la synthèse vocale ou la langue des signes,
-          et suivre leur progression avec un suivi individualisé.
+         Keysafe est une plateforme e-learning destinée aux collaborateurs des industries, en particulier du secteur pétrolier. Elle propose un environnement de formation en ligne interactif, avec des contenus fiables et de qualité, favorisant l’engagement des utilisateurs et l’efficacité des apprentissages.
         </Typography>
         <Button variant="contained" sx={{borderRadius:"20px", mt: 4, bgcolor: "#ee983dff", color: "white",textTransform:"none" }}>
           Découvrir KeySafe

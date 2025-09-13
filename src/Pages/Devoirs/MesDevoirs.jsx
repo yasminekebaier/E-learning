@@ -36,7 +36,7 @@ const subjects = [
 ];
 
 const MesDevoirs = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Box sx={{ padding: "20px" }}>

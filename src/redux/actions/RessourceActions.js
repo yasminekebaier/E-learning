@@ -9,11 +9,9 @@ export const fetchRessources = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const response = await axios.get(
-        "http://localhost:8085/Ressource/listRessource",
-        config
+      const response = await axios.get("http://localhost:8085/Ressource/listRessource",config
       )
-      console.log(response.data)
+      console.log("listes des ressources",response.data)
       return response.data; 
       
     } catch (error) {
@@ -28,28 +26,38 @@ export const fetchRessources = createAsyncThunk(
 export const AddRessources = createAsyncThunk(
   "Ressources/createRessources",
   async (RessourceData, { rejectWithValue }) => {
-      const { titreRes, typeRes, contenuRes, heureAjout, Niveau, cours } = RessourceData;
-      try {
-          const config = {
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          };
-          const response = await axios.post(
-              "http://localhost:8085/Ressource/addResource/1",
-             { titreRes, typeRes, contenuRes, heureAjout, Niveau, cours } , 
-              config
-          );
-          return response.data;
-      } catch (error) {
-          if (error.response && error.response.data.message) {
-              return rejectWithValue(error.response.data.message);
-          } else {
-              return rejectWithValue(error.message);
-          }
-      }
+    try {
+      const formData = new FormData();
+      formData.append("file", RessourceData.file);
+      formData.append("titre", RessourceData.titreRes);
+      formData.append("type", RessourceData.typeRes);
+      formData.append("niveauScolaire", RessourceData.niveau); // correspond au Enum Niveau_SCOLAIRE
+      formData.append("courid", Number(RessourceData.coursId)); // <-- important, correspond au @RequestParam
+
+     const token = localStorage.getItem("token"); // ou où tu stockes ton JWT
+
+const response = await axios.post(
+  "http://localhost:8085/Ressource/add",
+  formData,
+  {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Authorization": `Bearer ${token}`,
+    },
   }
-)
+);
+
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const DeleteRessourcesAction =createAsyncThunk(
   "Ressources/deleteRessources",
   async ({ RessourcesIdToDelete }, { rejectWithValue }) => {

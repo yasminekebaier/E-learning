@@ -29,8 +29,8 @@ export const fetchQuizs = createAsyncThunk(
 
 export const AddQuiz = createAsyncThunk(
   "Quizs/createQuiz",
-  async (RessourceData, { rejectWithValue }) => {
-    const { titreRes, typeRes, contenuRes, heureAjout, Niveau, cours } = RessourceData;
+  async (QuizData, { rejectWithValue }) => {
+    const { titreRes, typeRes, contenuRes, heureAjout, Niveau, cours } = QuizData;
     try {
       const token = localStorage.getItem("token"); // récupère le token
       const config = {

@@ -20,6 +20,8 @@ import ListEnseignant from './Pages/Admin/ListEnseignant';
 import Acceuil from './Pages/Admin/Acceuil';
 import ListAdmin from './Pages/Admin/ListAdmin';
 import GestionMatiere from './Pages/Admin/GestionMatiere';
+import MesCours from './Pages/cours/MesCours';
+import GestionCours from './Pages/cours/GestionCours';
 
 function App() {
   return (
@@ -55,6 +57,14 @@ function App() {
             element={
               <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
                 <AddQuizDevoir />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="GestionCours"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
+                <GestionCours />
               </PrivateRoute>
             }
           />
@@ -115,7 +125,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* Sous-pages réservées aux étudiants */}
+        
           <Route
             path="EvaluerQuizDevoirs"
             element={
@@ -124,7 +134,7 @@ function App() {
               </PrivateRoute>
             }
           />
-
+  {/* Sous-pages réservées aux étudiants */}
           <Route
             path="devoirs"
             element={
@@ -140,6 +150,14 @@ function App() {
                 <MesMatiére />
               </PrivateRoute>
             }/>
+             <Route
+             path="matieres/:matiere"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+                <MesCours />
+              </PrivateRoute>
+            }
+          />
              <Route
             path="profile"
             element={

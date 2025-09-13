@@ -9,10 +9,12 @@ const style = {
   transform: 'translate(-50%, -50%)',
   minWidth:"60%",
   minHeight: "60%",
-  maxHeight: "89%",
+  maxHeight: "100%",
   bgcolor: '#F4FAFF',
   boxShadow: 10,
   borderRadius: '10px', 
+  overFlowY: 'auto',
+  overFlowX:'auto',
   p:3,
    
 };

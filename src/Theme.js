@@ -62,14 +62,16 @@ h5:{
 h6:{
   fontFamily:"inter",
   fontSize:16,
-  color:"#09759D", 
+  color:"#080D50", 
   fontWeight:"bold",
   marginBottom:"20px",
 },
 h7:{
-  color:"white",
-  fontFamily:"inter",
-  fontSize:17,
+    fontFamily:"inter",
+  fontSize:20,
+  color:"#09759D", 
+  fontWeight:"bold",
+ 
   
 },
 h8:{
@@ -77,7 +79,7 @@ h8:{
   fontSize:15,
   color:"#080D50",
   fontWeight:"bold",
-  marginBottom:"10px",
+  
 },
 },
 shape:{

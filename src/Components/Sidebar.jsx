@@ -31,14 +31,18 @@ const Sidebar = ({ onMenuClick }) => {
   // Définir le menu complet
   const menuItems = [
     { text: t('Acceuil'), icon: <HomeIcon />, path: '/app/acceuiladmin', roles: ['ROLE_ADMIN'] },
+    { text: t('Gestion des cours'), icon: <PictureInPictureIcon />, path: '/app/GestionCours', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Ressources'), icon: <GroupIcon />, path: '/app/Ressources', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Gérer des quiz et devoirs'), icon: <AssignmentIcon />, path: '/app/AddQuizDevoirs', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Evaluer des quiz et devoirs'), icon: <AssignmentTurnedInIcon />, path: '/app/EvaluerQuizDevoirs', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('VisioConférence'), icon: <AssignmentTurnedInIcon />, path: '/app/visioconférence', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Mes devoirs'), icon: <PictureInPictureIcon />, path: '/app/devoirs', roles: ['ROLE_ELEVE'] },
     { text: t('Mes matiéres'), icon: <PictureInPictureIcon />, path: '/app/matieres', roles: ['ROLE_ELEVE'] },
+     { text: t('Gestion des matiéres'), icon: <PictureInPictureIcon />, path: '/app/gestionmatiere', roles: ['ROLE_ADMIN'] },
+     
     { text: t('Compte'), icon: <AccountCircleIcon />, path: '/app/profile', roles: ['ROLE_ENSEIGNANT','ROLE_ELEVE','ROLE_ADMIN'] },
-    { text: t('Gestion des matiéres'), icon: <PictureInPictureIcon />, path: '/app/gestionmatiere', roles: ['ROLE_ADMIN'] },
+   
+    
 
   ];
 
