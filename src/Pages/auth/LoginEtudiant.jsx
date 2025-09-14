@@ -9,7 +9,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import loginEtudiant from "../../assets/loginEtudiant.png";
+import inscription from "../../assets/inscription.png";
 import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../redux/actions/userActions'; // à adapter
 import { useNavigate } from 'react-router-dom';
@@ -51,15 +51,15 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
   };
 
   return (
-    <Grid container sx={{ height: '100vh', bgcolor: '#C6EFF2' }}>
+    <Grid container sx={{ height: '100vh', bgcolor: '#cfeef1ff' }}>
       
       {/* Left - Illustration */}
       <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 4,width:"50%" }}>
-        <Box component="img" src={loginEtudiant} alt="Login Illustration" sx={{ width: '70%', maxWidth: 300 }} />
-        <Typography variant="h5" fontWeight="bold" mt={3}>
-          Bienvenue sur <span style={{ color: '#4C5BD4' }}>KeySafe</span> 🎓
+        <Box component="img" src={inscription} alt="Login Illustration" sx={{ width: '70%', maxWidth: 300 }} />
+        <Typography variant="h4" fontWeight="bold" mt={3}>
+          Bienvenue sur <span style={{ color: "#080D50" }}>KeySafe</span> 🎓
         </Typography>
-        <Typography variant="body1" mt={1} textAlign="center" maxWidth={400}>
+        <Typography variant="h3" mt={1} textAlign="center" maxWidth={400}>
           Connecte-toi pour accéder à ta plateforme d'apprentissage personnalisée.
         </Typography>
       </Grid>

@@ -22,6 +22,7 @@ import ListAdmin from './Pages/Admin/ListAdmin';
 import GestionMatiere from './Pages/Admin/GestionMatiere';
 import MesCours from './Pages/cours/MesCours';
 import GestionCours from './Pages/cours/GestionCours';
+import Message from './Pages/Chat/Message';
 
 function App() {
   return (
@@ -158,6 +159,20 @@ function App() {
               </PrivateRoute>
             }
           />
+            <Route
+            path="message"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+                <Message />
+              </PrivateRoute>
+            }/>
+             <Route
+            path="VisioCnférenceEtudiant"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+                <VisioconférenceEtudiant />
+              </PrivateRoute>
+            }/>
              <Route
             path="profile"
             element={

@@ -12,6 +12,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PictureInPictureIcon from '@mui/icons-material/PictureInPicture';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import ChatIcon from '@mui/icons-material/Chat';
+import ListIcon from '@mui/icons-material/List';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -37,7 +39,9 @@ const Sidebar = ({ onMenuClick }) => {
     { text: t('Evaluer des quiz et devoirs'), icon: <AssignmentTurnedInIcon />, path: '/app/EvaluerQuizDevoirs', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('VisioConférence'), icon: <AssignmentTurnedInIcon />, path: '/app/visioconférence', roles: ['ROLE_ENSEIGNANT'] },
     { text: t('Mes devoirs'), icon: <PictureInPictureIcon />, path: '/app/devoirs', roles: ['ROLE_ELEVE'] },
-    { text: t('Mes matiéres'), icon: <PictureInPictureIcon />, path: '/app/matieres', roles: ['ROLE_ELEVE'] },
+    { text: t('Mes matiéres'), icon: <ListIcon/>, path: '/app/matieres', roles: ['ROLE_ELEVE'] },
+    { text: t('VisioConférence'), icon: <AssignmentTurnedInIcon/>, path: '/app/VisioCnférenceEtudiant', roles: ['ROLE_ELEVE'] },
+    { text: t('Message de descussion'), icon: <ChatIcon />, path: '/app/message', roles: ['ROLE_ELEVE'] },
      { text: t('Gestion des matiéres'), icon: <PictureInPictureIcon />, path: '/app/gestionmatiere', roles: ['ROLE_ADMIN'] },
      
     { text: t('Compte'), icon: <AccountCircleIcon />, path: '/app/profile', roles: ['ROLE_ENSEIGNANT','ROLE_ELEVE','ROLE_ADMIN'] },

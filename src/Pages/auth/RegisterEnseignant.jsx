@@ -15,7 +15,7 @@ import {
   StepLabel,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import loginamelll from "../../assets/loginamell.png";
+import registerEnseignant from "../../assets/registerEnseignant.png";
 import { RegisterEnseignantAction } from '../../redux/actions/userActions';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
@@ -113,15 +113,15 @@ const handleRegister = async () => {
         >
           <Box
             component="img"
-            src={loginamelll}
+            src={registerEnseignant}
             alt="illustration"
             sx={{ width: '70%', maxWidth: 250, mb: 3 }}
           />
- <Typography variant="h5" color="#080D50" fontWeight="bold" gutterBottom>
+ <Typography variant="h3" color="#080D50" fontWeight="bold" gutterBottom>
           🎓 Bienvenue sur KeySafe
         </Typography>
-        <Typography variant="body1" mb={3}>
-          Notre objectif est d'aider chaque enseignant à accompagner ses élèves dans leur apprentissage.
+        <Typography variant="h5" mb={3}>
+          Notre objectif est d'aider chaque enseignant à accompagner ses étudiants dans leur apprentissage.
         </Typography>
         <Typography variant="subtitle1" color="#080D50" fontWeight="bold" mb={1}>
           Pourquoi s'inscrire ?
@@ -158,10 +158,10 @@ const handleRegister = async () => {
       color: '#ccc', // étapes non actives
     },
     '& .MuiStepIcon-root.Mui-completed': {
-      color: '#a259ff', // étapes complétées
+      color: 'orange', // étapes complétées
     },
     '& .MuiStepIcon-root.Mui-active': {
-      color: '#a259ff', // étape active (cercle)
+      color: 'orange', // étape active (cercle)
     },
   }}
 >
@@ -191,12 +191,12 @@ const handleRegister = async () => {
                 <TextField label="Confirmer le mot de passe *" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} fullWidth />
               </Box>
               
-              <Button variant="outlined" sx={{backgroundColor:"#52307c",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
+              <Button variant="outlined" sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
                 📎 Joindre un CV
                 <input type="file" hidden onChange={handleFileChange} />
               </Button>
               <Box mt={2} textAlign="right">
-                <Button variant="contained" sx={{backgroundColor:"#52307c",borderRadius:"15px"}}  onClick={handleNext}>Suivant</Button>
+                <Button variant="contained" sx={{backgroundColor:"orange",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
               </Box>
             </Box>
           )}
@@ -218,10 +218,10 @@ const handleRegister = async () => {
                 </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
-                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#080D50",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
+                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
                 <Button variant="contained" color="#080D50"
                  onClick={handleRegister}
-                 sx={{backgroundColor:"#080D50",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
+                 sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
               </Box>
             </>
           )}

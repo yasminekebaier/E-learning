@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import loginEtudiant from "../../assets/loginEtudiant.png";
+import registerEtudiant1 from "../../assets/registerEtudiant1.png";
 import { GridCheckCircleIcon } from '@mui/x-data-grid';
 import { RegisterAction } from '../../redux/actions/userActions';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -33,7 +33,7 @@ const RegisterEtudiant = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    nom_prenom_parent: '',
+    
     nom_prenom_eleve: '',
     email: '',
     phone: '',
@@ -80,7 +80,7 @@ const RegisterEtudiant = () => {
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        bgcolor: '#C6EFF2',
+        bgcolor: '#cfeef1ff',
         justifyContent: "space-between",
         height: '100vh'
       }}
@@ -99,14 +99,14 @@ const RegisterEtudiant = () => {
       >
         <Box
           component="img"
-          src={loginEtudiant}
+          src={registerEtudiant1}
           alt="illustration"
-          sx={{ width: '70%', maxWidth: 250, border: "2px solid red" }}
+          sx={{ width: '70%', maxWidth: 250 }}
         />
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          Bienvenue sur <span style={{ color: '#4C5BD4' }}>KeySafe</span> 🎓
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Bienvenue sur <span style={{ color: '"#080D50"' }}>KeySafe</span> 🎓
         </Typography>
-        <Typography variant="body1" sx={{ mb: 2 }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
           KeySafe est une plateforme qui aide chaque élève à apprendre à lire à son rythme, avec des activités ludiques et adaptées.
         </Typography>
         <Box>
@@ -145,8 +145,8 @@ const RegisterEtudiant = () => {
             sx={{
               mb: 4,
               '& .MuiStepIcon-root': { color: '#ccc' },
-              '& .MuiStepIcon-root.Mui-completed': { color: '#a259ff' },
-              '& .MuiStepIcon-root.Mui-active': { color: '#a259ff' }
+              '& .MuiStepIcon-root.Mui-completed': { color: '#ffac59ff' },
+              '& .MuiStepIcon-root.Mui-active': { color: '#ffac59ff' }
             }}
           >
             {steps.map((label) => (
@@ -160,20 +160,11 @@ const RegisterEtudiant = () => {
           {activeStep === 0 && (
             <>
               <Grid container spacing={4} sx={{ mt: 4, flexDirection: "column", display: "flex" }}>
-                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                  <Grid item xs={12} md={6} width={"45%"}>
+               
+              
+                  <Grid item xs={12} md={6} >
                     <TextField
-                      label="Nom et prénom du parent"
-                      fullWidth
-                      required
-                      size="small"
-                      InputProps={{ sx: { borderRadius: '12px' } }}
-                      onChange={(e) => setFormData({ ...formData, nom_prenom_parent: e.target.value })}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6} width={"45%"}>
-                    <TextField
-                      label="Nom et prénom de l'élève"
+                      label="Nom et prénom"
                       fullWidth
                       required
                       size="small"
@@ -181,11 +172,11 @@ const RegisterEtudiant = () => {
                       onChange={(e) => setFormData({ ...formData, nom_prenom_eleve: e.target.value })}
                     />
                   </Grid>
-                </Box>
+               
 
                 <Grid item xs={12} md={6}>
                   <TextField
-                    label="Email du parent"
+                    label="Email"
                     type="email"
                     fullWidth
                     required
@@ -254,7 +245,7 @@ const RegisterEtudiant = () => {
 
                 <Grid item xs={12} md={6}>
                   <TextField
-                    label="Date de naissance de l'élève"
+                    label="Date de naissance "
                     type="date"
                     size="small"
                     InputProps={{ sx: { borderRadius: '12px' } }}
@@ -305,13 +296,13 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     textTransform: "none",
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   ‹ Précédent
@@ -321,13 +312,13 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleNext}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     textTransform: "none",
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   Suivant ›
@@ -346,9 +337,9 @@ const RegisterEtudiant = () => {
 
                 <Grid container spacing={2}>
                   {[
-                    { label: "Nom et prénom du parent :", value: formData.nom_prenom_parent },
+                    
                     { label: "Nom et prénom de l'élève :", value: formData.nom_prenom_eleve },
-                    { label: "Email du parent :", value: formData.email },
+                    { label: "Email :", value: formData.email },
                     { label: "Numéro de téléphone :", value: formData.phone },
                     { label: "Situation de l'élève :", value: formData.Situation_Eleve },
                     { label: "Date de naissance de l'élève :", value: formData.date_naissance },
@@ -385,13 +376,13 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     textTransform: "none",
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   ‹ Précédent
@@ -401,13 +392,13 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleNext}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
                     textTransform: "none",
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   Suivant ›
@@ -451,12 +442,12 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   ‹ Précédent
@@ -466,12 +457,12 @@ const RegisterEtudiant = () => {
                   variant="contained"
                   onClick={handleRegister}
                   sx={{
-                    backgroundColor: '#ffc1cc',
-                    color: '#000',
+                    backgroundColor: 'orange',
+                    color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#ffb0b8' }
+                    '&:hover': { backgroundColor: 'orange' }
                   }}
                 >
                   Valider ›
