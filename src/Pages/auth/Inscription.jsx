@@ -107,7 +107,7 @@ const Inscription = () => {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "#f9b66fff",
+                    backgroundColor: "orange",
                     textTransform: "none",
                     color: "#000",
                     fontWeight: "bold",
