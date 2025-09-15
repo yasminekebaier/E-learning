@@ -24,7 +24,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 const situations = ["SCOLARISEE", "NON_SCOLARISEE"];
 const niveaux = ["PRIMAIRE", "SECONDAIRE", "AUTRE"];
 
-const steps = ['Info élève', 'Vérification', 'Paiement'];
+const steps = ['Info apprenant', 'Vérification', 'Paiement'];
 
 const RegisterEtudiant = () => {
   const dispatch = useDispatch();
@@ -107,7 +107,7 @@ const RegisterEtudiant = () => {
           Bienvenue sur <span style={{ color: '"#080D50"' }}>KeySafe</span> 🎓
         </Typography>
         <Typography variant="h5" sx={{ mb: 2 }}>
-          KeySafe est une plateforme qui aide chaque élève à apprendre à lire à son rythme, avec des activités ludiques et adaptées.
+          KeySafe est une plateforme qui aide chaque apprenant à apprendre à lire à son rythme, avec des activités ludiques et adaptées.
         </Typography>
         <Box>
           <Typography variant="subtitle1" fontWeight="bold" color="#080D50">
@@ -260,7 +260,7 @@ const RegisterEtudiant = () => {
                   <Grid width={"45%"} item xs={12} md={3}>
                     <TextField
                       select
-                      label="Situation de l'élève"
+                      label="Situation de l'apprenant"
                       fullWidth
                       required
                       size="small"
@@ -338,11 +338,11 @@ const RegisterEtudiant = () => {
                 <Grid container spacing={2}>
                   {[
                     
-                    { label: "Nom et prénom de l'élève :", value: formData.nom_prenom_eleve },
+                    { label: "Nom et prénom de l'apprenant :", value: formData.nom_prenom_eleve },
                     { label: "Email :", value: formData.email },
                     { label: "Numéro de téléphone :", value: formData.phone },
-                    { label: "Situation de l'élève :", value: formData.Situation_Eleve },
-                    { label: "Date de naissance de l'élève :", value: formData.date_naissance },
+                    { label: "Situation de l'apprenant :", value: formData.Situation_Eleve },
+                    { label: "Date de naissance de l'apprenant :", value: formData.date_naissance },
                     { label: "Niveau scolaire :", value: formData.Niveau_SCOLAIRE }
                   ].map((item, index) => (
                     <Grid

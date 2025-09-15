@@ -34,7 +34,7 @@ const getTypeIcon = (type) => {
   switch (type.toLowerCase()) {
     case "pdf": return <PictureAsPdfIcon sx={{ color: "#d32f2f", mr: 1 }} />;
     case "Vidéo":
-    case "Vidéo": return <VideoLibraryIcon sx={{ color: "#1976d2", mr: 1 }} />;
+    case "vidéo": return <VideoLibraryIcon sx={{ color: "#1976d2", mr: 1 }} />;
     case "quiz": return <QuizIcon sx={{ color: "#fbc02d", mr: 1 }} />;
     case "document":
     case "doc": return <ArticleIcon sx={{ color: "#616161", mr: 1 }} />;
@@ -333,10 +333,13 @@ const handleRessourceClick = (ressource) => {
     ))}
   </Select>
 </FormControl>
-          <Button variant="contained" component="label">
-            {t("Choisir un fichier")}
+<Box sx={{border:"1px dashed grey",p:2,borderRadius:2,textAlign:"center",backgroundColor:"#f9f9f9"}}>
+  <Typography variant="body2" sx={{mb:1}}>{file ? file.name : t("Glisser-déposez un fichier ici ou ")}</Typography>
+          <Button variant="contained" component="label"sx={{textTransform:"none",bgcolor:"#f49f45ff","&:hover":{bgcolor:"#f49f45ff"}}}>
+            {t("Parcourir")}
             <input type="file" hidden onChange={e => setFile(e.target.files[0])} />
           </Button>
+          </Box>
           <ButtonComponent text={t("Déposer")} color="orange" onClick={handleAddRessource} />
         </Box>
       </CustomModal>
@@ -362,7 +365,7 @@ const handleRessourceClick = (ressource) => {
    <Dialog open={openVideoModal} onClose={() => setOpenVideoModal(false)} maxWidth="md" fullWidth>
   <DialogTitle>Lecture de la vidéo</DialogTitle>
   <DialogContent>
-   <video width="100%" height="auto" controls>
+   <video width="100%" height="100%" controls>
   <source src={videoUrl} type="video/mp4" />
   Votre navigateur ne supporte pas la lecture vidéo.
 </video>

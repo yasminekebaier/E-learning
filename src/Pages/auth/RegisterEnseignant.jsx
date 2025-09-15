@@ -129,7 +129,7 @@ const handleRegister = async () => {
     {[
   "Des outils pédagogiques avancés",
   "Créez et gérez vos classes facilement",
-  "Suivi personnalisé des élèves",
+  "Suivi personnalisé des apprenants",
 ].map((text, index) => (
   <Box key={index} display="flex" alignItems="center" mb={1}>
     <CheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} />

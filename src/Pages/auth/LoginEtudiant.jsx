@@ -13,10 +13,11 @@ import inscription from "../../assets/inscription.png";
 import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../redux/actions/userActions'; // à adapter
 import { useNavigate } from 'react-router-dom';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
 import keysafe from '../../assets/keysafe.jpg';
-import { Flag } from '@mui/icons-material';
+import ReactCountryFlag from "react-country-flag";
 const LoginEtudiant = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
     password: ''
   });
 
-  const handleLogin = async () => {
+   const handleLogin = async () => {
     try {
       const resultAction = await dispatch(LoginAction(formData)); // adapte selon ta logique
       console.log("Connexion réussie :", resultAction);
@@ -51,6 +52,8 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
   };
 
   return (
+    <>
+    <ToastContainer position="top-right" autoClose={3000} />
     <Grid container sx={{ height: '100vh', bgcolor: '#cfeef1ff' }}>
       
       {/* Left - Illustration */}
@@ -89,7 +92,10 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
                   mr: 2,
                 }}>
 
-                <Flag code={selectedLanguage === 'fr' ? 'FR' : 'GB'} style={{ width: 28, height: 18, borderRadius: 3 }} />
+                  <ReactCountryFlag 
+    countryCode={selectedLanguage === 'fr' ? 'FR' : 'GB'} svg 
+    style={{ width: 28, height: 18, borderRadius: 3 }}
+  />
               </IconButton>
               <Menu
                 anchorEl={langMenu}
@@ -99,11 +105,11 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               >
                 <MenuItem onClick={() => handleLanguageChange('fr')}>
-                  <Flag code="FR" style={{ width: 26, marginRight: 10 }} />
+                  <ReactCountryFlag countryCode="FR" svg style={{ width: 26, marginRight: 10 }} />
                   Français
                 </MenuItem>
                 <MenuItem onClick={() => handleLanguageChange('en')}>
-                  <Flag code="GB" style={{ width: 26, marginRight: 10 }} />
+                  <ReactCountryFlag countryCode="GB" svg style={{ width: 26, marginRight: 10 }} />
                   English
                 </MenuItem>
               </Menu>
@@ -179,6 +185,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
         </Paper>
       </Grid>
     </Grid>
+    </>
   );
 };
 

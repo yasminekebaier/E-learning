@@ -12,9 +12,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LogoutAction } from '../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
+import 'react-toastify/dist/ReactToastify.css';
 const Navbar = () => {
 
     // Séparation des états des menus
@@ -53,6 +54,7 @@ const [langMenu, setLangMenu] = useState(null);
   };
   return (
     <>
+    <ToastContainer position="top-right" autoClose={3000} />
       <AppBar
         position="fixed"
         sx={{
@@ -64,7 +66,7 @@ const [langMenu, setLangMenu] = useState(null);
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Logo à gauche */}
           <Link to="/" style={{ textDecoration: 'none' }}>
-            <img src={keysafe} alt="Logo" style={{ width: "90px", height: "60px" }} />
+            <img src={keysafe} alt="Logo" style={{ width: "100px", height: "60px" }} />
           </Link>
 {/* Search bar centrée */}
           <Box

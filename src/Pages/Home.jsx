@@ -45,9 +45,11 @@ const Home = () => {
         <Typography  sx={{ maxWidth: 600, mx: "auto", mt: 2 ,color:"#080D50",fontWeight:"600",fontSize:"20px"}}>
    Une plateforme d’apprentissage en ligne destinée aux collaborateurs du secteur industriel, facilitant leur participation aux formations grâce à des contenus fiables et interactifs.
         </Typography>
+        <Link to={"/inscription"}>
         <Button variant="contained" sx={{ mt: 4, bgcolor: "#ee983dff", color: "white",borderRadius:"20px",textTransform:"none"}}>
           Commencer
         </Button>
+        </Link>
         </Box>
         {/* Illustration centrale */}
         <Box mt={5} sx={{width:"40%"}}>
@@ -117,7 +119,7 @@ const Home = () => {
             <Typography fontWeight="bold" color="#234aa0">Espace Utilisateurs</Typography>
             <Typography>Connexion Enseignant</Typography>
             <Typography>Connexion Admin</Typography>
-            <Typography>Accès Élève</Typography>
+            <Typography>Accès apprenant</Typography>
           </Grid>
           <Grid item xs={12} md={3}>
             <Typography fontWeight="bold" color="#234aa0">Adresse</Typography>

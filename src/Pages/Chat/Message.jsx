@@ -30,7 +30,7 @@ const Message = () => {
       {/* 📌 Zone de chat */}
       <Box flex={1} display="flex" flexDirection="column" bgcolor="#fafafa">
         <Box p={2} bgcolor="white" borderBottom="1px solid #ddd">
-          <Typography variant="h6">John Doe</Typography>
+          <Typography variant="h6">Amal Abid</Typography>
         </Box>
         
         {/* Messages */}

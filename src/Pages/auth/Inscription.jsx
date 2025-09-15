@@ -2,28 +2,28 @@ import React from "react";
 import { Grid, Card, CardContent, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import keysafe from "../../assets/keysafe.jpg";
-import teacherImg from "../../assets/loginamell.png";
-import adminImg from "../../assets/admin.png";
-import studentImg from "../../assets/loginEtudiant.png";
-import booksImg from "../../assets/insrip.png";
+import enseignat from "../../assets/enseignat.png";
+import adminstrateur from "../../assets/adminstrateur.png";
+import etudiant from "../../assets/etudiant.png";
+import inscrigauche from "../../assets/inscrigauche.png";
 
 const roles = [
   {
     id: 1,
-    label: "ENSEIGNANT",
-    img: teacherImg,
+    label: "Enseignant",
+    img: enseignat,
     link: "/register",
   },
   {
     id: 2,
-    label: "ADMINISTRATEUR",
-    img: adminImg,
+    label: "Administrateur",
+    img: adminstrateur,
     link: "/inscription/admin",
   },
   {
     id: 3,
-    label: "ÉLÈVE",
-    img: studentImg,
+    label: "Apprenant",
+    img: etudiant,
     link: "/registerEtudiant",
   },
 ];
@@ -55,7 +55,8 @@ const Inscription = () => {
           position: "absolute",
           top: 20,
           left: 20,
-          height: "60px",
+          height: "80px",
+          width:"180px"
         }}
       />
 
@@ -106,7 +107,7 @@ const Inscription = () => {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "orange",
+                    backgroundColor: "#f9b66fff",
                     textTransform: "none",
                     color: "#000",
                     fontWeight: "bold",
@@ -128,13 +129,13 @@ const Inscription = () => {
 
       {/* Image pile de livres */}
       <img
-        src={booksImg}
+        src={inscrigauche}
         alt="Books"
         style={{
           position: "absolute",
           bottom: 20,
           right: 40,
-          height: "70%",
+          height: "40%",
         }}
       />
     </Grid>

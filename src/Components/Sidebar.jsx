@@ -128,7 +128,7 @@ const Sidebar = ({ onMenuClick }) => {
            
             {['eleves', 'enseignants', 'admin'].map((route) => {
   const labelMap = {
-    eleves: 'Liste des élèves',
+    eleves: 'Liste des apprenants',
     enseignants: 'Liste des enseignants',
     admin: 'Liste des administrateurs',
   };
