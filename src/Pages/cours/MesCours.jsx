@@ -68,7 +68,7 @@ const displayedCourses = courses.slice(startIndex, startIndex + itemsPerPage);
 
       <Paper elevation={3} sx={{ backgroundColor: "#f9f9f9", padding: 2, borderRadius: 1, boxShadow: "0px 2px 6px rgba(0,0,0,0.1)", mb: 4, maxWidth: "800px" }}>
         <Typography variant="h8" sx={{  }}>
-          La matière de {matiere} en 4ème année permet aux élèves de développer
+          La matière de {matiere} en 4ème année permet aux collaborateur de développer
           leurs compétences en lecture, écriture, expression orale et
           compréhension grammaticale. Les cours sont adaptés au programme officiel
           et enrichis de ressources interactives et d’exercices variés.

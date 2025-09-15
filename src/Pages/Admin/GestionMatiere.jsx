@@ -122,7 +122,7 @@ const [enseignantId, setEnseignantId] = useState("");
   { id: "description", label: "Description de la matière", align: "left" },
 {
   id: "enseignant", 
-  label: "Enseignant", 
+  label: "Collaborateur", 
   align: "left",
   render: (matiere) => 
     matiere.enseignant

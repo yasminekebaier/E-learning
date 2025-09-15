@@ -10,7 +10,7 @@ import inscrigauche from "../../assets/inscrigauche.png";
 const roles = [
   {
     id: 1,
-    label: "Enseignant",
+    label: "Collarateur",
     img: enseignat,
     link: "/register",
   },
@@ -22,7 +22,7 @@ const roles = [
   },
   {
     id: 3,
-    label: "Apprenant",
+    label: "Formateur",
     img: etudiant,
     link: "/registerEtudiant",
   },

@@ -63,7 +63,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
           Bienvenue sur <span style={{ color: "#080D50" }}>KeySafe</span> 🎓
         </Typography>
         <Typography variant="h3" mt={1} textAlign="center" maxWidth={400}>
-          Connecte-toi pour accéder à ta plateforme d'apprentissage personnalisée.
+          Connectez-vous pour accéder à votre plateforme de formation et optimisez votre parcours professionnel avec TPSS.
         </Typography>
       </Grid>
 
@@ -81,7 +81,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
             pt: { xs: 2, md: 3 },
             pb: 0
           }}>
-            <img src={keysafe} alt="Logo" style={{ width: 95, height: 52, objectFit: "contain" }} />
+            <img src={keysafe} alt="Logo" style={{ width: 170, height: 100, objectFit: "contain" }} />
             <Box>
               <IconButton onClick={handleFlagClick}
                 sx={{
@@ -92,10 +92,10 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
                   mr: 2,
                 }}>
 
-                  <ReactCountryFlag 
-    countryCode={selectedLanguage === 'fr' ? 'FR' : 'GB'} svg 
-    style={{ width: 28, height: 18, borderRadius: 3 }}
-  />
+                <ReactCountryFlag 
+                  countryCode={selectedLanguage === 'fr' ? 'FR' : 'GB'} svg 
+                  style={{ width: 28, height: 18, borderRadius: 3 }}
+                />
               </IconButton>
               <Menu
                 anchorEl={langMenu}

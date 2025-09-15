@@ -112,7 +112,7 @@ const userSlice = createSlice({
 })
 .addCase(FetchAllUsers.fulfilled, (state, action) => {
   state.loading = false;
-  state.users = action.payload; // <-- Tous les utilisateurs, pas seulement les élèves
+  state.users = action.payload; // <-- Tous les utilisateurs, pas seulement les collaborateur
   state.error = false;
 })
 

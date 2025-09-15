@@ -120,8 +120,8 @@ const rowsWithData = (users || []).map((user) => ({
   );
 
 const columns = [
-  { id: "nom_prenom_parent", label: t("Parent"), align: "center" },
-  { id: "nom_prenom_eleve", label: t("Élève"), align: "left" },
+  // { id: "nom_prenom_parent", label: t("Parent"), align: "center" },
+  { id: "nom_prenom_eleve", label: t("Collaborateur"), align: "left" },
   { id: "date_naissance", label: t("Né(e) le"), align: "left" },
   { id: "niveau", label: t("Niveau"), align: "center" },
   { id: "situation", label: t("Situation"), align: "center" },
@@ -140,7 +140,7 @@ const columns = [
         <Typography
           sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}
         >
-          {t("Liste des élèves")}
+          {t("Liste des collaborateurs")}
         </Typography>
       </Box>
 
@@ -156,7 +156,7 @@ const columns = [
       >
         <TextField
           size="small"
-          label={t("Rechercher un élève")}
+          label={t("Rechercher un collaborateur")}
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -227,7 +227,7 @@ const columns = [
     <UpdateModal
   open={openModal}
   handleClose={handleCloseModal}
-  title={`Modifier l'élève : ${selectedUser?.nom_prenom_eleve || ""}`}
+  title={`Modifier le collaborateur : ${selectedUser?.nom_prenom_eleve || ""}`}
 >
   {selectedUser && (
     <Box component="form" sx={{ mt: 2 }}>

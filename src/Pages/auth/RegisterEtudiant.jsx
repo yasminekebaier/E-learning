@@ -21,10 +21,10 @@ import { GridCheckCircleIcon } from '@mui/x-data-grid';
 import { RegisterAction } from '../../redux/actions/userActions';
 import { unwrapResult } from '@reduxjs/toolkit';
 
-const situations = ["SCOLARISEE", "NON_SCOLARISEE"];
-const niveaux = ["PRIMAIRE", "SECONDAIRE", "AUTRE"];
+// const situations = ["SCOLARISEE", "NON_SCOLARISEE"];
+// const niveaux = ["PRIMAIRE", "SECONDAIRE", "AUTRE"];
 
-const steps = ['Info apprenant', 'Vérification', 'Paiement'];
+const steps = ['Info collaborateur', 'Vérification', 'Paiement'];
 
 const RegisterEtudiant = () => {
   const dispatch = useDispatch();
@@ -107,16 +107,17 @@ const RegisterEtudiant = () => {
           Bienvenue sur <span style={{ color: '"#080D50"' }}>KeySafe</span> 🎓
         </Typography>
         <Typography variant="h5" sx={{ mb: 2 }}>
-          KeySafe est une plateforme qui aide chaque apprenant à apprendre à lire à son rythme, avec des activités ludiques et adaptées.
-        </Typography>
+KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de l'industrie pétrolière. Elle vous aide à optimiser les processus administratifs et logistiques grâce à des outils numériques innovants et des contenus de formation fiables.        </Typography>
         <Box>
           <Typography variant="subtitle1" fontWeight="bold" color="#080D50">
             Pourquoi s’inscrire ?
           </Typography>
           <ul style={{ paddingLeft: 20 }}>
-            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Accès à des jeux et exercices pour apprendre à lire</li>
-            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Un parcours personnalisé selon ton niveau scolaire</li>
-            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Apprends tout en t’amusant !</li>
+            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Accès à des formations interactives </li>
+            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Optimisation des processus</li>
+            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Engagement écoresponsable !</li>
+            <li><GridCheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} /> Développement continu</li>
+
           </ul>
         </Box>
         <Box mt={7} p={2} bgcolor="#e3f2fd" borderRadius="10px" width="55%">
@@ -255,12 +256,12 @@ const RegisterEtudiant = () => {
                     onChange={(e) => setFormData({ ...formData, date_naissance: e.target.value })}
                   />
                 </Grid>
-
+{/* 
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                   <Grid width={"45%"} item xs={12} md={3}>
                     <TextField
                       select
-                      label="Situation de l'apprenant"
+                      label="Situation du collaborateur"
                       fullWidth
                       required
                       size="small"
@@ -287,7 +288,7 @@ const RegisterEtudiant = () => {
                       ))}
                     </TextField>
                   </Grid>
-                </Box>
+                </Box> */}
               </Grid>
 
               {/* Navigation */}
@@ -338,12 +339,12 @@ const RegisterEtudiant = () => {
                 <Grid container spacing={2}>
                   {[
                     
-                    { label: "Nom et prénom de l'apprenant :", value: formData.nom_prenom_eleve },
+                    { label: "Nom et prénom du collaborateur :", value: formData.nom_prenom_eleve },
                     { label: "Email :", value: formData.email },
                     { label: "Numéro de téléphone :", value: formData.phone },
-                    { label: "Situation de l'apprenant :", value: formData.Situation_Eleve },
-                    { label: "Date de naissance de l'apprenant :", value: formData.date_naissance },
-                    { label: "Niveau scolaire :", value: formData.Niveau_SCOLAIRE }
+                    // { label: "Situation du collaborateur :", value: formData.Situation_Eleve },
+                    { label: "Date de naissance du collaborateur :", value: formData.date_naissance },
+                    // { label: "Niveau scolaire :", value: formData.Niveau_SCOLAIRE }
                   ].map((item, index) => (
                     <Grid
                       key={index}

@@ -121,15 +121,15 @@ const handleRegister = async () => {
           🎓 Bienvenue sur KeySafe
         </Typography>
         <Typography variant="h5" mb={3}>
-          Notre objectif est d'aider chaque enseignant à accompagner ses étudiants dans leur apprentissage.
+          Notre objectif est d'aider chaque formateur à accompagner ses collaborateurs dans leur apprentissage.
         </Typography>
         <Typography variant="subtitle1" color="#080D50" fontWeight="bold" mb={1}>
           Pourquoi s'inscrire ?
         </Typography>
     {[
-  "Des outils pédagogiques avancés",
+  "Des outils avancés",
   "Créez et gérez vos classes facilement",
-  "Suivi personnalisé des apprenants",
+  "Suivi personnalisé des collaborateurs",
 ].map((text, index) => (
   <Box key={index} display="flex" alignItems="center" mb={1}>
     <CheckCircleIcon sx={{ color: '#52307c', mr: 1, fontSize: 20 }} />
@@ -214,8 +214,7 @@ const handleRegister = async () => {
               </Box>
               <Box mt={2} bgcolor="#e3f2fd" p={2} borderRadius="8px">
                 <Typography variant="body2">
-                  Je confirme que les informations ci-dessus sont correctes et que je suis un enseignant habilité par mon établissement à utiliser KeySafe.
-                </Typography>
+                Je confirme que les informations ci-dessus sont exactes et que je suis un formateur autorisé par mon établissement à utiliser KeySafe.                </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
                 <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>

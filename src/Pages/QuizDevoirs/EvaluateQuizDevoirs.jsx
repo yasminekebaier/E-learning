@@ -164,7 +164,7 @@ const [selectedRow, setSelectedRow] = useState(null);
     { value: 45, label: "Total des devoirs", color: "#E8F0FE", icon: AssignmentIcon, iconColor: "#1976d2" },
     { value: 32, label: "Évalués", color: "#E6F4EA", icon: CheckCircleIcon, iconColor: "#388e3c" },
     { value: 13, label: "En attente", color: "#FFF4E5", icon: HourglassEmptyIcon, iconColor: "#f57c00" },
-    { value: 128, label: "Élèves", color: "#F3E8FF", icon: PeopleIcon, iconColor: "#9c27b0" },
+    { value: 128, label: "collaborateur", color: "#F3E8FF", icon: PeopleIcon, iconColor: "#9c27b0" },
   ].map((item, index) => (
     <Grid
       item
