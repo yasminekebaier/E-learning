@@ -6,12 +6,14 @@ import coursReducer from './slices/CoursSlice.js'
 import {persistReducer} from 'redux-persist'
 import { persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import quizDevoirReducer from "./slices/QuizSlice.js";
 
 const rootReducer = combineReducers({
     user:userReducer,
     ressources:RessourcesReducer,
     matiere:matiereReducer,
-    cours:coursReducer
+    cours:coursReducer,
+     quizDevoir: quizDevoirReducer,
 });
 const persistConfig={
     key:'root',

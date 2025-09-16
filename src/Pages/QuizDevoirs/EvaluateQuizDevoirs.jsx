@@ -29,7 +29,7 @@ const [selectedRow, setSelectedRow] = useState(null);
     { id: "titre", label: "Devoir" },
     { id: "type", label: "Type" },
     { id: "Etudiant", label: "Nom de l'etudiant" },
-    { id: "classe", label: "Classe" },
+    { id: "Niveau", label: "Niveau" },
     { id: "dateLimite", label: "Date limite" },
     { id: "soumissions", label: "Soumissions" },
     {

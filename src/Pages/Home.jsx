@@ -38,24 +38,71 @@ const Home = () => {
       </Box>
 
       {/* Hero Section */}
-      <Box px={3} py={3} sx={{display:"flex" ,flexDirection:"row",gap:"20%"
-        ,textAlign:"center",backgroundColor:"#cce7f5",marginBottom:"20px",}}>
-        <Box >
-         <Typography variant="h4" fontWeight="bold" color="#234aa0"> KeySafe !</Typography>
-        <Typography  sx={{ maxWidth: 600, mx: "auto", mt: 2 ,color:"#080D50",fontWeight:"600",fontSize:"20px"}}>
-   Une plateforme d’apprentissage en ligne destinée aux collaborateurs du secteur industriel, facilitant leur participation aux formations grâce à des contenus fiables et interactifs.
-        </Typography>
-        <Link to={"/inscription"}>
-        <Button variant="contained" sx={{ mt: 4, bgcolor: "#ee983dff", color: "white",borderRadius:"20px",textTransform:"none"}}>
-          Commencer
-        </Button>
-        </Link>
-        </Box>
-        {/* Illustration centrale */}
-        <Box sx={{width:"40%"}}>
-          <img src={learning1} alt="Illustration enfants" width="90%" height="50%" />
-        </Box>
-      </Box>
+<Box
+  px={2}
+  py={2}
+  sx={{
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",          // centre verticalement
+    justifyContent: "center",      // centre horizontalement
+    gap: "40px",
+    backgroundColor: "#cce7f5",
+    marginBottom: "20px",
+    minHeight: "300px",            // hero réduit
+    textAlign: "center",
+  }}
+>
+  {/* Texte */}
+  <Box sx={{ maxWidth: 700 }}>
+    <Typography variant="h3" fontWeight="bold" color="#234aa0">
+      KeySafe !
+    </Typography>
+    <Typography
+      sx={{
+        mt: 1,
+        color: "#080D50",
+        fontWeight: "600",
+        fontSize: "16px",
+      }}
+    >
+      Une plateforme d’apprentissage en ligne destinée aux collaborateurs du
+      secteur industriel, facilitant leur participation aux formations grâce à
+      des contenus fiables et interactifs.
+    </Typography>
+    <Link to={"/inscription"}>
+      <Button
+        variant="contained"
+        sx={{
+          mt: 2,
+          bgcolor: "#ee983dff",
+          color: "white",
+          borderRadius: "20px",
+          textTransform: "none",
+          fontSize: "19px",
+          px: 3,
+        }}
+      >
+        Commencer
+      </Button>
+    </Link>
+  </Box>
+
+  {/* Illustration */}
+  <Box sx={{ display: "flex", justifyContent: "center",width:"50%",border:"1px solid red" }}>
+    <img
+      src={learning1}
+      alt="Illustration"
+      style={{
+        height:"50%", // réduit l’image
+        width: "55%",
+        
+      }}
+    />
+  </Box>
+</Box>
+
+
 
       {/* Aperçu de KeySafe */}
       <Paper 

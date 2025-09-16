@@ -3,7 +3,7 @@ import {
   Box, Card, CardContent, Typography, Pagination, IconButton,
   Grid, Divider, Stack, TextField, MenuItem, Tooltip, Stepper, Step, StepLabel, Button
 } from '@mui/material';
-import AddCircleOutline from '@mui/icons-material/Close';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import QuizIcon from '@mui/icons-material/Quiz';
 import WorkIcon from '@mui/icons-material/Work';
@@ -14,19 +14,24 @@ import { ButtonComponent } from '../../Components/Global/ButtonComponent';
 import CustomModal from '../../Components/Global/ModelComponent';
 import UpdateModal from '../../Components/Global/UpdateModel';
 import { useTranslation } from 'react-i18next';
+import { fetchQuizsDevoir, AddQuizDevoirs } from '../../redux/actions/QuizActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCours } from '../../redux/actions/CoursAction';
 
 const AddQuizDevoir = () => {
   const [page, setPage] = useState(1);
-  const [items, setItems] = useState([]);
- const { t } = useTranslation();
- const [openUpdate, setopenUpdate] = useState(false);
- const handleCloseUpdate= () => setopenUpdate(false)
-  // Modal création Quiz/Devoir
+  const { t } = useTranslation();
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const handleCloseUpdate = () => setOpenUpdate(false);
+
   const [openQuizModal, setOpenQuizModal] = useState(false);
   const handleOpenQuizModal = () => setOpenQuizModal(true);
   const handleCloseQuizModal = () => setOpenQuizModal(false);
 
-  // Modal détails / questions
+  const dispatch = useDispatch();
+  const { quizs, loading, error } = useSelector((state) => state.quizDevoir); 
+  const { cours } = useSelector((state) => state.cours); 
+
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const handleOpenDetailModal = () => setOpenDetailModal(true);
   const handleCloseDetailModal = () => {
@@ -34,43 +39,37 @@ const AddQuizDevoir = () => {
     setOpenDetailModal(false);
   };
 
+  const [newQuiz, setNewQuiz] = useState({
+    titre: "",
+    type: "QUIZ",
+    coursId: "",
+    dateLimite: "",
+    duree: ""
+  });
+
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-  // Questions
-  const [currentQuestion, setCurrentQuestion] = useState({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
-  const [questions, setQuestions] = useState([
-    // Exemple questions existantes
-    { texte: "Exemple question 1", options: ["A","B","C","D"], correctAnswerIndex: 0 },
-    { texte: "Exemple question 2", options: ["A","B","C","D"], correctAnswerIndex: 2 },
-    { texte: "Exemple question 3", options: ["A","B","C","D"], correctAnswerIndex: 0 },
-    { texte: "Exemple question 4", options: ["A","B","C","D"], correctAnswerIndex: 2 }
-  ]);
 
-  // Stepper
+  const [currentQuestion, setCurrentQuestion] = useState({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
+  const [questions, setQuestions] = useState([]);
+
   const [activeStep, setActiveStep] = useState(0);
   const steps = ['Détails du Quiz', 'Questions Existantes', 'Ajouter une Question'];
 
   const itemsPerPage = 3;
 
-  useEffect(() => {
-    const data = [
-      { id: 1, type: 'quiz', classe: '1ère A', date: '2025-07-17', duree: '30 min' },
-      { id: 2, type: 'devoir', classe: '2ème B', date: '2025-07-18', duree: '1h' },
-      { id: 3, type: 'quiz', classe: '3ème C', date: '2025-07-19', duree: '45 min' },
-      { id: 4, type: 'devoir', classe: '4ème D', date: '2025-07-20', duree: '1h15' },
-      { id: 5, type: 'quiz', classe: '5ème E', date: '2025-07-21', duree: '20 min' },
-    ];
-    setItems(data);
-  }, []);
-
-  const pageCount = Math.ceil(items.length / itemsPerPage);
-  const paginatedItems = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const pageCount = Math.ceil(quizs.length / itemsPerPage);
+  const paginatedItems = quizs.slice((page - 1) * itemsPerPage, page * itemsPerPage);
   const cardsToShow = [...paginatedItems];
   while (cardsToShow.length < itemsPerPage) cardsToShow.push(null);
 
   const handlePageChange = (event, value) => setPage(value);
 
-  // Gestion question
+  useEffect(() => {
+    dispatch(fetchCours());
+    dispatch(fetchQuizsDevoir());
+  }, [dispatch]);
+
   const handleCurrentQuestionChange = (field, value) => {
     const newQuestion = { ...currentQuestion };
     if (field === "texte") newQuestion.texte = value;
@@ -86,7 +85,7 @@ const AddQuizDevoir = () => {
   const addCurrentQuestion = () => {
     setQuestions([...questions, currentQuestion]);
     setCurrentQuestion({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
-    setActiveStep(1); // Retour step 2 après ajout
+    setActiveStep(1);
   };
 
   const handleViewDetails = (quiz) => {
@@ -108,38 +107,32 @@ const AddQuizDevoir = () => {
         <Box display="flex" flexWrap="wrap" gap={2} px={2} mt={2}>
           {cardsToShow.map((item, index) =>
             item ? (
-              <Card key={item.id} sx={{ flex: '1 1 calc(33.33% - 16px)', minWidth: 250,minHeight: 250 }}>
+              <Card key={item.id} sx={{ flex: '1 1 calc(33.33% - 16px)', minWidth: 250, minHeight: 250 }}>
                 <CardContent>
                   <Grid container justifyContent="space-between" alignItems="center">
                     <Box display="flex" alignItems="center" gap={1}>
-                      {item.type === 'quiz' ? <QuizIcon color="primary" /> : <WorkIcon color="secondary" />}
-                      <Typography variant="h4" fontWeight="bold">{item.type === 'quiz' ? 'Quiz' : 'Devoir'}</Typography>
+                      {item.type === 'QUIZ' ? <QuizIcon color="primary" /> : <WorkIcon color="secondary" />}
+                      <Typography variant="h4" fontWeight="bold">{item.type}</Typography>
                     </Box>
                     <Stack direction="row" spacing={1}>
-  <Tooltip title="Modifier">
-    <IconButton
-      size="small"
-      onClick={() => {
-        setSelectedQuiz(item); // sélectionne le quiz pour préremplir
-        setopenUpdate(true);   // ouvre le modal
-      }}
-    >
-      <EditIcon color="primary" />
-    </IconButton>
-  </Tooltip>
-  <Tooltip title="Supprimer">
-    <IconButton size="small"><DeleteOutlineIcon color="error" /></IconButton>
-  </Tooltip>
-</Stack>
-</Grid>
+                      <Tooltip title="Modifier">
+                        <IconButton size="small" onClick={() => { setSelectedQuiz(item); setOpenUpdate(true); }}>
+                          <EditIcon color="primary" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Supprimer">
+                        <IconButton size="small">{/* TODO: Delete */}<DeleteOutlineIcon color="error" /></IconButton>
+                      </Tooltip>
+                    </Stack>
+                  </Grid>
                   <Box mt={2} mb={1} sx={{display:'flex', flexDirection:'column', gap:1,color:"#080D50"}}>
-                  <Typography><strong>Classe:</strong> {item.classe}</Typography>
-                  <Typography><strong>Date:</strong> {item.date}</Typography>
-                  <Typography><strong>Durée:</strong> {item.duree}</Typography>
+                    <Typography><strong>Cours:</strong> {item.cours?.nom || "N/A"}</Typography>
+                    <Typography><strong>Date limite:</strong> {item.dateLimite || "N/A"}</Typography>
+                    <Typography><strong>Durée:</strong> {item.duree || "N/A"} minutes</Typography>
                   </Box>
                   <Divider sx={{ my: 1 }} />
                   <Stack direction="row" justifyContent="space-between">
-                    <Typography>20 questions</Typography>
+                    <Typography>{item.questions?.length || 0} questions</Typography>
                     <Typography sx={{ cursor: 'pointer', color: '#1976d2' }} onClick={() => handleViewDetails(item)}>Voir les détails</Typography>
                   </Stack>
                 </CardContent>
@@ -171,22 +164,60 @@ const AddQuizDevoir = () => {
       {/* Modal Création Quiz/Devoir */}
       <CustomModal open={openQuizModal} handleClose={handleCloseQuizModal} title="Ajouter Quiz Devoir" icon={<AddCircleOutline />}>
         <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField label="Titre" fullWidth />
-           <TextField select label="Type" fullWidth defaultValue="">
-            <MenuItem value="1ère A">Quiz</MenuItem>
-            <MenuItem value="2ème B">Devoir</MenuItem>
+          <TextField
+            label="Titre"
+            fullWidth
+            value={newQuiz.titre}
+            onChange={(e) => setNewQuiz({ ...newQuiz, titre: e.target.value })}
+          />
+          <TextField
+            select
+            label="Type"
+            fullWidth
+            value={newQuiz.type}
+            onChange={(e) => setNewQuiz({ ...newQuiz, type: e.target.value })}
+          >
+            <MenuItem value="QUIZ">Quiz</MenuItem>
+            <MenuItem value="DEVOIR">Devoir</MenuItem>
           </TextField>
-          <TextField select label="Classe" fullWidth defaultValue="">
-            <MenuItem value="1ère A">1ère A</MenuItem>
-            <MenuItem value="2ème B">2ème B</MenuItem>
+          <TextField
+            select
+            label="Classe / Cours"
+            fullWidth
+            value={newQuiz.coursId}
+            onChange={(e) => setNewQuiz({ ...newQuiz, coursId: e.target.value })}
+          >
+            {cours.map((c) => (
+              <MenuItem key={c.id} value={c.id}>{c.nom}</MenuItem>
+            ))}
           </TextField>
-          <TextField label="Date" type="date" InputLabelProps={{ shrink: true }} fullWidth />
-          <TextField label="Durée (minutes)" type="number" fullWidth />
-          <ButtonComponent text="Enregistrer" color="#080D50" onClick={() => { /* call API */ }} />
+          <TextField
+            label="Date limite"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            fullWidth
+            value={newQuiz.dateLimite}
+            onChange={(e) => setNewQuiz({ ...newQuiz, dateLimite: e.target.value })}
+          />
+          <TextField
+            label="Durée (minutes)"
+            type="number"
+            fullWidth
+            value={newQuiz.duree}
+            onChange={(e) => setNewQuiz({ ...newQuiz, duree: e.target.value })}
+          />
+          <ButtonComponent
+            text="Enregistrer"
+            color="#080D50"
+            onClick={() => {
+              dispatch(AddQuizDevoirs(newQuiz, newQuiz.coursId));
+              handleCloseQuizModal();
+              setNewQuiz({ titre: "", type: "QUIZ", dateLimite: "", duree: "", coursId: "" });
+            }}
+          />
         </Box>
       </CustomModal>
-
-      {/* Modal Détails / Questions avec Stepper */}
+       {/* Modal Détails / Questions avec Stepper */}
       <CustomModal open={openDetailModal} handleClose={handleCloseDetailModal} title={selectedQuiz ? `Quiz: ${selectedQuiz.type} - Classe: ${selectedQuiz.classe}` : ""} icon={<AddCircleOutline />}>
         <Box sx={{ width: '100%', mt: 2 }}>
           <Stepper activeStep={activeStep}>
@@ -324,8 +355,6 @@ const AddQuizDevoir = () => {
     </Box>
   </Box>
 </UpdateModal>
-
-
     </>
   );
 };

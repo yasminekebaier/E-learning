@@ -75,6 +75,7 @@ const [videoUrl, setVideoUrl] = useState('');
 
   const [RessourcesIdToDelete, setRessourcesIdToDelete] = useState(null);
   const [RessourcesName, setRessourcesName] = useState('');
+    const [ressourcesAvecRelations, setRessourcesAvecRelations] = useState([]);
 const { cours } = useSelector((state) => state.cours);
  useEffect(() => {
   dispatch(fetchRessources()).then((res) => {
@@ -85,19 +86,18 @@ const { cours } = useSelector((state) => state.cours);
 
 
   // Filtrer + Trier
-const filteredRows = Array.isArray(ressources)
-  ? ressources
-      .filter(r => {
-        const matchType = selectedType ? r.typeRes?.toLowerCase() === selectedType.toLowerCase() : true;
-        const matchSearch = searchTerm ? r.titreRes?.toLowerCase().includes(searchTerm.toLowerCase()) : true;
-        return matchType && matchSearch;
-      })
-      .sort((a, b) => {
-        const dateA = new Date(a.dateAjout);
-        const dateB = new Date(b.dateAjout);
-        return sortOption === 'newest' ? dateB - dateA : dateA - dateB;
-      })
-  : [];
+ // 👉 Remplace "ressources" par "ressourcesAvecRelations" ici :
+  const filteredRows = ressourcesAvecRelations
+    .filter(r => {
+      const matchType = selectedType ? r.typeRes?.toLowerCase() === selectedType.toLowerCase() : true;
+      const matchSearch = searchTerm ? r.titreRes?.toLowerCase().includes(searchTerm.toLowerCase()) : true;
+      return matchType && matchSearch;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.dateAjout);
+      const dateB = new Date(b.dateAjout);
+      return sortOption === 'newest' ? dateB - dateA : dateA - dateB;
+    });
 
 const rowsWithIcons = filteredRows.map(row => ({
   ...row,
@@ -206,6 +206,26 @@ const handleRessourceClick = (ressource) => {
       toast.info("Action non disponible pour ce type de ressource");
   }
 };
+  useEffect(() => {
+    const loadData = async () => {
+      const resCours = await dispatch(fetchCours()).unwrap();
+      const resRessources = await dispatch(fetchRessources()).unwrap();
+
+      const fusion = resCours.flatMap(c =>
+        (c.ressources || []).map(r => ({
+          ...r,
+          cours: { id: c.id, nom: c.nom },
+          matiere: c.matiere ? { id: c.matiere.id, name: c.matiere.name } : null
+        }))
+      );
+
+      setRessourcesAvecRelations(fusion);
+    };
+
+    loadData();
+  }, [dispatch]);
+
+
 
 
 
@@ -224,7 +244,8 @@ const handleRessourceClick = (ressource) => {
   },
     { id: 'cours', label: "Cours", align: 'center', render: row => row.cours?.nom },
     { id: 'niveauScolaire', label: "Niveau", align: 'center' },
-    { id: 'matiere', label: "Matière", align: 'center', render: row => row.cours?.matiere?.name },
+    { id: 'matiere', label: "Matière", align: 'center', render: row => row.matiere?.name },
+
 
   ];
 
