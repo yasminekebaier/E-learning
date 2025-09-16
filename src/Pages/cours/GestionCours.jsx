@@ -4,6 +4,10 @@ import { Box, Typography, Card, CardContent, CardActions, Button, List, ListItem
 import { AddCircleOutline } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { ListItemIcon } from "@mui/material";
 
 import { fetchMatieres } from "../../redux/actions/MatiéreAction";
 import { ButtonComponent } from "../../Components/Global/ButtonComponent";
@@ -108,25 +112,83 @@ const getCoursParMatiere = (matiereId) => {
       ) : (
         <Box display="grid" gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={3}>
           {matieresEnseignant.map((matiere) => (
-            <Card key={matiere.id} sx={{ borderRadius: 1, boxShadow: 4 }}>
-              <CardContent>
-                <Typography variant="h3" color="green">{matiere.name}</Typography>
-                <Box sx={{display:"flex", mt: 1, mb: 2 }}>
+            <Card
+  key={matiere.id}
+  sx={{
+    borderRadius: 1,
+    boxShadow: 4,
+    display: "flex",
+    flexDirection: "column",
+    height: "100%" // important pour que flex fonctionne bien
+  }}
+>
+  <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h4" color="green">{matiere.name}</Typography>
+                <Box sx={{ mb: 2 ,mt:1}}>
                 <Typography variant="body2" >
                   Description de la matiére :
                 </Typography>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }} >{matiere.description}</Typography>
                 </Box>
 <Divider sx={{ mb: 1 }} />
-                <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                   {t("Cours existants")} :
                 </Typography>
-              <List>
+<List>
   {getCoursParMatiere(matiere.id).length > 0 ? (
     getCoursParMatiere(matiere.id).map((coursItem, idx) => (
-      <ListItem key={idx}>
-        <ListItemText primary={coursItem.nom} />
-      </ListItem>
+      <Box key={idx} sx={{ mb: 2 }}>
+        {/* Nom du cours */}
+        <ListItem>
+          <ListItemText 
+            primary={coursItem.nom} 
+            secondary={coursItem.description} 
+          />
+        </ListItem>
+
+        {/* 🔽 Affichage des ressources du cours */}
+        {coursItem.ressources && coursItem.ressources.length > 0 ? (
+          <List >
+            {coursItem.ressources.map((res) => {
+              let icon;
+              if (
+                res.typeRes?.toLowerCase() === "vidéo" || 
+                res.contenuRes.toLowerCase().endsWith(".mp4") || 
+                res.contenuRes.toLowerCase().endsWith(".mkv")
+              ) {
+                icon = <OndemandVideoIcon color="primary" />;
+              } else if (res.contenuRes.toLowerCase().endsWith(".pdf")) {
+                icon = <PictureAsPdfIcon color="error" />;
+              } else {
+                icon = <InsertDriveFileIcon color="action" />;
+              }
+
+              return (
+                <ListItem key={res.id}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText
+                    primary={res.titreRes}
+                    secondary={
+                      <a
+                        href={res.fichier}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#1976d2", textDecoration: "underline" }}
+                      >
+                        {res.contenuRes}
+                      </a>
+                    }
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        ) : (
+          <Typography variant="body2" color="text.secondary" sx={{ ml: 4 }}>
+            Aucune ressource pour ce cours
+          </Typography>
+        )}
+      </Box>
     ))
   ) : (
     <Typography variant="body2" color="text.secondary">
@@ -135,9 +197,12 @@ const getCoursParMatiere = (matiereId) => {
   )}
 </List>
 
-              </CardContent>
 
-              <CardActions>
+
+
+              </CardContent>
+<Divider mb={2} />
+               <CardActions sx={{ mt: "auto",display:"flex",justifyContent: "flex-end" }}>
                 <ButtonComponent
                   text={t("Ajouter un cours")}
                   icon={<AddCircleOutline />}

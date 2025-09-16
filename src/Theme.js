@@ -54,8 +54,8 @@ h4:{
 },
 h5:{
   fontFamily:"inter",
-  fontSize:15,
-  color:"black",
+  fontSize:17,
+  color:"orange",
   fontWeight:"bold", 
   
 },

@@ -21,7 +21,6 @@ const Home = () => {
         <img src={keysafe} alt="keysafe Logo" width={100} />
         <Box sx={{ display: "flex", gap: 3 }}>
           <Typography variant="body1" sx={{ cursor: "pointer" }}>À propos</Typography>
-          <Typography variant="body1" sx={{ cursor: "pointer" }}>Enseignants</Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
             <Link to={"/inscription"}>
@@ -89,7 +88,7 @@ const Home = () => {
   </Box>
 
   {/* Illustration */}
-  <Box sx={{ display: "flex", justifyContent: "center",width:"50%",border:"1px solid red" }}>
+  <Box sx={{ display: "flex", justifyContent: "center",width:"50%" }}>
     <img
       src={learning1}
       alt="Illustration"
