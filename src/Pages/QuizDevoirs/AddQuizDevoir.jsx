@@ -349,7 +349,7 @@ const AddQuizDevoir = () => {
         color="#1A9BC3"
         onClick={() => {
           console.log("Envoyer modification du quiz :", selectedQuiz);
-          setopenUpdate(false);
+          setOpenUpdate(false);
         }}
       />
     </Box>
