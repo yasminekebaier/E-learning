@@ -14,10 +14,10 @@ import { ButtonComponent } from '../../Components/Global/ButtonComponent';
 import CustomModal from '../../Components/Global/ModelComponent';
 import UpdateModal from '../../Components/Global/UpdateModel';
 import { useTranslation } from 'react-i18next';
-import { fetchQuizsDevoir, AddQuizDevoirs } from '../../redux/actions/QuizActions';
+import { fetchQuizsDevoir, AddQuizDevoirs, AddDevoir } from '../../redux/actions/QuizActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCours } from '../../redux/actions/CoursAction';
-
+import axios from 'axios';
 const AddQuizDevoir = () => {
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
@@ -49,6 +49,9 @@ const AddQuizDevoir = () => {
 
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
+const [openDevoirModal, setOpenDevoirModal] = useState(false);
+const handleOpenDevoirModal = () => setOpenDevoirModal(true);
+const handleCloseDevoirModal = () => setOpenDevoirModal(false);
 
   const [currentQuestion, setCurrentQuestion] = useState({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
   const [questions, setQuestions] = useState([]);
@@ -95,6 +98,17 @@ const AddQuizDevoir = () => {
 
   const handleNextStep = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
   const handleBackStep = () => setActiveStep((prev) => Math.max(prev - 1, 0));
+const [file, setFile] = useState(null);
+
+
+const [resourceTitle, setResourceTitle] = useState("");
+
+
+const handleFileChange = (e) => {
+  setFile(e.target.files[0]);
+};
+
+
 
   return (
     <>
@@ -104,57 +118,82 @@ const AddQuizDevoir = () => {
           <ButtonComponent text="Nouveau Quiz Devoir" icon={<AddCircleOutline />} color="orange" onClick={handleOpenQuizModal} />
         </Box>
 
-        <Box display="flex" flexWrap="wrap" gap={2} px={2} mt={2}>
-          {cardsToShow.map((item, index) =>
-            item ? (
-              <Card key={item.id} sx={{ flex: '1 1 calc(33.33% - 16px)', minWidth: 250, minHeight: 250 }}>
-                <CardContent>
-                  <Grid container justifyContent="space-between" alignItems="center">
-                    <Box display="flex" alignItems="center" gap={1}>
-                      {item.type === 'QUIZ' ? <QuizIcon color="primary" /> : <WorkIcon color="secondary" />}
-                      <Typography variant="h4" fontWeight="bold">{item.type}</Typography>
-                    </Box>
-                    <Stack direction="row" spacing={1}>
-                      <Tooltip title="Modifier">
-                        <IconButton size="small" onClick={() => { setSelectedQuiz(item); setOpenUpdate(true); }}>
-                          <EditIcon color="primary" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Supprimer">
-                        <IconButton size="small">{/* TODO: Delete */}<DeleteOutlineIcon color="error" /></IconButton>
-                      </Tooltip>
-                    </Stack>
-                  </Grid>
-                  <Box mt={2} mb={1} sx={{display:'flex', flexDirection:'column', gap:1,color:"#080D50"}}>
-                    <Typography><strong>Cours:</strong> {item.cours?.nom || "N/A"}</Typography>
-                    <Typography><strong>Date limite:</strong> {item.dateLimite || "N/A"}</Typography>
-                    <Typography><strong>Durée:</strong> {item.duree || "N/A"} minutes</Typography>
-                  </Box>
-                  <Divider sx={{ my: 1 }} />
-                  <Stack direction="row" justifyContent="space-between">
-                    <Typography>{item.questions?.length || 0} questions</Typography>
-                    <Typography sx={{ cursor: 'pointer', color: '#1976d2' }} onClick={() => handleViewDetails(item)}>Voir les détails</Typography>
-                  </Stack>
-                </CardContent>
-              </Card>
+ <Box display="flex" flexWrap="wrap" gap={2} px={2} mt={2}>
+  {cardsToShow.map((item, index) =>
+    item ? (
+      <Card key={item.id} sx={{ flex: '1 1 calc(33.33% - 16px)', minWidth: 250, minHeight: 250 }}>
+        <CardContent>
+          {/* Header type et icône */}
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Box display="flex" alignItems="center" gap={1}>
+              {item.type === 'QUIZ' ? <QuizIcon color="primary" /> : <WorkIcon color="secondary" />}
+              <Typography variant="h4" fontWeight="bold">{item.type}</Typography>
+            </Box>
+          </Grid>
+
+          {/* Infos principales */}
+          <Box mt={2} sx={{ display: 'flex', flexDirection: 'column', gap: 1, color: "#080D50" }}>
+            <Typography><strong>Cours:</strong> {item.cours?.nom || "N/A"}</Typography>
+            <Typography><strong>Date limite:</strong> {item.dateLimite || "N/A"}</Typography>
+
+            {item.type === 'QUIZ' ? (
+              <Typography><strong>Durée:</strong> {item.duree || "N/A"} minutes</Typography>
             ) : (
-              <Card key={`empty-${index}`} sx={{
-                flex: '1 1 calc(33.33% - 16px)',
-                minWidth: 250,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '2px dashed #ccc',
-                textAlign: 'center',
-                cursor: 'pointer'
-              }}>
-                <Typography sx={{ mb: 1 }}>Ajouter un nouveau quiz ou devoir</Typography>
-                <IconButton color="primary"><AddIcon /></IconButton>
-              </Card>
-            )
-          )}
-        </Box>
+              <Typography>
+                <strong>Fichier:</strong>{" "}
+                {item.file ? (
+                  <a href={item.file} target="_blank" rel="noopener noreferrer">{item.file}</a>
+                ) : "Aucun fichier"}
+              </Typography>
+            )}
+          </Box>
+
+          <Divider sx={{ my: 1 }} />
+
+          {/* Footer actions */}
+          <Stack direction="row" justifyContent="space-between">
+            {item.type === 'QUIZ' ? (
+              <Typography>{item.questions?.length || 0} questions</Typography>
+            ) : (
+              <Typography>{item.file ? "Fichier disponible" : "Pas de fichier"}</Typography>
+            )}
+
+            <Typography
+              sx={{ cursor: 'pointer', color: '#1976d2' }}
+              onClick={() => {
+                setSelectedQuiz(item);
+                if (item.type === "QUIZ") {
+                  handleViewDetails(item);       // ouvre modal quiz
+                } else {
+                  handleOpenDevoirModal();       // ouvre modal devoir/fichier
+                }
+              }}
+            >
+              {item.type === "QUIZ" ? "Voir les détails" : (item.file ? "Voir / Télécharger fichier" : "Ajouter un fichier")}
+            </Typography>
+          </Stack>
+        </CardContent>
+      </Card>
+    ) : (
+      <Card key={`empty-${index}`} sx={{
+        flex: '1 1 calc(33.33% - 16px)',
+        minWidth: 250,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: '2px dashed #ccc',
+        textAlign: 'center',
+        cursor: 'pointer'
+      }}>
+        <Typography sx={{ mb: 1 }}>Ajouter un nouveau quiz ou devoir</Typography>
+        <IconButton color="primary"><AddIcon /></IconButton>
+      </Card>
+    )
+  )}
+</Box>
+
+
 
         <Box mt={3} display="flex" justifyContent="center">
           <Pagination count={pageCount} page={page} onChange={handlePageChange} color="primary" />
@@ -309,6 +348,70 @@ const AddQuizDevoir = () => {
           </Box>
         </Box>
       </CustomModal>
+     {/* Modal Détails / ajout ressource devoir */}
+<CustomModal
+  open={openDevoirModal}
+  handleClose={handleCloseDevoirModal}
+  title={`Ajouter une ressource pour le devoir: ${selectedQuiz?.titre}`}
+  icon={<WorkIcon />}
+>
+  <Box
+    component="form"
+    sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}
+  >
+    <TextField
+      label="Titre de la ressource"
+      fullWidth
+      value={resourceTitle}
+      onChange={(e) => setResourceTitle(e.target.value)}
+    />
+
+    {/* input fichier */}
+    <Button
+      variant="outlined"
+      component="label"
+      sx={{ textTransform: "none" }}
+    >
+      Choisir un fichier
+      <input
+        type="file"
+        hidden
+        onChange={handleFileChange}
+      />
+    </Button>
+
+    {file && (
+      <Typography variant="body2" color="textSecondary">
+        Fichier sélectionné : {file.name}
+      </Typography>
+    )}
+
+   <ButtonComponent
+  text="Ajouter Ressource"
+  color="orange"
+  onClick={async () => {
+    if (!file) {
+      alert("Veuillez sélectionner un fichier !");
+      return;
+    }
+
+    try {
+      await dispatch(AddDevoir({ file, titre: resourceTitle, coursId: selectedQuiz.id })).unwrap();
+      alert("Ressource ajoutée avec succès ✅");
+      setFile(null);
+      setResourceTitle("");
+      handleCloseDevoirModal();
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de l'ajout ❌");
+    }
+  }}
+/>
+
+  </Box>
+</CustomModal>
+
+
       <UpdateModal
   open={openUpdate}
   handleClose={handleCloseUpdate}

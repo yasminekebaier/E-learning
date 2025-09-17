@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchQuizsDevoir = createAsyncThunk(
-  "Quizs/list",
+"devoirQuiz/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
@@ -13,33 +13,10 @@ export const fetchQuizsDevoir = createAsyncThunk(
         },
       };
 
-      // Fetch des quiz
-      const quizResponse = await axios.get("http://localhost:8085/Quiz/listquiz", config);
-      const quizs = quizResponse.data.map(q => ({
-        ...q,
-        type: "QUIZ",   // pour distinguer côté frontend
-        cours: q.cours || null
-      }));
-
-      // Fetch des devoirs
-      const devoirResponse = await axios.get("http://localhost:8085/Devoirs", config);
-      const devoirs = devoirResponse.data.map(d => ({
-        ...d,
-        type: "DEVOIR",
-        cours: d.cours || null,
-        dateLimite: d.datefin,  // si tu veux harmoniser les champs
-        duree: d.nbrhour
-      }));
-
-      // Combine quiz et devoirs
-      return [...quizs, ...devoirs];
-
+      const res = await axios.get("http://localhost:8085/api/devoirquiz/all", config);
+      return res.data; // tu récupères déjà la liste combinée
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -85,6 +62,25 @@ export const FetchOneQuiz = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Impossible de récupérer le quiz.");
+    }
+  }
+);
+export const AddDevoir = createAsyncThunk(
+  "quiz/addDevoir",
+  async ({ file, titre, coursId }, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("titre", titre);
+      formData.append("coursId", coursId);
+
+      const response = await axios.post("http://localhost:8085/Devoirs/add", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data; // le devoir créé
+    } catch (err) {
+      console.error(err);
+      return rejectWithValue(err.response.data || "Erreur lors de l'ajout");
     }
   }
 );

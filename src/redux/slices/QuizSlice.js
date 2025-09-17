@@ -1,11 +1,5 @@
-// src/Redux/slices/quizDevoirSlice.js
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  fetchQuizsDevoir,
-  AddQuizDevoirs,
-/*   UpdateQuizDevoir,
-  DeleteQuizDevoir, */
-} from "../actions/QuizActions.js";
+import { createSlice } from "@reduxjs/toolkit"; 
+import { fetchQuizsDevoir, AddQuizDevoirs, AddDevoir } from "../actions/QuizActions.js";
 
 const quizDevoirSlice = createSlice({
   name: "quizDevoir",
@@ -14,51 +8,58 @@ const quizDevoirSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {}, // si tu veux des actions locales (ex: resetError)
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // === FETCH ALL ===
-      .addCase(fetchQuizsDevoir.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchQuizsDevoir.fulfilled, (state, action) => {
-        state.loading = false;
-        state.quizs = action.payload;
+      // Dans le map du fetch
+state.quizs = action.payload.map(item => ({
+  id: item.id,
+  titre: item.titre,
+  type: item.type,
+  dateLimite: item.dateLimite,
+  statut: item.statut,
+  cours: item.cours || null,
+  duree: item.duree || null,
+  questions: item.questions || [],  // pour les quiz
+  file: item.file || null           // pour les devoirs
+}));
+
       })
       .addCase(fetchQuizsDevoir.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // === ADD ===
-      .addCase(AddQuizDevoirs.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      // === ADD QUIZ ===
       .addCase(AddQuizDevoirs.fulfilled, (state, action) => {
-        state.loading = false;
-        state.quizs.push(action.payload);
-      })
-      .addCase(AddQuizDevoirs.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // === UPDATE ===
-      /* .addCase(UpdateQuizDevoir.fulfilled, (state, action) => {
-        state.loading = false;
-        const index = state.quizs.findIndex((q) => q.id === action.payload.id);
-        if (index !== -1) {
-          state.quizs[index] = action.payload;
-        }
+        const newQuiz = {
+          id: action.payload.id,
+          titre: action.payload.titre,
+          type: action.payload.type,
+          dateLimite: action.payload.dateLimite,
+          statut: action.payload.statut,
+          cours: action.payload.cours || null,
+          duree: action.payload.duree || null,
+          questions: action.payload.questions || [],
+        };
+        state.quizs.push(newQuiz);
       })
 
-      // === DELETE ===
-      .addCase(DeleteQuizDevoir.fulfilled, (state, action) => {
-        state.loading = false;
-        state.quizs = state.quizs.filter((q) => q.id !== action.payload);
-      }); */
+      // === ADD DEVOIR ===
+      .addCase(AddDevoir.fulfilled, (state, action) => {
+        const newDevoir = {
+          id: action.payload.id,
+          titre: action.payload.titre,
+          type: action.payload.type,
+          dateLimite: action.payload.dateLimite,
+          statut: action.payload.statut,
+          cours: action.payload.cours || null,
+          file: action.payload.file || null,
+        };
+        state.quizs.push(newDevoir);
+      });
   },
 });
 

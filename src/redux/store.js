@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
     ressources:RessourcesReducer,
     matiere:matiereReducer,
     cours:coursReducer,
-     quizDevoir: quizDevoirReducer,
+    quizDevoir:quizDevoirReducer,
 });
 const persistConfig={
     key:'root',

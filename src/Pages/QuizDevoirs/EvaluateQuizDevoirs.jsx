@@ -20,7 +20,7 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import PeopleIcon from '@mui/icons-material/People';
 import EvaluationModal from "../../Components/Global/EvaluationModal";
 const EvaluateQuizDevoirs = () => {
-  const { t } = useTranslation();
+const { t } = useTranslation();
 const [openModal, setOpenModal] = useState(false);
 const [selectedRow, setSelectedRow] = useState(null);
 
