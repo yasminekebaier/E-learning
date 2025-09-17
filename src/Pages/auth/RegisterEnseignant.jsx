@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux';
 const specialties = [" MATH","PHYSICS","CHEMISTRY","BIOLOGY","INFORMATICS",
     "HISTORY",
     "LITERATURE"];
-const steps = ['Informations de l’enseignant', 'Vérification'];
+const steps = ['Informations du formateur', 'Vérification'];
 
 const RegisterEnseignant = () => {
    const dispatch = useDispatch();
