@@ -20,19 +20,18 @@ export const fetchQuizsDevoir = createAsyncThunk(
     }
   }
 );
-;
-
 export const AddQuizDevoirs = createAsyncThunk(
   "quizDevoir/add",
   async (newQuiz, { rejectWithValue }) => {
     try {
-      
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         `http://localhost:8085/api/devoirquiz/add?coursId=${newQuiz.coursId}`,
         newQuiz ,
               {
-    headers: { // token JWT valide
-      'Content-Type': 'application/json'
+    headers: { 
+              "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
     }
   } // corps de la requête
       );

@@ -1,204 +1,166 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  MenuItem,
-  Button,
-  Select,
-  InputLabel,
-  FormControl,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
+import React, { useState, useEffect } from "react";
+import { Box, Paper, Typography, TextField, Button, Grid, InputLabel } from "@mui/material";
+import { FormControl, Select, MenuItem } from "@mui/material";
 
-const classes = ['3e A', '3e B', '4e A'];
-const durations = ['30 mn', '45 mn', '1 h'];
+import { useDispatch, useSelector } from "react-redux";
 
+import VideoCallIcon from "@mui/icons-material/VideoCall";
+import dayjs from "dayjs";
+import TableComponent from "../../Components/Global/TableComponent";
+import { AddVisios, fetchVisios } from "../../redux/actions/VisioConférenceAction";
+import { toast } from 'react-toastify';
 const Visioconference = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    date: '',
-    time: '',
-    duration: '',
-    description: '',
-    class: '',
-    meetLink: '',
-  });
+  const dispatch = useDispatch();
+  const { visioConferences, isFetching } = useSelector((state) => state.visioConferences);
+const [formData, setFormData] = useState({
+  titre: "",
+  description: "",
+  dateDebut: "",
+  dateFin: "",
+  url: "",
+  eleveId: "" // <-- pour stocker l'élève sélectionné
+});
 
-  const [meetings, setMeetings] = useState([]);
-  const [editingLinkId, setEditingLinkId] = useState(null);
-  const [tempLink, setTempLink] = useState('');
 
-  // Charger les réunions sauvegardées depuis localStorage
+  const [tempUrl, setTempUrl] = useState("");
+const { users } = useSelector((state) => state.user);
+const eleves = users.filter(u => u.role === "ELEVE");
+
   useEffect(() => {
-    const storedMeetings = localStorage.getItem('meetings');
-    if (storedMeetings) {
-      setMeetings(JSON.parse(storedMeetings));
-    }
-  }, []);
+    dispatch(fetchVisios());
+  }, [dispatch]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({ ...prev, [name]: value }));
+};
+
+// exemple avec l'utilisateur connecté côté Redux
+const { CurrentUser } = useSelector((state) => state.user);
+const enseignantId = CurrentUser?.id; // ID de l'enseignant connecté
 
   const handleGenerateLink = () => {
-    setFormData((prev) => ({ ...prev, meetLink: 'https://meet.google.com/xyz-meet' }));
+    setFormData((prev) => ({ ...prev, url: "https://meet.google.com/xyz-meet" }));
   };
 
-  const handlePlanify = () => {
-    const newMeeting = { ...formData, id: Date.now(), status: 'À venir' };
-    const updatedMeetings = [...meetings, newMeeting];
-    setMeetings(updatedMeetings);
-    localStorage.setItem('meetings', JSON.stringify(updatedMeetings));
-
-    setFormData({
-      title: '',
-      date: '',
-      time: '',
-      duration: '',
-      description: '',
-      class: '',
-      meetLink: '',
-    });
-  };
-
-  const handleSaveLink = (id) => {
-    const updatedMeetings = meetings.map((m) =>
-      m.id === id ? { ...m, meetLink: tempLink } : m
-    );
-    setMeetings(updatedMeetings);
-    localStorage.setItem('meetings', JSON.stringify(updatedMeetings));
-    setEditingLinkId(null);
-    setTempLink('');
-  };
-  const getStatusColor = (status) => {
-  switch (status) {
-    case 'À venir':
-      return '#ef8c85ff'; // bleu
-    case 'En cours':
-      return '#f3a85cff'; // orange
-    case 'Terminé':
-      return '#2e7d32'; // vert
-    default:
-      return '#616161'; // gris par défaut
+const handlePlanify = () => {
+  if (!enseignantId || !formData.eleveId) {
+    toast.error("Veuillez sélectionner un élève.");
+    return;
   }
+
+  const sessionPayload = {
+    titre: formData.titre,
+    description: formData.description,
+    dateDebut: dayjs(formData.dateDebut).toISOString(),
+    dateFin: dayjs(formData.dateFin).toISOString(),
+    url: formData.url,
+    isLive: false,
+    isRecorded: false,
+    status: "À venir"
+  };
+if (!formData.url.startsWith("https://meet.google.com/")) {
+    toast.error("Veuillez entrer un lien Google Meet valide !");
+    return;
+}
+
+  dispatch(AddVisios({
+    enseignantId,
+    eleveId: formData.eleveId,
+    session: sessionPayload
+  }));
+
+  // Réinitialiser le formulaire
+  setFormData({
+    titre: "",
+    description: "",
+    dateDebut: "",
+    dateFin: "",
+    url: "",
+    eleveId: ""
+  });
 };
 
 
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "À venir":
+        return "#ef8c85ff";
+      case "En cours":
+        return "#f3a85cff";
+      case "Terminé":
+        return "#2e7d32";
+      default:
+        return "#616161";
+    }
+  };
+
+  const columns = [
+    { id: "titre", label: "Titre" },
+    { id: "description", label: "Description" },
+    {
+      id: "dateDebut",
+      label: "Début",
+      render: (row) => dayjs(row.dateDebut).format("DD/MM/YYYY HH:mm")
+    },
+    {
+      id: "dateFin",
+      label: "Fin",
+      render: (row) => dayjs(row.dateFin).format("DD/MM/YYYY HH:mm")
+    },
+    {
+      id: "status",
+      label: "Statut",
+      render: (row) => (
+        <Box
+          sx={{
+            color: "white",
+            backgroundColor: getStatusColor(row.status),
+            px: 2,
+            py: 0.5,
+            borderRadius: 1,
+            fontSize: "0.8rem",
+            fontWeight: "bold",
+            textAlign: "center",
+            display: "inline-block"
+          }}
+        >
+          {row.status}
+        </Box>
+      )
+    }
+  ];
+
+  const actions = [
+    {
+      tooltip: "Démarrer la visioconférence",
+      icon: <VideoCallIcon />,
+      onClick: (row) => {
+        if (row.url) window.open(row.url, "_blank");
+        else alert("Pas de lien Meet disponible !");
+      }
+    }
+  ];
+
   return (
     <Box p={4}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: '16px', mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: "16px", mb: 4 }}>
         <Typography variant="h5" fontWeight="bold" color="#080D50" mb={3}>
           Planifier une visioconférence
         </Typography>
 
-        <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '30%' }}>
-            <Grid item xs={12}>
-              <TextField
-                label="Titre"
-                name="title"
-                fullWidth
-                value={formData.title}
-                onChange={handleChange}
-                sx={{
-                  '& label': { color: '#080D50', fontWeight: 'bold' },
-                  '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={6} width={100}>
-              <FormControl
-                fullWidth
-                sx={{
-                  '& .MuiInputLabel-root': { color: '#080D50', fontWeight: 'bold' },
-                  '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-                }}
-              >
-                <InputLabel>Classe</InputLabel>
-                <Select
-                  name="class"
-                  value={formData.class}
-                  onChange={handleChange}
-                  label="Classe"
-                >
-                  {classes.map((cl) => (
-                    <MenuItem key={cl} value={cl}>
-                      {cl}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Box>
-
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: '30%' }}>
-            <Grid item xs={6}>
-              <TextField
-                label="Date"
-                name="date"
-                type="date"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                value={formData.date}
-                onChange={handleChange}
-                sx={{
-                  '& label': { color: '#080D50', fontWeight: 'bold' },
-                  '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <TextField
-                label="Heure"
-                name="time"
-                type="time"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                value={formData.time}
-                onChange={handleChange}
-                sx={{
-                  '& label': { color: '#080D50', fontWeight: 'bold' },
-                  '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={3} width={100}>
-              <FormControl
-                fullWidth
-                sx={{
-                  '& .MuiInputLabel-root': { color: '#080D50', fontWeight: 'bold' },
-                  '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-                }}
-              >
-                <InputLabel>Durée</InputLabel>
-                <Select
-                  name="duration"
-                  value={formData.duration}
-                  onChange={handleChange}
-                  label="Durée"
-                >
-                  {durations.map((d) => (
-                    <MenuItem key={d} value={d}>
-                      {d}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Box>
+        <Grid container spacing={2} sx={{ display: "flex", flexDirection: "column" }}>
+          <Grid item xs={12}>
+            <TextField
+              label="Titre"
+              name="titre"
+              fullWidth
+              value={formData.titre}
+              onChange={handleChange}
+              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+            />
+          </Grid>
 
           <Grid item xs={12}>
             <TextField
@@ -209,149 +171,101 @@ const Visioconference = () => {
               rows={2}
               value={formData.description}
               onChange={handleChange}
-              sx={{
-                '& label': { color: '#080D50', fontWeight: 'bold' },
-                '& .MuiOutlinedInput-root': { borderRadius: '10px' },
-              }}
+              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
             />
           </Grid>
 
-          <Grid item xs={12}>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Button
-                onClick={handleGenerateLink}
-                variant="contained"
-                sx={{ bgcolor: '#ee983dff', textTransform: 'none', borderRadius: '8px' }}
-              >
-                Générer un lien Meet
-              </Button>
+          <Grid item xs={6}>
+            <TextField
+              label="Date début"
+              name="dateDebut"
+              type="datetime-local"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={formData.dateDebut}
+              onChange={handleChange}
+              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+            />
+          </Grid>
 
-              {formData.meetLink && (
-                <TextField
-                  value={formData.meetLink}
-                  size="small"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  sx={{
-                    flex: 1,
-                    '& .MuiOutlinedInput-root': { borderRadius: '8px' },
-                  }}
-                />
-              )}
-            </Box>
+          <Grid item xs={6}>
+            <TextField
+              label="Date fin"
+              name="dateFin"
+              type="datetime-local"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              value={formData.dateFin}
+              onChange={handleChange}
+              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+            />
+          </Grid>
+<FormControl fullWidth sx={{ mb: 2 }}>
+  <InputLabel>Élève</InputLabel>
+  <Select
+    name="eleveId"
+    value={formData.eleveId}
+    onChange={handleChange}
+    label="Élève"
+  >
+    {eleves.map(e => (
+      <MenuItem key={e.id} value={e.id}>
+        {e.nom_prenom_eleve} - {e.email}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
+          <Grid item xs={12} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          {/*   <Button onClick={handleGenerateLink} variant="contained" sx={{ bgcolor: "#ee983dff", textTransform: "none", borderRadius: "8px" }}>
+              Générer un lien Meet
+            </Button> */}
+
+           
+   <Grid item xs={12} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+  <TextField
+    label="Lien Google Meet"
+    name="url"
+    size="small"
+    fullWidth
+    value={formData.url}
+    onChange={handleChange}
+    sx={{ flex: 1, "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
+  />
+  <Button
+    variant="outlined"
+    sx={{ textTransform: "none", borderRadius: "8px" }}
+    onClick={async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text.startsWith("https://meet.google.com/")) {
+          setFormData(prev => ({ ...prev, url: text }));
+          toast.success("Lien Meet collé !");
+        } else {
+          toast.error("Le contenu du presse-papiers n'est pas un lien Google Meet valide.");
+        }
+      } catch (err) {
+        toast.error("Impossible d'accéder au presse-papiers.");
+      }
+    }}
+  >
+    Coller le lien Meet
+  </Button>
+</Grid>
+
+
+          
           </Grid>
 
           <Grid item xs={12} textAlign="center">
-            <Button
-              onClick={handlePlanify}
-              variant="contained"
-              sx={{ bgcolor: '#ee983dff', textTransform: 'none', borderRadius: '10px', px: 6 }}
-            >
+            <Button onClick={handlePlanify} variant="contained" sx={{ bgcolor: "#ee983dff", textTransform: "none", borderRadius: "10px", px: 6 }}>
               Planifier
             </Button>
           </Grid>
         </Grid>
       </Paper>
 
-      {/* Table des visioconférences */}
-      <TableContainer component={Paper} elevation={2}>
-        <Table>
-          <TableHead sx={{ bgcolor: '#eece8dff' }}>
-            <TableRow>
-              <TableCell><strong>Titre</strong></TableCell>
-              <TableCell><strong>Classe</strong></TableCell>
-              <TableCell><strong>Date</strong></TableCell>
-              <TableCell><strong>Heure</strong></TableCell>
-              <TableCell><strong>Statut</strong></TableCell>
-              <TableCell align="center"><strong>Action</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {meetings.map((meeting) => (
-              <TableRow key={meeting.id}>
-                <TableCell>{meeting.title}</TableCell>
-                <TableCell>{meeting.class}</TableCell>
-                <TableCell>{meeting.date}</TableCell>
-                <TableCell>{meeting.time}</TableCell>
-               <TableCell>
-  <Box
-    sx={{
-      color: 'white',
-      backgroundColor: getStatusColor(meeting.status),
-      px: 2,
-      py: 0.5,
-      borderRadius: '10px',
-      display: 'inline-block',
-      fontSize: '0.8rem',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    }}
-  >
-    {meeting.status}
-  </Box>
-</TableCell>
-
-                <TableCell align="center">
-                  {meeting.meetLink ? (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<VideoCallIcon />}
-                      href={meeting.meetLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        borderColor: '#ee983dff',
-                        color: '#ee983dff',
-                        borderRadius: '10px',
-                        textTransform: 'none',
-                        '&:hover': { bgcolor: '#f3e5f5' },
-                      }}
-                    >
-                      Démarrer
-                    </Button>
-                  ) : editingLinkId === meeting.id ? (
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                      <TextField
-                        size="small"
-                        placeholder="https://meet.google.com/..."
-                        value={tempLink}
-                        onChange={(e) => setTempLink(e.target.value)}
-                        sx={{ width: '70%' }}
-                      />
-                      <Button
-                        variant="text"
-                        onClick={() => handleSaveLink(meeting.id)}
-                      >
-                        Sauvegarder
-                      </Button>
-                    </Box>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={() => {
-                        setEditingLinkId(meeting.id);
-                        setTempLink('');
-                      }}
-                      sx={{
-                        bgcolor: '#6a1b9a',
-                        color: 'white',
-                        textTransform: 'none',
-                        borderRadius: '10px',
-                        '&:hover': { bgcolor: '#4a0072' },
-                      }}
-                    >
-                      Ajouter lien Meet
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableComponent rows={visioConferences} columns={columns} actions={actions} />
     </Box>
   );
 };

@@ -98,7 +98,7 @@ const Sidebar = ({ onMenuClick }) => {
       text: t("Message de descussion"),
       icon: <ChatIcon />,
       path: "/app/message",
-      roles: ["ROLE_ELEVE"],
+      roles: ["ROLE_ELEVE","ROLE_ENSEIGNANT"],
     },
     {
       text: t("Gestion des matiéres"),

@@ -28,9 +28,11 @@ export const fetchMatieres= createAsyncThunk(
   "Matiere/list",
   async (_, { rejectWithValue }) => {
     try {
+       const token = localStorage.getItem("token");
       const config = {
         headers: {
           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
         },
       };
       const response = await axios.get(

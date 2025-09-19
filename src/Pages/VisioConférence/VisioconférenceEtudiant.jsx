@@ -1,38 +1,29 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
+  Select,
+  MenuItem,
   Button
 } from '@mui/material';
+import TableComponent from '../../Components/Global/TableComponent';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
+import dayjs from 'dayjs';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchVisios } from '../../redux/actions/VisioConférenceAction';
 
 const VisioconférenceEtudiant = () => {
-  const [meetings, setMeetings] = useState([]);
+  const dispatch = useDispatch();
+  const { visioConferences } = useSelector((state) => state.visioConferences);
   const [selectedClass, setSelectedClass] = useState('');
-  const classes = ['3e A', '3e B', '4e A'];
 
   useEffect(() => {
-    const stored = localStorage.getItem('meetings');
-    if (stored) {
-      setMeetings(JSON.parse(stored));
-    }
-  }, []);
- 
-  const filteredMeetings = selectedClass
-    ? meetings.filter((m) => m.class === selectedClass)
-    : meetings;
+    dispatch(fetchVisios());
+  }, [dispatch]);
+
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -43,110 +34,100 @@ const VisioconférenceEtudiant = () => {
     }
   };
 
+  const columns = [
+    { id: 'titre', label: 'Titre' },
+    { id: 'description', label: 'Description' },
+    {
+      id: 'enseignant',
+      label: 'Enseignant',
+      render: (row) => row.enseignant?.nom_prenom_ensignant || 'Inconnu'
+    },
+    {
+      id: 'dateDebut',
+      label: 'Début',
+      render: (row) => dayjs(row.dateDebut).format('DD/MM/YYYY HH:mm')
+    },
+    {
+      id: 'dateFin',
+      label: 'Fin',
+      render: (row) => dayjs(row.dateFin).format('DD/MM/YYYY HH:mm')
+    },
+    {
+      id: 'status',
+      label: 'Statut',
+      render: (row) => (
+        <Box
+          sx={{
+            color: 'white',
+            backgroundColor: getStatusColor(row.status),
+            px: 2,
+            py: 0.5,
+            borderRadius: 1,
+            fontSize: '0.8rem',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            display: 'inline-block'
+          }}
+        >
+          {row.status}
+        </Box>
+      )
+    }
+  ];
+
+  const actions = [
+    {
+      tooltip: 'Rejoindre la visioconférence',
+      icon: <VideoCallIcon />,
+      onClick: (row) => {
+        if (row.url) window.open(row.url, '_blank');
+        else alert('Pas de lien Meet disponible !');
+      }
+    }
+  ];
+const [selectedTeacher, setSelectedTeacher] = useState('');
+
+// Filtrer les visioconférences par enseignant
+const filteredMeetings = selectedTeacher
+  ? visioConferences.filter(
+      (m) => m.enseignant?.nom_prenom_ensignant === selectedTeacher
+    )
+  : visioConferences;
+
   return (
-  <Box p={4}>
+    <Box p={4}>
       <Paper elevation={3} sx={{ p: 3, borderRadius: '16px', mb: 4 }}>
         <Typography variant="h5" fontWeight="bold" color="#080D50" mb={2}>
           Visioconférences disponibles
         </Typography>
 
-        {/* Filtre classe */}
-        <FormControl fullWidth sx={{ maxWidth: 300 }}>
-          <InputLabel>Filtrer par classe</InputLabel>
-          <Select
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-            label="Filtrer par classe"
-          >
-            <MenuItem value="">Toutes les classes</MenuItem>
-            {classes.map((cl) => (
-              <MenuItem key={cl} value={cl}>{cl}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-         {/* Tableau */}
-         <Box sx={{marginTop:"30px"}}>
-      <TableContainer component={Paper} elevation={2}>
-        <Table>
-          <TableHead sx={{ bgcolor: '#e0f2f1' }}>
-            <TableRow>
-              <TableCell><strong>Titre</strong></TableCell>
-              <TableCell><strong>Classe</strong></TableCell>
-              <TableCell><strong>Date</strong></TableCell>
-              <TableCell><strong>Heure</strong></TableCell>
-              <TableCell><strong>Statut</strong></TableCell>
-              <TableCell align="center"><strong>Action</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredMeetings.map((meeting) => (
-              <TableRow key={meeting.id}>
-                <TableCell>{meeting.title}</TableCell>
-                <TableCell>{meeting.class}</TableCell>
-                <TableCell>{meeting.date}</TableCell>
-                <TableCell>{meeting.time}</TableCell>
-                <TableCell>
-                  <Box
-                    sx={{
-                      backgroundColor: getStatusColor(meeting.status),
-                      color: 'white',
-                      px: 2,
-                      py: 0.5,
-                      borderRadius: '10px',
-                      fontSize: '0.8rem',
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      display: 'inline-block',
-                    }}
-                  >
-                    {meeting.status}
-                  </Box>
-                </TableCell>
-                <TableCell align="center">
-                  {meeting.meetLink ? (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      href={meeting.meetLink}
-                      target="_blank"
-                      startIcon={<VideoCallIcon />}
-                      sx={{
-                        borderColor: '#388e3c',
-                        color: '#388e3c',
-                        borderRadius: '10px',
-                        textTransform: 'none',
-                        '&:hover': {
-                          bgcolor: '#e8f5e9',
-                        },
-                      }}
-                    >
-                      Rejoindre
-                    </Button>
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">
-                      Pas encore disponible
-                    </Typography>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+        {/* Filtre par élève si besoin */}
+     <FormControl fullWidth sx={{ maxWidth: 300 }}>
+  <InputLabel>Filtrer par formateur</InputLabel>
+  <Select
+    value={selectedTeacher}
+    onChange={(e) => setSelectedTeacher(e.target.value)}
+    label="Filtrer par enseignant"
+  >
+    <MenuItem value="">Tous les enseignants</MenuItem>
+    {visioConferences
+      .map((m) => m.enseignant?.nom_prenom_ensignant)
+      .filter((v, i, a) => v && a.indexOf(v) === i) // unique
+      .map((name) => (
+        <MenuItem key={name} value={name}>
+          {name}
+        </MenuItem>
+      ))}
+  </Select>
+</FormControl>
 
-            {filteredMeetings.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6} align="center">
-                  Aucune visioconférence disponible.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      </Box>
+
+        <Box sx={{ marginTop: '30px' }}>
+          <TableComponent rows={filteredMeetings} columns={columns} actions={actions} />
+        </Box>
       </Paper>
-
-     
     </Box>
   );
-}
+};
 
-export default VisioconférenceEtudiant
+export default VisioconférenceEtudiant;

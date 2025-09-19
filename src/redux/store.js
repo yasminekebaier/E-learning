@@ -7,13 +7,16 @@ import {persistReducer} from 'redux-persist'
 import { persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import quizDevoirReducer from "./slices/QuizSlice.js";
-
+import visioConferencesReducer from "./slices/VisioSlice.js";
+import MessagesReducer from "./slices/ChatSlice.js";
 const rootReducer = combineReducers({
     user:userReducer,
     ressources:RessourcesReducer,
     matiere:matiereReducer,
     cours:coursReducer,
     quizDevoir:quizDevoirReducer,
+    visioConferences:visioConferencesReducer,
+    Messages:MessagesReducer
 });
 const persistConfig={
     key:'root',

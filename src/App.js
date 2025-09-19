@@ -72,7 +72,7 @@ function App() {
               <Route
             path="profile"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
               <Profile/>
               </PrivateRoute>
             }
@@ -113,7 +113,7 @@ function App() {
            <Route
             path="profile"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
               <Profile/>
               </PrivateRoute>
             }
@@ -162,7 +162,7 @@ function App() {
             <Route
             path="message"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE","ROLE_ENSEIGNANT"]}>
                 <Message />
               </PrivateRoute>
             }/>
@@ -176,7 +176,7 @@ function App() {
              <Route
             path="profile"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE", "ROLE_ADMIN", "ROLE_ENSEIGNANT"]}>
               <Profile/>
               </PrivateRoute>
             }

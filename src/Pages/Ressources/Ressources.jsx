@@ -72,8 +72,7 @@ const [niveauScolaire, setNiveauScolaire] = useState("PRIMAIRE");
   const [UpdatedNiveau, setUpdateNiveau] = useState('');
 const [openVideoModal, setOpenVideoModal] = useState(false);
 const [videoUrl, setVideoUrl] = useState('');
-
-  const [RessourcesIdToDelete, setRessourcesIdToDelete] = useState(null);
+const [RessourcesIdToDelete, setRessourcesIdToDelete] = useState(null);
   const [RessourcesName, setRessourcesName] = useState('');
     const [ressourcesAvecRelations, setRessourcesAvecRelations] = useState([]);
 const { cours } = useSelector((state) => state.cours);

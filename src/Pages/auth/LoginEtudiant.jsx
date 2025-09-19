@@ -40,16 +40,42 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
     password: ''
   });
 
-   const handleLogin = async () => {
-    try {
-      const resultAction = await dispatch(LoginAction(formData)); // adapte selon ta logique
-      console.log("Connexion réussie :", resultAction);
-      navigate('/app'); // redirection à modifier selon ton app
-    } catch (error) {
-      console.error("Erreur de connexion :", error);
-      alert("Email ou mot de passe incorrect.");
+ const handleLogin = async () => {
+  try {
+    const resultAction = await dispatch(LoginAction(formData)); 
+    const user = resultAction?.payload; // selon ta structure de Redux, adapter
+
+    console.log("Connexion réussie :", user);
+
+    if (!user) {
+      toast.error("Utilisateur non trouvé !");
+      return;
     }
-  };
+
+    // Normaliser le rôle
+    const role = user.role?.replace("ROLE_", "").toUpperCase();
+
+    switch (role) {
+      case "ENSEIGNANT":
+        navigate("/app/GestionCours"); // page prof
+        break;
+      case "ELEVE":
+        navigate("/app/matieres"); // page élève
+        break;
+      case "ADMIN":
+        navigate("/app/acceuiladmin"); // page admin
+        break;
+      default:
+        navigate("/"); // fallback
+        break;
+    }
+
+  } catch (error) {
+    console.error("Erreur de connexion :", error);
+    toast.error("Email ou mot de passe incorrect.");
+  }
+};
+
 
   return (
     <>

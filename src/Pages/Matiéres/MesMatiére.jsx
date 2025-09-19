@@ -1,38 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PaginationComponent from "../../Components/Global/PaginationComponent";
-
-const subjects = [
-  { name: "Anglais" },
-  { name: "Français" },
-  { name: "Matière Islamique" },
-  { name: "Mathématique" },
-  { name: "Physique" },
-  { name: "مادة الرياضيات" },
-];
+import { fetchMatieres } from "../../redux/actions/MatiéreAction";
 
 const MesMatieres = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { matieres, loading, error } = useSelector(state => state.matiere);
+
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Nombre total de pages
-  const pageCount = Math.ceil(subjects.length / itemsPerPage);
-
-  // Sélection des matières de la page courante
-  const startIndex = (page - 1) * itemsPerPage;
-  const displayedSubjects = subjects.slice(startIndex, startIndex + itemsPerPage);
+  // Récupération des matières au montage
+  useEffect(() => {
+    dispatch(fetchMatieres());
+  }, [dispatch]);
 
   // Gestion de la pagination
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+  const pageCount = Math.ceil(matieres.length / itemsPerPage);
+  const startIndex = (page - 1) * itemsPerPage;
+  const displayedSubjects = matieres.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (event, value) => setPage(value);
 
   // Redirection vers la page des cours
   const handleCardClick = (subject) => {
     navigate(`/app/matieres/${encodeURIComponent(subject.name)}`);
   };
+
+  // Gestion du chargement et des erreurs
+  if (loading) return <Typography sx={{ p: 3 }}>Chargement...</Typography>;
+  if (error) return <Typography color="error" sx={{ p: 3 }}>Erreur : {error}</Typography>;
+  if (!matieres.length) return <Typography sx={{ p: 3 }}>Aucune matière disponible</Typography>;
 
   return (
     <Box sx={{ padding: 3, minHeight: "100vh" }}>
@@ -40,10 +42,10 @@ const MesMatieres = () => {
         variant="h5"
         sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold", mb: 3 }}
       >
-        Bienvenue en 4ème année
+        Bienvenue
       </Typography>
 
-      {/* Conteneur des cards */}
+      {/* Conteneur des cartes */}
       <Box
         sx={{
           display: "flex",
@@ -53,9 +55,9 @@ const MesMatieres = () => {
           mb: 2,
         }}
       >
-        {displayedSubjects.map((subject, index) => (
+        {displayedSubjects.map((subject) => (
           <Card
-            key={index}
+            key={subject.id}
             onClick={() => handleCardClick(subject)}
             sx={{
               flex: "0 1 calc(33.33% - 20px)",
@@ -92,18 +94,14 @@ const MesMatieres = () => {
               <img
                 src="https://cdn-icons-png.flaticon.com/512/2331/2331777.png"
                 alt="mascotte"
-                style={{
-                  width: 60,
-                  height: 60,
-                  marginTop: 5,
-                }}
+                style={{ width: 60, height: 60, marginTop: 5 }}
               />
             </CardContent>
           </Card>
         ))}
       </Box>
 
-      {/* Pagination en bas */}
+      {/* Pagination */}
       <PaginationComponent
         count={pageCount}
         page={page}
