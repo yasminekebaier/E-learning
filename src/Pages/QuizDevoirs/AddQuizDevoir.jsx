@@ -221,7 +221,7 @@ const handleFileChange = (e) => {
           </TextField>
           <TextField
             select
-            label="Classe / Cours"
+            label="Cours"
             fullWidth
             value={newQuiz.coursId}
             onChange={(e) => setNewQuiz({ ...newQuiz, coursId: e.target.value })}

@@ -4,24 +4,31 @@ import axios from "axios";
 export const AddMatiéres = createAsyncThunk(
   "Matieres/createMatieres",
   async (MatiereData, { rejectWithValue }) => {
-    const { name, description, enseignantId } = MatiereData;
+    const { name, description, enseignantId, eleveId } = MatiereData;
+
     try {
       const response = await axios.post(
-        `http://localhost:8085/Matiere/add/${enseignantId}`, 
+        "http://localhost:8085/Matiere/add",
         null, // pas de body
         {
           params: {
+            formateurId: enseignantId, // attention au nom des params
+            eleveId: eleveId,
             nom: name,
             description: description,
           },
         }
       );
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
+
+
+
 
 
 export const fetchMatieres= createAsyncThunk(

@@ -48,6 +48,8 @@ const [enseignantId, setEnseignantId] = useState("");
   const [description, setDescription] = useState("");
   const [MatiéresIdToDelete, setMatiéresIdToDelete] = useState(null)
   const [openDelete, setOpenDelete] = useState(false);
+  const [eleveId, setEleveId] = useState(""); // id de l'étudiant sélectionné
+
    const handleCloseDelete = () => setOpenDelete(false)
    const [MatiéreName, setMatiéreName] = useState(null)
  const MatiéreId=matieres.id
@@ -60,12 +62,15 @@ const [enseignantId, setEnseignantId] = useState("");
     dispatch(fetchMatieres());
   }, [dispatch]);
 
-  const handleAddMatiere = async () => {
+const handleAddMatiere = async () => {
   if (!matiereName.trim()) {
     return toast.error("Veuillez saisir le nom de la matière");
   }
   if (!enseignantId) {
     return toast.error("Veuillez sélectionner un enseignant");
+  }
+  if (!eleveId) {
+    return toast.error("Veuillez sélectionner un étudiant");
   }
 
   try {
@@ -74,6 +79,7 @@ const [enseignantId, setEnseignantId] = useState("");
         name: matiereName,
         description,
         enseignantId,
+        eleveId, // <-- ajouté ici
       })
     ).unwrap();
 
@@ -81,12 +87,14 @@ const [enseignantId, setEnseignantId] = useState("");
     setMatiereName("");
     setDescription("");
     setEnseignantId("");
+    setEleveId(""); // reset
     handleCloseAdd();
     dispatch(fetchMatieres());
   } catch (err) {
     toast.error(err || "Erreur lors de l'ajout de la matière");
   }
 };
+
 
 
  const handleDeleteMatiere = async (id) => {
@@ -242,6 +250,27 @@ const handleDeleteConfirm = async () => {
         ))}
       </Select>
     </FormControl>
+<Typography sx={{ fontWeight: 500, color: "#080D50" }}>
+  {t("Étudiant")}
+</Typography>
+<FormControl fullWidth>
+  <InputLabel id="eleve-select-label">
+    {t("Sélectionner un étudiant")}
+  </InputLabel>
+  <Select
+    labelId="eleve-select-label"
+    value={eleveId}
+    onChange={(e) => setEleveId(e.target.value)}
+  >
+    {users
+      .filter(u => u.role === "ELEVE")
+      .map((eleve) => (
+        <MenuItem key={eleve.id} value={eleve.id}>
+          {eleve.nom_prenom || eleve.username || eleve.email}
+        </MenuItem>
+    ))}
+  </Select>
+</FormControl>
 
     <ButtonComponent
       text={t("Ajouter")}

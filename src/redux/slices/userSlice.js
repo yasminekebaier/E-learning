@@ -12,9 +12,23 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+   name: 'user',
   initialState,
-  reducers: {},
+ reducers: {
+  RESET_STORE: (state) => {
+    state.CurrentUser = null;
+    state.loading = false;
+    state.error = false;
+    state.successMessage = null;
+    state.errorMessage = null;
+    state.token = null;
+    state.users = []; // <-- vide la liste des utilisateurs
+    localStorage.removeItem("token"); // pour que token soit vraiment supprimé
+  },
+  setUser: (state, action) => {
+    state.CurrentUser = action.payload;
+  },
+},
   extraReducers: (builder) => {
     builder
       // REGISTER
