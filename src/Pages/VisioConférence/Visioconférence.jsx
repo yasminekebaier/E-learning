@@ -131,7 +131,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
       )
     }
   ];
-
+  
   const actions = [
     {
       tooltip: "Démarrer la visioconférence",
@@ -146,7 +146,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
   return (
     <Box p={4}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: "16px", mb: 4 }}>
-        <Typography variant="h5" fontWeight="bold" color="#080D50" mb={3}>
+        <Typography variant="h5" fontWeight="bold" color="#174090" mb={3}>
           Planifier une visioconférence
         </Typography>
 
@@ -158,7 +158,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
               fullWidth
               value={formData.titre}
               onChange={handleChange}
-              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+              sx={{ "& label": { color: "#174090", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
             />
           </Grid>
 
@@ -171,7 +171,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
               rows={2}
               value={formData.description}
               onChange={handleChange}
-              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+              sx={{ "& label": { color: "#174090", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
             />
           </Grid>
 
@@ -184,7 +184,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
               InputLabelProps={{ shrink: true }}
               value={formData.dateDebut}
               onChange={handleChange}
-              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+              sx={{ "& label": { color: "#174090", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
             />
           </Grid>
 
@@ -197,7 +197,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
               InputLabelProps={{ shrink: true }}
               value={formData.dateFin}
               onChange={handleChange}
-              sx={{ "& label": { color: "#080D50", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+              sx={{ "& label": { color: "#174090", fontWeight: "bold" }, "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
             />
           </Grid>
 <FormControl fullWidth sx={{ mb: 2 }}>
@@ -217,7 +217,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
 </FormControl>
 
           <Grid item xs={12} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          {/*   <Button onClick={handleGenerateLink} variant="contained" sx={{ bgcolor: "#ee983dff", textTransform: "none", borderRadius: "8px" }}>
+          {/*   <Button onClick={handleGenerateLink} variant="contained" sx={{ bgcolor: "#008000", textTransform: "none", borderRadius: "8px" }}>
               Générer un lien Meet
             </Button> */}
 
@@ -258,7 +258,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
           </Grid>
 
           <Grid item xs={12} textAlign="center">
-            <Button onClick={handlePlanify} variant="contained" sx={{ bgcolor: "#ee983dff", textTransform: "none", borderRadius: "10px", px: 6 }}>
+            <Button onClick={handlePlanify} variant="contained" sx={{ bgcolor: "#008000", textTransform: "none", borderRadius: "10px", px: 6 }}>
               Planifier
             </Button>
           </Grid>

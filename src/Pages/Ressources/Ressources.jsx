@@ -264,7 +264,7 @@ const handleRessourceClick = (ressource) => {
           <ButtonComponent
             text={t('Déposez une ressource')}
             icon={<AddCircleOutline />}
-            color="orange"
+            color="#008000"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>
@@ -360,7 +360,7 @@ const handleRessourceClick = (ressource) => {
             <input type="file" hidden onChange={e => setFile(e.target.files[0])} />
           </Button>
           </Box>
-          <ButtonComponent text={t("Déposer")} color="orange" onClick={handleAddRessource} />
+          <ButtonComponent text={t("Déposer")} color="#008000" onClick={handleAddRessource} />
         </Box>
       </CustomModal>
 

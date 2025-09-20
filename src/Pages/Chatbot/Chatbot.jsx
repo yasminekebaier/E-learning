@@ -63,7 +63,7 @@ const Chatbot = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 z-50 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-#008000-500 to-#008000-600 text-white rounded-full shadow-2xl hover:shadow-#008000-500/25 transition-all duration-300 z-50 flex items-center justify-center group"
         style={{
           boxShadow: isOpen 
             ? '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' 
@@ -110,7 +110,7 @@ const Chatbot = () => {
             }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-#008000-500 to-#008000-600 text-white p-4 flex items-center justify-between">
               <div className="flex items-center">
                 <motion.div
                   animate={{ rotate: [0, 360] }}
@@ -121,7 +121,7 @@ const Chatbot = () => {
                 </motion.div>
                 <div>
                   <h3 className="font-bold">Assistant KeySafe</h3>
-                  <p className="text-sm text-orange-100">
+                  <p className="text-sm text-#008000-100">
                     {isTyping ? 'En train d\'écrire...' : 'En ligne'}
                   </p>
                 </div>
@@ -301,7 +301,7 @@ const Chatbot = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Tapez votre message..."
-                  className={`flex-1 px-4 py-3 rounded-full border-2 transition-all duration-200 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                  className={`flex-1 px-4 py-3 rounded-full border-2 transition-all duration-200 focus:ring-2 focus:ring-#008000-500 focus:border-transparent ${
                     settings.theme === 'dark'
                       ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400'
                       : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -312,7 +312,7 @@ const Chatbot = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}
-                  className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full hover:from-orange-600 hover:to-orange-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg"
+                  className="w-12 h-12 bg-gradient-to-r from-#008000-500 to-#008000-600 text-white rounded-full hover:from-#008000-600 hover:to-#008000-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg"
                 >
                   <Send className="w-5 h-5" />
                 </motion.button>

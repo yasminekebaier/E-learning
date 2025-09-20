@@ -40,7 +40,7 @@ const MesMatieres = () => {
     <Box sx={{ padding: 3, minHeight: "100vh" }}>
       <Typography
         variant="h5"
-        sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold", mb: 3 }}
+        sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold", mb: 3 }}
       >
         Bienvenue
       </Typography>

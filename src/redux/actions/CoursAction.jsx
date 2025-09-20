@@ -5,54 +5,56 @@ import axios from "axios";
 export const AddCours = createAsyncThunk(
   "Cours/createCours",
   async (CoursData, { rejectWithValue }) => {
-    const {
-      matiereId,
-      nom,
-      description,
-      etat,
-      type,
-      datedebut,
-      datefin,
-      nbrhour,
-      prix,
-      nomformateur,
-      creepar
-    } = CoursData;
+ const {
+  matiereId,
+  studentId,   // 👈 ajouter ici
+  nom,
+  description,
+  etat,
+  type,
+  datedebut,
+  datefin,
+  nbrhour,
+  prix,
+  nomformateur,
+  creepar
+} = CoursData;
+
 
     const payload = {
       nom,
       description,
       etat,
       type,
-      datedebut,
-      datefin,
+      datedebut: datedebut ? new Date(datedebut).toISOString() : null,
+      datefin: datefin ? new Date(datefin).toISOString() : null,
       nbrhour: Number(nbrhour),
       prix: Number(prix),
       nomformateur,
-      creepar
+      creepar,
+      ressources: [] // pas de ressources à la création
     };
 
     try {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `http://localhost:8085/Cours/addcours/${matiereId}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      );
+  `http://localhost:8085/Cours/addcours/${matiereId}/${studentId}`,
+  payload,
+  {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
 
       return response.data;
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
+      return rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
 );

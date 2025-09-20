@@ -14,13 +14,13 @@ const TableComponent = ({ rows, columns, actions }) => {
           <TableRow sx={{ bgcolor: '#f8f9fa' }}>
             {/* Début de la table */}
             {columns.map((column) => (
-              <TableCell key={column.id} align={column.align || "center"} style={{ color: "#080D50", fontWeight: "bold" }}>
+              <TableCell key={column.id} align={column.align || "center"} style={{ color: "#174090", fontWeight: "bold" }}>
                 {column.label}
               </TableCell>
             ))}
             {/* Si la table a des actions, ajouter une colonne "Actions" dans l'en-tête */}
             {actions && (
-              <TableCell align="center" style={{ color: "#080D50", fontWeight: "bold" }}>
+              <TableCell align="center" style={{ color: "#174090", fontWeight: "bold" }}>
                 Actions
               </TableCell>
             )}

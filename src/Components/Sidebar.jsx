@@ -141,11 +141,11 @@ const Sidebar = ({ onMenuClick }) => {
             onClick={toggleDrawer}
             sx={{
               backgroundColor: isRouteActive(item.path)
-                ? "#FFA726"
+                ? "#008000"
                 : "transparent",
               "&:hover": {
                 backgroundColor: isRouteActive(item.path)
-                  ? "#FB8C00"
+                  ? "#008000"
                   : "#f0f0f0",
               },
               borderRadius: 2,
@@ -157,7 +157,7 @@ const Sidebar = ({ onMenuClick }) => {
               sx={{
                 minWidth: "auto",
                 marginRight: "8px",
-                color: isRouteActive(item.path) ? "#fff" : "#080D50",
+                color: isRouteActive(item.path) ? "#fff" : "#174090",
               }}
             >
               {item.icon}
@@ -166,7 +166,7 @@ const Sidebar = ({ onMenuClick }) => {
               primary={item.text}
               primaryTypographyProps={{
                 style: {
-                  color: isRouteActive(item.path) ? "#fff" : "#080D50",
+                  color: isRouteActive(item.path) ? "#fff" : "#174090",
                   fontWeight: "bold",
                 },
               }}
@@ -181,7 +181,7 @@ const Sidebar = ({ onMenuClick }) => {
           <ListItem disablePadding>
             <ListItemButton onClick={handleAdminMenuClick}>
               <ListItemIcon
-                sx={{ color: "#080D50", minWidth: "auto", marginRight: "8px" }}
+                sx={{ color: "#174090", minWidth: "auto", marginRight: "8px" }}
               >
                 <GroupIcon />
               </ListItemIcon>
@@ -189,7 +189,7 @@ const Sidebar = ({ onMenuClick }) => {
                 primary="Gestion des utilisateurs"
                 primaryTypographyProps={{
                   style: {
-                    color: "#080D50",
+                    color: "#174090",
                     fontWeight: "bold",
                   },
                 }}
@@ -217,9 +217,9 @@ const Sidebar = ({ onMenuClick }) => {
                     onClick={toggleDrawer}
                     sx={{
                       pl: 4,
-                      backgroundColor: active ? "#FFA726" : "transparent",
+                      backgroundColor: active ? "#008000" : "transparent",
                       "&:hover": {
-                        backgroundColor: active ? "#FB8C00" : "#f0f0f0",
+                        backgroundColor: active ? "#008000" : "#f0f0f0",
                       },
                       borderRadius: 2,
                       mb: 0.5,
@@ -230,7 +230,7 @@ const Sidebar = ({ onMenuClick }) => {
                       primary={labelMap[route]}
                       primaryTypographyProps={{
                         style: {
-                          color: active ? "#fff" : "#080D50",
+                          color: active ? "#fff" : "#174090",
                           fontWeight: "bold",
                         },
                       }}

@@ -5,11 +5,11 @@ export const fetchQuizsDevoir = createAsyncThunk(
 "devoirQuiz/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+   
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+        
         },
       };
 
@@ -25,18 +25,24 @@ export const AddQuizDevoirs = createAsyncThunk(
   async (newQuiz, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
+
+      // Créer un payload selon le type
+      const payload = {
+        ...newQuiz,
+        quiz: newQuiz.type === "QUIZ" ? { questions: [] } : null, // <-- Quiz vide pour les questions
+        devoir: newQuiz.type === "DEVOIR" ? null : null
+      };
+
       const res = await axios.post(
         `http://localhost:8085/api/devoirquiz/add?coursId=${newQuiz.coursId}`,
-        newQuiz ,
-              {
-    headers: { 
-              "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-    }
-  } // corps de la requête
+        payload, // objet JSON modifié
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-
-
 
       return res.data;
     } catch (err) {
@@ -44,6 +50,8 @@ export const AddQuizDevoirs = createAsyncThunk(
     }
   }
 );
+
+
 
 export const FetchOneQuiz = createAsyncThunk(
   "Quiz/fetchOne",
@@ -65,21 +73,60 @@ export const FetchOneQuiz = createAsyncThunk(
   }
 );
 export const AddDevoir = createAsyncThunk(
-  "quiz/addDevoir",
-  async ({ file, titre, coursId }, { rejectWithValue }) => {
+  "quizDevoir/addDevoir",
+  async ({ quizDevoirId, file }, { rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("titre", titre);
-      formData.append("coursId", coursId);
 
-      const response = await axios.post("http://localhost:8085/Devoirs/add", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return response.data; // le devoir créé
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        `http://localhost:8085/api/devoirquiz/${quizDevoirId}/upload-devoir`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.data;
     } catch (err) {
-      console.error(err);
-      return rejectWithValue(err.response.data || "Erreur lors de l'ajout");
+      return rejectWithValue(err.response?.data || "Erreur upload devoir");
     }
   }
 );
+export const AddQuestions = createAsyncThunk(
+  "quizDevoir/addQuestions",
+  async ({ quizId, questions }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Transformer les questions pour correspondre au backend
+      const payload = questions.map(q => ({
+        content: q.texte, // correspond à Question.content côté backend
+        correctAnswerIndex: q.correctAnswerIndex,
+        choices: q.options.map(opt => ({ content: opt })) // correspond à List<Choice>
+      }));
+
+      // Envoyer au backend
+      await axios.post(`http://localhost:8085/Question/addQuestions/${quizId}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      return questions; // ou payload si tu veux stocker la structure envoyée
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      return rejectWithValue(err.response?.data || "Erreur lors de l'ajout des questions");
+    }
+  }
+);
+
+
+
+

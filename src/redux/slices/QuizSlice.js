@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"; 
-import { fetchQuizsDevoir, AddQuizDevoirs, AddDevoir } from "../actions/QuizActions.js";
+import { fetchQuizsDevoir, AddQuizDevoirs, AddDevoir, AddQuestions } from "../actions/QuizActions.js";
 
 const quizDevoirSlice = createSlice({
   name: "quizDevoir",
@@ -14,19 +14,7 @@ const quizDevoirSlice = createSlice({
       // === FETCH ALL ===
       .addCase(fetchQuizsDevoir.fulfilled, (state, action) => {
       // Dans le map du fetch
-state.quizs = action.payload.map(item => ({
-  id: item.id,
-  titre: item.titre,
-  type: item.type,
-  dateLimite: item.dateLimite,
-  statut: item.statut,
-  cours: item.cours || null,
-  duree: item.duree || null,
-  questions: item.questions || [],  // pour les quiz
-  file: item.file || null           // pour les devoirs
-}));
-
-      })
+state.quizs = action.payload})
       .addCase(fetchQuizsDevoir.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
@@ -59,7 +47,23 @@ state.quizs = action.payload.map(item => ({
           file: action.payload.file || null,
         };
         state.quizs.push(newDevoir);
-      });
+      })
+      // === ADD QuestionQUIZ===
+        // === ADD QUESTIONS ===
+    .addCase(AddQuestions.fulfilled, (state, action) => {
+      const addedQuestions = action.payload; // liste des questions ajoutées
+      const quizId = addedQuestions[0]?.quiz?.id;
+      if (quizId) {
+        const quizIndex = state.quizs.findIndex((q) => q.id === quizId);
+        if (quizIndex !== -1) {
+          state.quizs[quizIndex].questions = [
+            ...(state.quizs[quizIndex].questions || []),
+            ...addedQuestions
+          ];
+        }
+      }
+    });
+      
   },
 });
 

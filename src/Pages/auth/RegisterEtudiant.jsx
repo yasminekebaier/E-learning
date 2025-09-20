@@ -104,12 +104,12 @@ const RegisterEtudiant = () => {
           sx={{ width: '70%', maxWidth: 250 }}
         />
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Bienvenue sur <span style={{ color: '"#080D50"' }}>KeySafe</span> 🎓
+          Bienvenue sur <span style={{ color: '"#174090"' }}>KeySafe</span> 🎓
         </Typography>
         <Typography variant="h5" sx={{ mb: 2 }}>
 KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de l'industrie pétrolière. Elle vous aide à optimiser les processus administratifs et logistiques grâce à des outils numériques innovants et des contenus de formation fiables.        </Typography>
         <Box>
-          <Typography variant="subtitle1" fontWeight="bold" color="#080D50">
+          <Typography variant="subtitle1" fontWeight="bold" color="#174090">
             Pourquoi s’inscrire ?
           </Typography>
           <ul style={{ paddingLeft: 20 }}>
@@ -121,7 +121,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
           </ul>
         </Box>
         <Box mt={7} p={2} bgcolor="#e3f2fd" borderRadius="10px" width="55%">
-          <Typography variant="body2" fontWeight="bold" color="#080D50">
+          <Typography variant="body2" fontWeight="bold" color="#174090">
             📧 Un email de confirmation sera envoyé, contenant les informations de connexion.
           </Typography>
         </Box>
@@ -297,13 +297,13 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     textTransform: "none",
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   ‹ Précédent
@@ -313,13 +313,13 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleNext}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     textTransform: "none",
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   Suivant ›
@@ -332,7 +332,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
           {activeStep === 1 && (
             <>
               <Box sx={{ bgcolor: '#C6EFF2', p: 3, borderRadius: '10px' }}>
-                <Typography variant="h6" fontWeight="bold" color="#080D50" mb={2}>
+                <Typography variant="h6" fontWeight="bold" color="#174090" mb={2}>
                   Validation des informations
                 </Typography>
 
@@ -360,7 +360,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                         border: '1px solid #ccc'
                       }}
                     >
-                      <Typography fontWeight="bold" color="#080D50">
+                      <Typography fontWeight="bold" color="#174090">
                         {item.label}
                       </Typography>
                       <Typography color="#234aa0">
@@ -377,13 +377,13 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     textTransform: "none",
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   ‹ Précédent
@@ -393,13 +393,13 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleNext}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
                     textTransform: "none",
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   Suivant ›
@@ -443,12 +443,12 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleBack}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   ‹ Précédent
@@ -458,12 +458,12 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                   variant="contained"
                   onClick={handleRegister}
                   sx={{
-                    backgroundColor: 'orange',
+                    backgroundColor: '#008000',
                     color: 'White',
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: 'orange' }
+                    '&:hover': { backgroundColor: '#008000' }
                   }}
                 >
                   Valider ›

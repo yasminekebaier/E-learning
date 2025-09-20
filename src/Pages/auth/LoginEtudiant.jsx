@@ -86,7 +86,7 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
       <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 4,width:"50%" }}>
         <Box component="img" src={inscription} alt="Login Illustration" sx={{ width: '70%', maxWidth: 300 }} />
         <Typography variant="h4" fontWeight="bold" mt={3}>
-          Bienvenue sur <span style={{ color: "#080D50" }}>KeySafe</span> 🎓
+          Bienvenue sur <span style={{ color: "#174090" }}>KeySafe</span> 🎓
         </Typography>
         <Typography variant="h3" mt={1} textAlign="center" maxWidth={400}>
           Connectez-vous pour accéder à votre plateforme de formation et optimisez votre parcours professionnel avec TPSS.
@@ -190,19 +190,29 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
             }}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
-
+{/* Lien mot de passe oublié */}
+<Box sx={{ width: '100%', textAlign: 'right', mt: 1 }}>
+  <Typography
+    component="span"
+    variant="body2"
+    sx={{ cursor: 'pointer', color: '#1890ff', '&:hover': { textDecoration: 'underline' } }}
+    onClick={() => navigate("/forget-password")}
+  >
+    {t("Mot de passe oublié ?")}
+  </Typography>
+</Box>
           <Button
             variant="contained"
             fullWidth
             onClick={handleLogin}
             sx={{
               mt: 3,
-              backgroundColor: 'orange',
+              backgroundColor: '#008000',
               color: '#000',
               borderRadius: '20px',
               textTransform: 'none',
               fontWeight: 'bold',
-              '&:hover': { backgroundColor: 'orange' }
+              '&:hover': { backgroundColor: '#008000' }
             }}
           >
             Se connecter

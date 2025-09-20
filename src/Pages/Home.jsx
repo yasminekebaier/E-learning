@@ -27,12 +27,12 @@ const Home = () => {
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
           <Link to={"/inscription"}>
-            <Button variant="contained" sx={{ bgcolor: "#ee983dff", color: "white", textTransform: "none", borderRadius: "20px" }}>
+            <Button variant="contained" sx={{ bgcolor: "#008000", color: "white", textTransform: "none", borderRadius: "20px" }}>
               Inscription
             </Button>
           </Link>
           <Link to={"/LoginEtudiant"}>
-            <Button variant="outlined" sx={{ borderRadius: "20px", borderColor: "#ee983dff", color: "#ee983dff", textTransform: "none" }}>
+            <Button variant="outlined" sx={{ borderRadius: "20px", borderColor: "#008000", color: "#008000", textTransform: "none" }}>
               Connexion
             </Button>
           </Link>
@@ -63,7 +63,7 @@ const Home = () => {
           <Typography
             sx={{
               mt: 1,
-              color: "#080D50",
+              color: "#174090",
               fontWeight: "600",
               fontSize: "18px",
               lineHeight: 1.6,
@@ -78,7 +78,7 @@ const Home = () => {
               variant="contained"
               sx={{
                 mt: 3,
-                bgcolor: "#ee983dff",
+                bgcolor: "#008000",
                 color: "white",
                 borderRadius: "25px",
                 textTransform: "none",
@@ -87,7 +87,7 @@ const Home = () => {
                 py: 1.5,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                 "&:hover": {
-                  bgcolor: "#d6872eff",
+                  bgcolor: "#008000",
                   boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)",
                 },
               }}
@@ -139,7 +139,7 @@ const Home = () => {
           sx={{
             borderRadius: "25px",
             mt: 4,
-            bgcolor: "#ee983dff",
+            bgcolor: "#008000",
             color: "white",
             textTransform: "none",
             fontSize: "18px",
@@ -147,7 +147,7 @@ const Home = () => {
             py: 1.2,
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
             "&:hover": {
-              bgcolor: "#d6872eff",
+              bgcolor: "#008000",
               boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)",
             },
           }}
@@ -176,7 +176,7 @@ const Home = () => {
               <TextField fullWidth label="Message" multiline rows={4} />
             </Grid>
             <Grid item xs={14}>
-              <Button variant="contained" sx={{ bgcolor: "#ee983dff", color: "white",textTransform:"none",borderRadius:"20px" }}>
+              <Button variant="contained" sx={{ bgcolor: "#008000", color: "white",textTransform:"none",borderRadius:"20px" }}>
                 Envoyer
               </Button>
             </Grid>

@@ -173,13 +173,13 @@ const handleDeleteConfirm = async () => {
   return (
     <StyledPaper elevation={3}>
         <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
-          <Typography sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}>
+          <Typography sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold" }}>
             {t('Gestion des Matières')}
           </Typography>
           <ButtonComponent
             text={t('Ajouter une matière')}
             icon={<AddCircleOutline />}
-            color="orange"
+            color="#008000"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>
@@ -211,7 +211,7 @@ const handleDeleteConfirm = async () => {
     component="form"
     sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 2 }}
   >
-    <Typography sx={{ fontWeight: 500, color: "#080D50" }}>
+    <Typography sx={{ fontWeight: 500, color: "#174090" }}>
       {t("Nom de la matière")}
     </Typography>
     <TextField
@@ -221,7 +221,7 @@ const handleDeleteConfirm = async () => {
       onChange={(e) => setMatiereName(e.target.value)}
     />
 
-    <Typography sx={{ fontWeight: 500, color: "#080D50" }}>
+    <Typography sx={{ fontWeight: 500, color: "#174090" }}>
       {t("Description de la matière")}
     </Typography>
     <TextField
@@ -231,7 +231,7 @@ const handleDeleteConfirm = async () => {
       onChange={(e) => setDescription(e.target.value)}
     />
 
-    <Typography sx={{ fontWeight: 500, color: "#080D50" }}>
+    <Typography sx={{ fontWeight: 500, color: "#174090" }}>
       {t("Formateur")}
     </Typography>
     <FormControl fullWidth>
@@ -250,7 +250,7 @@ const handleDeleteConfirm = async () => {
         ))}
       </Select>
     </FormControl>
-<Typography sx={{ fontWeight: 500, color: "#080D50" }}>
+<Typography sx={{ fontWeight: 500, color: "#174090" }}>
   {t("Étudiant")}
 </Typography>
 <FormControl fullWidth>
@@ -274,7 +274,7 @@ const handleDeleteConfirm = async () => {
 
     <ButtonComponent
       text={t("Ajouter")}
-      color="orange"
+      color="#008000"
       onClick={handleAddMatiere} // ✅ on utilise la fonction centrale
     />
   </Box>

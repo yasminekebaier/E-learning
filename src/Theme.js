@@ -12,7 +12,7 @@ palette:{
     main: "#52307c",
   },
   tertiary: {
-    main: "#080D50", // Couleur orange en exemple
+    main: "#174090", // Couleur #008000 en exemple
 },
 },
 typography:{
@@ -33,14 +33,14 @@ h2:{
 h3:{
     fontFamily:"inter",
     fontSize:24,
-    color:"#080D50",
+    color:"#174090",
     fontWeight:"bold",
     marginBottom:"10px",
 },
 h5:{
   fontFamily:"inter",
   fontSize:25,
-  color:"#080D50",
+  color:"#174090",
   fontWeight:"bold",
   marginBottom:"10px",
   textAlign:"center"
@@ -48,21 +48,21 @@ h5:{
 h4:{
   fontFamily:"inter",
   fontSize:25,
-  color:"#080D50",
+  color:"#174090",
   fontWeight:"bold",
   
 },
 h5:{
   fontFamily:"inter",
   fontSize:17,
-  color:"orange",
+  color:"#008000",
   fontWeight:"bold", 
   
 },
 h6:{
   fontFamily:"inter",
   fontSize:16,
-  color:"#080D50", 
+  color:"#174090", 
   fontWeight:"bold",
   marginBottom:"20px",
 },
@@ -77,7 +77,7 @@ h7:{
 h8:{
   fontFamily:"inter",
   fontSize:15,
-  color:"#080D50",
+  color:"#174090",
   fontWeight:"bold",
   
 },

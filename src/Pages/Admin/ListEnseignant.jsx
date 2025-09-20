@@ -117,7 +117,7 @@ const handleCloseModal = () => {
     <>
     <StyledPaper elevation={3} sx={{ p: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}>
+        <Typography sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold" }}>
           {t("Liste des enseignants")}
         </Typography>
 

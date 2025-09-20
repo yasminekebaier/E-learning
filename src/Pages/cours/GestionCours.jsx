@@ -35,7 +35,11 @@ const [prix, setPrix] = useState("");
 const [nomformateur, setNomformateur] = useState(CurrentUser?.fullname || "");
 const [creepar, setCreepar] = useState(CurrentUser?.id || "");
 const { cours, isFetching} = useSelector((state) => state.cours);
+const { users } = useSelector((state) => state.user);
+const [selectedStudent, setSelectedStudent] = useState("");
 
+// on filtre pour ne garder que les etudiants
+const etudiants = users.filter((u) => u.role === "ELEVE");
 
 const getCoursParMatiere = (matiereId) => {
   return Array.isArray(cours) ? cours.filter(c => c.matiere?.id === matiereId) : [];
@@ -70,21 +74,23 @@ const getCoursParMatiere = (matiereId) => {
   }
 
   try {
-    await dispatch(
-      AddCours({
-        matiereId: selectedMatiere.id,
-        nom,
-        description,
-        etat,
-        type,
-        datedebut,
-        datefin,
-        nbrhour,
-        prix,
-        nomformateur,
-        creepar
-      })
-    ).unwrap();
+ await dispatch(
+  AddCours({
+    matiereId: selectedMatiere.id,
+    studentId: selectedStudent,  // 👈 ajouté
+    nom,
+    description,
+    etat,
+    type,
+    datedebut,
+    datefin,
+    nbrhour,
+    prix,
+    nomformateur,
+    creepar
+  })
+).unwrap();
+
 
     toast.success("Cours ajouté avec succès !");
     handleCloseAdd();
@@ -101,7 +107,7 @@ const getCoursParMatiere = (matiereId) => {
    <>
    <StyledPaper elevation={3} sx={{ padding: 2}}>
      <Box>
-      <Typography sx={{ fontSize: "20px", fontWeight: "bold", color: "#080D50", mb: 3 }}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "bold", color: "#174090", mb: 3 }}>
         {t("Gestion des cours par matières")}
       </Typography>
 
@@ -206,7 +212,7 @@ const getCoursParMatiere = (matiereId) => {
                 <ButtonComponent
                   text={t("Ajouter un cours")}
                   icon={<AddCircleOutline />}
-                  color="orange"
+                  color="#008000"
                   onClick={() => handleOpenAdd(matiere)}
                 />
               </CardActions>
@@ -278,21 +284,34 @@ const getCoursParMatiere = (matiereId) => {
       onChange={(e) => setNbrHour(e.target.value)} 
       size="small"
     />
-    <TextField 
+   {/*  <TextField 
       type="number" 
       label="Prix" 
       value={prix} 
       onChange={(e) => setPrix(e.target.value)} 
       size="small"
-    />
-    <TextField 
+    /> */}
+   {/*  <TextField 
       label="Formateur" 
       value={nomformateur} 
       disabled 
       size="small"
-    />
+    /> */}
+<FormControl size="small" fullWidth>
+  <InputLabel>Étudiant</InputLabel>
+  <Select
+    value={selectedStudent}
+    onChange={(e) => setSelectedStudent(e.target.value)}
+  >
+    {etudiants.map((et) => (
+      <MenuItem key={et.id} value={et.id}>
+        {et.nom_prenom || et.username || et.email}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
 
-    <ButtonComponent text="Ajouter" color="orange" onClick={handleAddCours} />
+    <ButtonComponent text="Ajouter" color="#008000" onClick={handleAddCours} />
   </Box>
 </CustomModal>
 

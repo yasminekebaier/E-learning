@@ -115,13 +115,13 @@ const ListAdmin = () => {
     <>
   <StyledPaper elevation={3}>
     <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={3}>
-         <Typography sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}> {t("Liste des administrateurs")}
+         <Typography sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold" }}> {t("Liste des administrateurs")}
            </Typography>
            
       <ButtonComponent
             text={t('Ajouter un administrateur')}
             icon={<AddCircleOutline />}
-            color="orange"
+            color="#008000"
             onClick={() => setOpenAddModal(true)}
           />
          

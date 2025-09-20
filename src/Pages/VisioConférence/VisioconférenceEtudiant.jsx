@@ -97,7 +97,7 @@ const filteredMeetings = selectedTeacher
   return (
     <Box p={4}>
       <Paper elevation={3} sx={{ p: 3, borderRadius: '16px', mb: 4 }}>
-        <Typography variant="h5" fontWeight="bold" color="#080D50" mb={2}>
+        <Typography variant="h5" fontWeight="bold" color="#174090" mb={2}>
           Visioconférences disponibles
         </Typography>
 

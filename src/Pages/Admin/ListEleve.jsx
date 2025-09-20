@@ -138,7 +138,7 @@ const columns = [
     <StyledPaper elevation={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography
-          sx={{ fontSize: "20px", color: "#080D50", fontWeight: "bold" }}
+          sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold" }}
         >
           {t("Liste des collaborateurs")}
         </Typography>

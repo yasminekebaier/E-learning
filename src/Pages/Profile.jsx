@@ -74,7 +74,7 @@ const Profile = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={8}>
-              <Typography variant="h6" sx={{ mb: 2, color: "#080D50" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "#174090" }}>
                 {t("Informations Personnelles")}
               </Typography>
               <Divider sx={{ mb: 2 }} />
@@ -94,13 +94,13 @@ const Profile = () => {
               <Divider sx={{ my: 3 }} />
               <Stack sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
                 <ButtonComponent
-                  color="orange"
+                  color="#008000"
                   text={t("Modifier Profil")}
                   icon={<EditIcon />}
                   onClick={() => console.log("Edit profile clicked")}
                 />
                 <ButtonComponent
-                  color="orange"
+                  color="#008000"
                   text={t("Modifier mot de passe")}
                   icon={<LockResetIcon />}
                   onClick={() => console.log("Change password clicked")}

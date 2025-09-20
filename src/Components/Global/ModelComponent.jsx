@@ -36,17 +36,17 @@ const CustomModal = ({ open, handleClose, title, children, icon }) => {
             right: -7,
             top: -7,
             backgroundColor: '#f2f2f2',
-            color: "#080D50",
+            color: "#174090",
            
             
           }}>
           <GridCloseIcon />
         </IconButton>
-        <Grid sx={{textAlign:"center",color:"#080D50"}}>
-  {icon && React.cloneElement(icon, { style: { color:"#080D50" } })}
+        <Grid sx={{textAlign:"center",color:"#174090"}}>
+  {icon && React.cloneElement(icon, { style: { color:"#174090" } })}
 </Grid>
         
-        <Typography  style={{textAlign:"center",color:"#080D50",fontSize:20}} >
+        <Typography  style={{textAlign:"center",color:"#174090",fontSize:20}} >
               <Grid  >
                 {title}
               </Grid>

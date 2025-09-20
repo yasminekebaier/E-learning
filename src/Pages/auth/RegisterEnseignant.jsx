@@ -20,9 +20,7 @@ import { RegisterEnseignantAction } from '../../redux/actions/userActions';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
-const specialties = [" MATH","PHYSICS","CHEMISTRY","BIOLOGY","INFORMATICS",
-    "HISTORY",
-    "LITERATURE"];
+const specialties = ["LOGISTIQUE_ET_SUPPLY_CHAIN","DIGITALISATION_ET_TECHNOLOGIES","SECURITE_ET_PREVENTION","ENVIRONNEMENT_ET_RSE"];
 const steps = ['Informations du formateur', 'Vérification'];
 
 const RegisterEnseignant = () => {
@@ -33,7 +31,7 @@ const RegisterEnseignant = () => {
   const handleBack = () => setActiveStep((prev) => prev - 1);
   const [formData, setFormData] = useState({
   fullName: '',
-  Matricule: '',
+ /*  Matricule: '', */
   specialty: '',
   phone: '',
   email: '',
@@ -117,13 +115,13 @@ const handleRegister = async () => {
             alt="illustration"
             sx={{ width: '70%', maxWidth: 250, mb: 3 }}
           />
- <Typography variant="h3" color="#080D50" fontWeight="bold" gutterBottom>
+ <Typography variant="h3" color="#174090" fontWeight="bold" gutterBottom>
           🎓 Bienvenue sur KeySafe
         </Typography>
         <Typography variant="h5" mb={3}>
           Notre objectif est d'aider chaque formateur à accompagner ses collaborateurs dans leur apprentissage.
         </Typography>
-        <Typography variant="subtitle1" color="#080D50" fontWeight="bold" mb={1}>
+        <Typography variant="subtitle1" color="#174090" fontWeight="bold" mb={1}>
           Pourquoi s'inscrire ?
         </Typography>
     {[
@@ -141,7 +139,7 @@ const handleRegister = async () => {
 
 
         <Box mt={7} p={2} bgcolor="#e3f2fd" borderRadius="10px" width="55%">
-          <Typography variant="body2" fontWeight="bold" color="#080D50">
+          <Typography variant="body2" fontWeight="bold" color="#174090">
             Cette inscription est préliminaire et sera approuvée par un administrateur par courriel.
           </Typography>
         </Box>
@@ -158,10 +156,10 @@ const handleRegister = async () => {
       color: '#ccc', // étapes non actives
     },
     '& .MuiStepIcon-root.Mui-completed': {
-      color: 'orange', // étapes complétées
+      color: '#008000', // étapes complétées
     },
     '& .MuiStepIcon-root.Mui-active': {
-      color: 'orange', // étape active (cercle)
+      color: '#008000', // étape active (cercle)
     },
   }}
 >
@@ -175,7 +173,7 @@ const handleRegister = async () => {
           {activeStep === 0 && (
             <Box display="flex" flexDirection="column" gap={2}>
               <TextField label="Nom et prénom *" name="fullName" value={formData.fullName} onChange={handleChange} fullWidth />
-              <TextField label="Matricule *" name="Matricule" value={formData.matricule} onChange={handleChange} fullWidth />
+              {/* <TextField label="Matricule *" name="Matricule" value={formData.matricule} onChange={handleChange} fullWidth /> */}
               <FormControl fullWidth>
                 <InputLabel>Spécialité(s) *</InputLabel>
                 <Select name="specialty" value={formData.specialty} onChange={handleChange} label="Spécialité(s)">
@@ -191,12 +189,12 @@ const handleRegister = async () => {
                 <TextField label="Confirmer le mot de passe *" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} fullWidth />
               </Box>
               
-              <Button variant="outlined" sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
+              <Button variant="outlined" sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
                 📎 Joindre un CV
                 <input type="file" hidden onChange={handleFileChange} />
               </Button>
               <Box mt={2} textAlign="right">
-                <Button variant="contained" sx={{backgroundColor:"orange",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
+                <Button variant="contained" sx={{backgroundColor:"#008000",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
               </Box>
             </Box>
           )}
@@ -206,7 +204,7 @@ const handleRegister = async () => {
               <Typography variant="h6" mb={3}>✅ Validation des informations</Typography>
               <Box sx={{ p: 2 }}>
                 <Typography><strong>Nom et prénom:</strong> {formData.fullName}</Typography>
-                <Typography><strong>Matricule:</strong> {formData.matricule}</Typography>
+                {/* <Typography><strong>Matricule:</strong> {formData.matricule}</Typography> */}
                 <Typography><strong>Numéro de téléphone:</strong> {formData.phone}</Typography>
                 <Typography><strong>Email académique:</strong> {formData.email}</Typography>
                 <Typography><strong>Mot de passe:</strong> {formData.password}</Typography>
@@ -217,10 +215,10 @@ const handleRegister = async () => {
                 Je confirme que les informations ci-dessus sont exactes et que je suis un formateur autorisé par mon établissement à utiliser KeySafe.                </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
-                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
-                <Button variant="contained" color="#080D50"
+                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
+                <Button variant="contained" color="#174090"
                  onClick={handleRegister}
-                 sx={{backgroundColor:"orange",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
+                 sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
               </Box>
             </>
           )}

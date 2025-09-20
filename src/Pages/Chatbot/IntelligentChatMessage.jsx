@@ -131,7 +131,7 @@ const IntelligentChatMessage = ({
         <motion.div
           className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${
             isUser
-              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white"
+              ? "bg-gradient-to-r from-#008000-500 to-#008000-600 text-white"
               : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
           }`}
           whileHover={animationsEnabled ? { scale: 1.1, rotate: 5 } : {}}
@@ -145,7 +145,7 @@ const IntelligentChatMessage = ({
           <motion.div
             className={`relative px-4 py-3 shadow-sm border max-w-fit ${
               isUser
-                ? "bg-orange-500 text-white rounded-tl-2xl rounded-bl-2xl rounded-br-md"
+                ? "bg-#008000-500 text-white rounded-tl-2xl rounded-bl-2xl rounded-br-md"
                 : theme === "dark"
                 ? "bg-gray-800 text-gray-100 border-gray-600 rounded-tr-2xl rounded-br-2xl rounded-bl-md"
                 : "bg-white text-gray-800 border-gray-200 rounded-tr-2xl rounded-br-2xl rounded-bl-md"

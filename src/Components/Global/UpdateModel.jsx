@@ -28,7 +28,7 @@ const UpdateModal = ({ open, handleClose, title, children, icon }) => {
               right: -7,
               top: -7,
               backgroundColor:'#f2f2f2',
-              color: "#080D50",
+              color: "#174090",
              
               
             }}>

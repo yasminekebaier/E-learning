@@ -145,7 +145,7 @@ const [selectedRow, setSelectedRow] = useState(null);
   return (
     <StyledPaper sx={{ padding: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography sx={{ fontSize: 20, fontWeight: 'bold', color:"#080D50",mb:"20px" }}>Evaluer des quiz et devoirs</Typography>
+          <Typography sx={{ fontSize: 20, fontWeight: 'bold', color:"#174090",mb:"20px" }}>Evaluer des quiz et devoirs</Typography>
           
         </Box>
 
