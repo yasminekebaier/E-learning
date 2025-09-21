@@ -79,38 +79,35 @@ const CurrentUser = useSelector((state) => state.user.CurrentUser);
     dispatch(fetchCours(matiere));
   }, [dispatch, matiere]);
 
-const handleRessourceClick = async (ressource) => {
+const API_BASE_URL = "http://localhost:8085";
+const handleRessourceClick = (ressource) => {
   if (!ressource || !ressource.typeRes) return;
 
-  try {
-    const fileUrl = `${API_BASE_URL}/Ressource/files/${ressource.contenuRes}?userId=${CurrentUser.id}`;
+const fileUrl = `${API_BASE_URL}/Ressource/files/${ressource.contenuRes}`;
+  const typeLower = ressource.typeRes.toLowerCase();
 
-    if (["vidéo", "video"].includes(ressource.typeRes.toLowerCase())) {
-      // Pour les vidéos, on ne teste pas l'accès avec fetch
-      setVideoUrl(fileUrl);
-      setOpenVideoModal(true);
-    } else {
-      // Pour les autres fichiers, tester l'accès
-      const response = await fetch(fileUrl);
-      if (!response.ok) {
-        if (response.status === 403) {
-          toast.info("Vous n'avez pas accès à cette ressource.");
-        } else {
-          toast.error("Erreur lors du téléchargement de la ressource.");
-        }
-        return;
-      }
-      const blob = await response.blob();
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = ressource.contenuRes;
-      link.click();
-    }
-  } catch (err) {
-    console.error(err);
-    toast.error("Erreur lors de l'accès à la ressource.");
-  }
+  const videoExtensions = ["mp4", "webm", "ogg", "mov", "avi", "mkv"];
+  const isVideo =
+    typeLower === "vidéo" ||
+    typeLower === "video" ||
+    videoExtensions.some((ext) => ressource.contenuRes.toLowerCase().endsWith(ext));
+
+if (isVideo) {
+    setVideoUrl(fileUrl);
+    setOpenVideoModal(true);
+} else {
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = ressource.contenuRes;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 };
+
+
+
+
 
 const { users } = useSelector((state) => state.user);
 
@@ -236,17 +233,16 @@ const enseignants = users.filter((u) => u.role === "ENSEIGNANT");
       </Box>
 
       {/* Modal Vidéo */}
-      <Dialog open={openVideoModal} onClose={() => setOpenVideoModal(false)} maxWidth="md" fullWidth>
-        <DialogTitle>Lecture de la vidéo</DialogTitle>
-        <DialogContent sx={{ p: 0 }}>
-          <ReactPlayer
-            url={videoUrl}
-            controls
-            width="100%"
-            height="100%"
-          />
-        </DialogContent>
-      </Dialog>
+     <Dialog open={openVideoModal} onClose={() => setOpenVideoModal(false)} maxWidth="md" fullWidth>
+  <DialogTitle>Lecture de la vidéo</DialogTitle>
+  <DialogContent>
+    <video width="100%" height="100%" controls>
+      <source src={videoUrl} type="video/mp4" />
+      Votre navigateur ne supporte pas la lecture vidéo.
+    </video>
+  </DialogContent>
+</Dialog>
+
       <CustomModal open={openAddModal} handleClose={handleCloseAdd} title="Quiz – Exemple">
         <Box component="form" sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
           <Typography>1. Complétez la phrase : Hier, je __ (manger) une pomme.</Typography>
