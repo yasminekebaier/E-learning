@@ -9,7 +9,7 @@ const servicesData = [
     id: 1,
     title: "L’apprentissage en ligne simplifié",
     description:
-      "Une interface intuitive pour permettre aux enseignants de partager leurs cours et aux élèves d’apprendre à leur rythme.",
+      "Une interface intuitive pour permettre aux enseignants de partager leurs cours et aux collaborateurs d’apprendre à leur rythme.",
     image: "/placeholder.svg?height=200&width=200",
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
@@ -23,9 +23,9 @@ const servicesData = [
   },
   {
     id: 3,
-    title: "Espace dédié aux enseignants",
+    title: "Espace dédié aux formateurs",
     description:
-      "Les enseignants peuvent créer et gérer des contenus adaptés, suivre les progrès, et personnaliser l’apprentissage.",
+      "Les formateurs peuvent créer et gérer des contenus adaptés, suivre les progrès, et personnaliser l’apprentissage.",
     image: "/placeholder.svg?height=200&width=200",
     gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
   },
