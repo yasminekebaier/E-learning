@@ -25,10 +25,15 @@ import { toast, ToastContainer } from "react-toastify";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import "react-toastify/dist/ReactToastify.css";
+import MailIcon from "@mui/icons-material/Mail";
+
+import { TextField} from "@mui/material";
+
 const Navbar = () => {
   // Séparation des états des menus
   const [userMenu, setUserMenu] = useState(null);
   const [langMenu, setLangMenu] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   // Menu utilisateur
   const handleUserClick = (event) => setUserMenu(event.currentTarget);
   const handleUserClose = () => setUserMenu(null);
@@ -86,33 +91,49 @@ const Navbar = () => {
               style={{ width: "190px", height: "auto" }}
             />
           </Link>
-          {/* Search bar centrée */}
-          <Box
-            sx={{
-              position: "relative",
-              borderRadius: 2,
-              backgroundColor: alpha("#000", 0.05),
-              "&:hover": { backgroundColor: alpha("#000", 0.1) },
-              width: "40%",
-              display: "flex",
-              alignItems: "center",
-              px: 2,
-            }}
-          >
-            <SearchIcon sx={{ mr: 1, color: "gray" }} />
-            <InputBase
-              placeholder="Rechercher…"
-              inputProps={{ "aria-label": "search" }}
-              sx={{ width: "100%" }}
-            />
-          </Box>
+
           {/* Notifications + Avatar + username à droite */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <IconButton>
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+ <Box sx={{ display: "flex", alignItems: "center" }}>
+  {/* Icône search */}
+  <IconButton onClick={() => setSearchOpen(!searchOpen)}>
+    <SearchIcon sx={{ color: "gray" }} />
+  </IconButton>
+
+  {/* TextField qui s'affiche seulement si searchOpen = true */}
+  {searchOpen && (
+    <TextField
+      autoFocus
+      size="small"
+      variant="outlined"
+      placeholder="Rechercher…"
+      sx={{
+        ml: 1,
+        transition: "width 0.3s",
+        width: 200, // largeur fixe ou dynamique
+        "& .MuiOutlinedInput-root": {
+          borderRadius: 3,
+          backgroundColor: "#f5f5f5",
+        },
+      }}
+    />
+  )}
+</Box>
+
+{/* Notifications */}
+<IconButton>
+  <Badge badgeContent={3} color="error">
+    <NotificationsIcon />
+  </Badge>
+</IconButton>
+
+{/* Messages */}
+<IconButton component={Link} to="/app/message">
+  <Badge badgeContent={3} color="error">
+    <MailIcon />
+  </Badge>
+</IconButton>
+
             {CurrentUser ? (
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box

@@ -156,10 +156,10 @@ const handleRegister = async () => {
       color: '#ccc', // étapes non actives
     },
     '& .MuiStepIcon-root.Mui-completed': {
-      color: '#008000', // étapes complétées
+      color: '#174090', // étapes complétées
     },
     '& .MuiStepIcon-root.Mui-active': {
-      color: '#008000', // étape active (cercle)
+      color: '#174090', // étape active (cercle)
     },
   }}
 >
@@ -189,12 +189,12 @@ const handleRegister = async () => {
                 <TextField label="Confirmer le mot de passe *" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} fullWidth />
               </Box>
               
-              <Button variant="outlined" sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
+              <Button variant="outlined" sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
                 📎 Joindre un CV
                 <input type="file" hidden onChange={handleFileChange} />
               </Button>
               <Box mt={2} textAlign="right">
-                <Button variant="contained" sx={{backgroundColor:"#008000",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
+                <Button variant="contained" sx={{backgroundColor:"#174090",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
               </Box>
             </Box>
           )}
@@ -215,10 +215,10 @@ const handleRegister = async () => {
                 Je confirme que les informations ci-dessus sont exactes et que je suis un formateur autorisé par mon établissement à utiliser KeySafe.                </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
-                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
+                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
                 <Button variant="contained" color="#174090"
                  onClick={handleRegister}
-                 sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
+                 sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
               </Box>
             </>
           )}

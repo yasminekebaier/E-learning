@@ -7,7 +7,7 @@ export const AddCours = createAsyncThunk(
   async (CoursData, { rejectWithValue }) => {
  const {
   matiereId,
-  studentId,   // 👈 ajouter ici
+  studentId,   
   nom,
   description,
   etat,

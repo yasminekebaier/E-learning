@@ -121,7 +121,7 @@ const ListAdmin = () => {
       <ButtonComponent
             text={t('Ajouter un administrateur')}
             icon={<AddCircleOutline />}
-            color="#008000"
+            color="#174090"
             onClick={() => setOpenAddModal(true)}
           />
          

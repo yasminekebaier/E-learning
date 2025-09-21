@@ -12,7 +12,7 @@ palette:{
     main: "#52307c",
   },
   tertiary: {
-    main: "#174090", // Couleur #008000 en exemple
+    main: "#174090", // Couleur #174090 en exemple
 },
 },
 typography:{
@@ -55,7 +55,7 @@ h4:{
 h5:{
   fontFamily:"inter",
   fontSize:17,
-  color:"#008000",
+  color:"#174090",
   fontWeight:"bold", 
   
 },

@@ -83,6 +83,24 @@ const { cours } = useSelector((state) => state.cours);
   dispatch(fetchCours());
 }, [dispatch]);
 
+const refreshRessourcesAvecRelations = async () => {
+  try {
+    const resCours = await dispatch(fetchCours()).unwrap();
+    const resRessources = await dispatch(fetchRessources()).unwrap();
+
+    const fusion = resCours.flatMap(c =>
+      (c.ressources || []).map(r => ({
+        ...r,
+        cours: { id: c.id, nom: c.nom },
+        matiere: c.matiere ? { id: c.matiere.id, name: c.matiere.name } : null
+      }))
+    );
+
+    setRessourcesAvecRelations(fusion);
+  } catch (error) {
+    console.error("Erreur lors du rafraîchissement des ressources :", error);
+  }
+};
 
   // Filtrer + Trier
  // 👉 Remplace "ressources" par "ressourcesAvecRelations" ici :
@@ -142,27 +160,22 @@ const rowsWithIcons = filteredRows.map(row => ({
     setUpdateNiveau(niveau);
     setOpenUpdate(true);
   };
-  const updateRessource = async () => {
-    try {
-      await dispatch(UpdateRessourceAction({
-        ResId,
-        Title: updatedtitreRes,
-        Type: updatedTypeRes,
-        HoursNumber: UpdatedNiveau
-      }));
-      toast.success("Ressource modifiée !");
-      setOpenUpdate(false);
-      dispatch(fetchRessources());
-    } catch (error) {
-      toast.error("Erreur lors de la modification !");
-    }
-  };
+const updateRessource = async () => {
+  try {
+    await dispatch(UpdateRessourceAction({ ResId, Title: updatedtitreRes, Type: updatedTypeRes, HoursNumber: UpdatedNiveau })).unwrap();
+    toast.success("Ressource modifiée !");
+    setOpenUpdate(false);
 
- const handleAddRessource = async () => {
+    refreshRessourcesAvecRelations(); // ✅ met à jour l'affichage
+  } catch (error) {
+    toast.error("Erreur lors de la modification !");
+  }
+};
+
+
+const handleAddRessource = async () => {
   if (!file || !titreRes || !coursId) 
     return toast.error("Veuillez remplir tous les champs");
-
-  if (isNaN(coursId)) return toast.error("Veuillez sélectionner un cours valide");
 
   const formData = new FormData();
   formData.append("file", file);
@@ -175,11 +188,13 @@ const rowsWithIcons = filteredRows.map(row => ({
     await dispatch(AddRessources({file, titreRes, typeRes, niveau: niveauScolaire, coursId})).unwrap();
     toast.success("Ressource ajoutée !");
     setOpenAddModal(false);
-    dispatch(fetchRessources());
+
+    refreshRessourcesAvecRelations(); // ✅ met à jour l'affichage
   } catch (err) {
     toast.error("Erreur lors de l'ajout !");
   }
 };
+
 const API_BASE_URL = "http://localhost:8085"; // adapte selon ton serveur
 
 const handleRessourceClick = (ressource) => {
@@ -205,24 +220,11 @@ const handleRessourceClick = (ressource) => {
       toast.info("Action non disponible pour ce type de ressource");
   }
 };
-  useEffect(() => {
-    const loadData = async () => {
-      const resCours = await dispatch(fetchCours()).unwrap();
-      const resRessources = await dispatch(fetchRessources()).unwrap();
+useEffect(() => {
+  refreshRessourcesAvecRelations();
+}, [dispatch]);
 
-      const fusion = resCours.flatMap(c =>
-        (c.ressources || []).map(r => ({
-          ...r,
-          cours: { id: c.id, nom: c.nom },
-          matiere: c.matiere ? { id: c.matiere.id, name: c.matiere.name } : null
-        }))
-      );
-
-      setRessourcesAvecRelations(fusion);
-    };
-
-    loadData();
-  }, [dispatch]);
+;
 
 
 
@@ -264,7 +266,7 @@ const handleRessourceClick = (ressource) => {
           <ButtonComponent
             text={t('Déposez une ressource')}
             icon={<AddCircleOutline />}
-            color="#008000"
+            color="#174090"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>
@@ -355,12 +357,12 @@ const handleRessourceClick = (ressource) => {
 </FormControl>
 <Box sx={{border:"1px dashed grey",p:2,borderRadius:2,textAlign:"center",backgroundColor:"#f9f9f9"}}>
   <Typography variant="body2" sx={{mb:1}}>{file ? file.name : t("Glisser-déposez un fichier ici ou ")}</Typography>
-          <Button variant="contained" component="label"sx={{textTransform:"none",bgcolor:"#f49f45ff","&:hover":{bgcolor:"#f49f45ff"}}}>
+          <Button variant="contained" component="label"sx={{textTransform:"none",bgcolor:"#0f9f0fff","&:hover":{bgcolor:"#0f9f0fff"}}}>
             {t("Parcourir")}
             <input type="file" hidden onChange={e => setFile(e.target.files[0])} />
           </Button>
           </Box>
-          <ButtonComponent text={t("Déposer")} color="#008000" onClick={handleAddRessource} />
+          <ButtonComponent text={t("Déposer")} color="#174090" onClick={handleAddRessource} />
         </Box>
       </CustomModal>
 

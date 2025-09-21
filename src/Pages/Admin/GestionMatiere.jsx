@@ -179,7 +179,7 @@ const handleDeleteConfirm = async () => {
           <ButtonComponent
             text={t('Ajouter une matière')}
             icon={<AddCircleOutline />}
-            color="#008000"
+            color="#174090"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>
@@ -274,7 +274,7 @@ const handleDeleteConfirm = async () => {
 
     <ButtonComponent
       text={t("Ajouter")}
-      color="#008000"
+      color="#174090"
       onClick={handleAddMatiere} // ✅ on utilise la fonction centrale
     />
   </Box>

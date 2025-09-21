@@ -212,7 +212,7 @@ const getCoursParMatiere = (matiereId) => {
                 <ButtonComponent
                   text={t("Ajouter un cours")}
                   icon={<AddCircleOutline />}
-                  color="#008000"
+                  color="#174090"
                   onClick={() => handleOpenAdd(matiere)}
                 />
               </CardActions>
@@ -311,7 +311,7 @@ const getCoursParMatiere = (matiereId) => {
   </Select>
 </FormControl>
 
-    <ButtonComponent text="Ajouter" color="#008000" onClick={handleAddCours} />
+    <ButtonComponent text="Ajouter" color="#174090" onClick={handleAddCours} />
   </Box>
 </CustomModal>
 

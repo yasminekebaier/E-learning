@@ -9,7 +9,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import inscription from "../../assets/inscription.png";
+import Learningamico from "../../assets/Learningamico.png";
 import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../redux/actions/userActions'; // à adapter
 import { useNavigate } from 'react-router-dom';
@@ -80,11 +80,11 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
   return (
     <>
     <ToastContainer position="top-right" autoClose={3000} />
-    <Grid container sx={{ height: '100vh', bgcolor: '#cfeef1ff' }}>
+    <Grid container sx={{ height: '100vh', bgcolor: '#f0f8ff' }}>
       
       {/* Left - Illustration */}
       <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 4,width:"50%" }}>
-        <Box component="img" src={inscription} alt="Login Illustration" sx={{ width: '70%', maxWidth: 300 }} />
+        <Box component="img" src={Learningamico} alt="Login Illustration" sx={{ width: '70%', maxWidth: 300 }} />
         <Typography variant="h4" fontWeight="bold" mt={3}>
           Bienvenue sur <span style={{ color: "#174090" }}>KeySafe</span> 🎓
         </Typography>
@@ -207,12 +207,12 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
             onClick={handleLogin}
             sx={{
               mt: 3,
-              backgroundColor: ' #174090',
-              color: '#cfeef1ff',
+              backgroundColor: '#008000',
+              color: '#000',
               borderRadius: '20px',
               textTransform: 'none',
               fontWeight: 'bold',
-              '&:hover': { backgroundColor: ' #174090' }
+              '&:hover': { backgroundColor: '#008000' }
             }}
           >
             Se connecter

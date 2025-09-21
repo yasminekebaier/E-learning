@@ -141,11 +141,11 @@ const Sidebar = ({ onMenuClick }) => {
             onClick={toggleDrawer}
             sx={{
               backgroundColor: isRouteActive(item.path)
-                ? "#008000"
+                ? "#174090"
                 : "transparent",
               "&:hover": {
                 backgroundColor: isRouteActive(item.path)
-                  ? "#008000"
+                  ? "#174090"
                   : "#f0f0f0",
               },
               borderRadius: 2,
@@ -217,9 +217,9 @@ const Sidebar = ({ onMenuClick }) => {
                     onClick={toggleDrawer}
                     sx={{
                       pl: 4,
-                      backgroundColor: active ? "#008000" : "transparent",
+                      backgroundColor: active ? "#174090" : "transparent",
                       "&:hover": {
-                        backgroundColor: active ? "#008000" : "#f0f0f0",
+                        backgroundColor: active ? "#174090" : "#f0f0f0",
                       },
                       borderRadius: 2,
                       mb: 0.5,

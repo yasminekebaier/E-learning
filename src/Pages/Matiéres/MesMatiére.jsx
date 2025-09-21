@@ -68,7 +68,7 @@ const MesMatieres = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#f1e0bfff",
+              backgroundColor: "#f5faff",
               borderRadius: 2,
               boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
               transition: "transform 0.3s ease-in-out",

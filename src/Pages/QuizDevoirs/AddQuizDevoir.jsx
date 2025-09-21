@@ -127,7 +127,7 @@ const saveQuestionsToBackend = async () => {
       <StyledPaper sx={{ width: '95%', m: 1, p: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography sx={{ fontSize: 20, fontWeight: 'bold', color:"#174090" }}>Créez des quiz et devoirs</Typography>
-          <ButtonComponent text="Nouveau Quiz Devoir" icon={<AddCircleOutline />} color="#008000" onClick={() => setOpenQuizModal(true)} />
+          <ButtonComponent text="Nouveau Quiz Devoir" icon={<AddCircleOutline />} color="#174090" onClick={() => setOpenQuizModal(true)} />
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={2} px={2} mt={2}>
@@ -241,7 +241,7 @@ const saveQuestionsToBackend = async () => {
                 <Typography><strong>Date limite:</strong> {selectedQuiz?.dateLimite || "N/A"}</Typography>
                 <Typography><strong>Durée:</strong> {selectedQuiz?.duree || "N/A"} minutes</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                  <Button sx={{color:"white",backgroundColor:"#008000"}} onClick={handleNextStep}>Voir Questions</Button>
+                  <Button sx={{color:"white",backgroundColor:"#174090"}} onClick={handleNextStep}>Voir Questions</Button>
                 </Box>
               </>
             )}
@@ -286,13 +286,13 @@ const saveQuestionsToBackend = async () => {
 
     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
       <Button
-        sx={{ color: "white", backgroundColor: "#008000" }}
+        sx={{ color: "white", backgroundColor: "#174090" }}
         onClick={handleBackStep}
       >
         Retour
       </Button>
       <Button
-        sx={{ color: "white", backgroundColor: "#008000" }}
+        sx={{ color: "white", backgroundColor: "#174090" }}
         onClick={handleNextStep}
       >
         Ajouter une question
@@ -312,8 +312,8 @@ const saveQuestionsToBackend = async () => {
                 <TextField label="Indice bonne réponse (0-3)" type="number" inputProps={{ min:0,max:3 }} fullWidth value={currentQuestion.correctAnswerIndex} onChange={(e)=>handleCurrentQuestionChange("correctAnswerIndex", e.target.value)} sx={{ mb:2 }}/>
 
                 <Box sx={{ display:'flex', justifyContent:'space-between' }}>
-                  <Button sx={{color:"white",backgroundColor:"#008000"}} onClick={handleBackStep}>Retour</Button>
-                  <Button sx={{color:"white",backgroundColor:"#008000"}} onClick={addCurrentQuestion}>Ajouter & Retour aux questions</Button>
+                  <Button sx={{color:"white",backgroundColor:"#174090"}} onClick={handleBackStep}>Retour</Button>
+                  <Button sx={{color:"white",backgroundColor:"#174090"}} onClick={addCurrentQuestion}>Ajouter & Retour aux questions</Button>
                 </Box>
 
                 <Box sx={{ display:'flex', justifyContent:'flex-end', mt:2 }}>
@@ -334,7 +334,7 @@ const saveQuestionsToBackend = async () => {
             <input type="file" hidden onChange={handleFileChange}/>
           </Button>
           {file && <Typography variant="body2">Fichier sélectionné : {file.name}</Typography>}
-          <ButtonComponent text="Ajouter Ressource" color="#008000" onClick={async ()=>{
+          <ButtonComponent text="Ajouter Ressource" color="#174090" onClick={async ()=>{
             if(!file){alert("Veuillez sélectionner un fichier !"); return;}
             try {
               await dispatch(AddDevoir({ quizDevoirId:selectedQuiz.id, file })).unwrap();

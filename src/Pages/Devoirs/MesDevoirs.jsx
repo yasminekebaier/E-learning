@@ -38,12 +38,12 @@ const MesDevoirs = () => {
             sx={{
               padding: "15px",
               borderRadius: "12px",
-              borderLeft: `8px solid #008000`, // couleur fixe ou selon matière
+              borderLeft: `8px solid #174090`, // couleur fixe ou selon matière
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#008000", fontSize: "1.1rem", mb: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#174090", fontSize: "1.1rem", mb: 1 }}>
               {devoir.cours?.nom || "Cours inconnu"}
             </Typography>
             <Divider />
