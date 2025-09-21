@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import {
   Box, Typography, Grid, Card, CardContent, Divider, List, ListItem,
   ListItemIcon, ListItemText, Dialog, DialogTitle, DialogContent,
-  CardActions
+  CardActions,
+  TextField,
+  MenuItem
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
@@ -21,6 +23,7 @@ import { ButtonComponent } from "../../Components/Global/ButtonComponent";
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import { useTranslation } from "react-i18next";
 import PersonIcon from '@mui/icons-material/Person';
+import CustomModal from "../../Components/Global/ModelComponent";
 const API_BASE_URL = "http://localhost:8085";
 
 const MesCours = () => {
@@ -38,6 +41,38 @@ const CurrentUser = useSelector((state) => state.user.CurrentUser);
   const startIndex = (page - 1) * itemsPerPage;
   const displayedCourses = cours?.slice(startIndex, startIndex + itemsPerPage) || [];
 
+
+  const [openAddModal, setOpenAddModal] = useState(false);
+
+
+  const handleCloseAdd = () => setOpenAddModal(false);
+
+
+  // État quiz
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+
+
+  // Quiz statique
+  const quiz = [
+    {
+      question: "Quelle est la capitale de la France ?",
+      options: ["Paris", "Lyon", "Marseille", "Bordeaux"],
+      answer: "Paris",
+    },
+    {
+      question: "2 + 2 = ?",
+      options: ["3", "4", "5", "22"],
+      answer: "4",
+    },
+    {
+      question: "React est une bibliothèque pour ?",
+      options: ["Backend", "Frontend", "Base de données", "OS"],
+      answer: "Frontend",
+    },
+  ];
   const handlePageChange = (_e, value) => setPage(value);
 
   useEffect(() => {
@@ -81,7 +116,20 @@ const { users } = useSelector((state) => state.user);
 
 // on filtre pour ne garder que les enseignants
 const enseignants = users.filter((u) => u.role === "ENSEIGNANT");
-
+  const handleAnswer = () => {
+    if (selectedAnswer === quiz[currentQuestion].answer) {
+      setScore(score + 1);
+    }
+    setSelectedAnswer("");
+    if (currentQuestion < quiz.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      alert(`Quiz terminé ! Votre score : ${score + (selectedAnswer === quiz[currentQuestion].answer ? 1 : 0)}/${quiz.length}`);
+      setQuizOpen(false);
+      setCurrentQuestion(0);
+      setScore(0);
+    }
+  };
   return (
     <StyledPaper>
       <Box sx={{ padding: 3 }}>
@@ -199,6 +247,42 @@ const enseignants = users.filter((u) => u.role === "ENSEIGNANT");
           />
         </DialogContent>
       </Dialog>
+      <CustomModal open={openAddModal} handleClose={handleCloseAdd} title="Quiz – Exemple">
+        <Box component="form" sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+          <Typography>1. Complétez la phrase : Hier, je __ (manger) une pomme.</Typography>
+          <TextField select fullWidth size="small" defaultValue="">
+            <MenuItem value="mangé">mangé</MenuItem>
+            <MenuItem value="ai mangé">ai mangé</MenuItem>
+            <MenuItem value="manger">manger</MenuItem>
+          </TextField>
+
+          <Typography>2. Cochez les auxiliaires utilisés pour le passé composé :</Typography>
+          <Box>
+            <label>
+              <input type="checkbox" value="avoir" /> avoir
+            </label>
+            <br />
+            <label>
+              <input type="checkbox" value="être" /> être
+            </label>
+            <br />
+            <label>
+              <input type="checkbox" value="aller" /> aller
+            </label>
+          </Box>
+
+          <Typography>3. Conjuguez le verbe "finir" avec "nous" :</Typography>
+          <TextField placeholder="Votre réponse ici" fullWidth size="small" />
+
+          <ButtonComponent
+            text="Valider le quiz"
+            color="#174090"
+            onClick={() => {
+              /* call API ou correction */
+            }}
+          />
+        </Box>
+            </CustomModal>
     </StyledPaper>
   );
 };
