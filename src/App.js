@@ -47,8 +47,8 @@ function App() {
         >
           {/* Sous-pages accessibles pour tous les rôles */}
           <Route path="Ressources" element={<Ressources />} />
-          <Route path="visioconférence" element={<Visioconférence />} />
-          <Route path="visioconférenceEtudiant" element={<VisioconférenceEtudiant />} />
+          <Route path="visioConference" element={<Visioconférence />} />
+          <Route path="visioConferenceEtudiant" element={<VisioconférenceEtudiant />} />
  
 
 
@@ -167,7 +167,7 @@ function App() {
               </PrivateRoute>
             }/>
              <Route
-            path="VisioCnférenceEtudiant"
+            path="visioConferenceEtudiant"
             element={
               <PrivateRoute rolesAllowed={["ROLE_ELEVE"]}>
                 <VisioconférenceEtudiant />

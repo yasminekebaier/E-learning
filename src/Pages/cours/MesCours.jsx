@@ -172,7 +172,7 @@ const enseignants = users.filter((u) => u.role === "ENSEIGNANT");
                                     <ButtonComponent
                                       text={t("Lancer Quiz")}
                                       icon={<AddCircleOutline />}
-                                      color="#174090"
+                                      color="#008000"
                                       onClick={() => setOpenAddModal(true)}
                                     />
                                   </CardActions>

@@ -124,7 +124,7 @@ const columns = [
   { id: "nom_prenom_eleve", label: t("Collaborateur"), align: "left" },
   { id: "date_naissance", label: t("Né(e) le"), align: "left" },
   { id: "niveau", label: t("Niveau"), align: "center" },
-  { id: "situation", label: t("Situation"), align: "center" },
+
   { id: "Photo", label: t("Photo"), align: "center" },
   { id: "actions", label: t("Actions"), align: "center" }, // <-- clé correspondante
 ];

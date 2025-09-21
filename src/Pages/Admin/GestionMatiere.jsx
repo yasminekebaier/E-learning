@@ -39,11 +39,11 @@ const handleCloseAdd= () => setOpenAddModal(false)
 const { t } = useTranslation();
 const { users } = useSelector((state) => state.user);
 
-// on filtre pour ne garder que les enseignants
-const enseignants = users.filter((u) => u.role === "ENSEIGNANT");
+// on filtre pour ne garder que les formateurs
+const formateurs = users.filter((u) => u.role === "formateur");
 
 // état pour la sélection
-const [enseignantId, setEnseignantId] = useState("");
+const [formateurId, setformateurId] = useState("");
  const [matiereName, setMatiereName] = useState("");
   const [description, setDescription] = useState("");
   const [MatiéresIdToDelete, setMatiéresIdToDelete] = useState(null)
@@ -66,8 +66,8 @@ const handleAddMatiere = async () => {
   if (!matiereName.trim()) {
     return toast.error("Veuillez saisir le nom de la matière");
   }
-  if (!enseignantId) {
-    return toast.error("Veuillez sélectionner un enseignant");
+  if (!formateurId) {
+    return toast.error("Veuillez sélectionner un formateur");
   }
   if (!eleveId) {
     return toast.error("Veuillez sélectionner un étudiant");
@@ -78,7 +78,7 @@ const handleAddMatiere = async () => {
       AddMatiéres({
         name: matiereName,
         description,
-        enseignantId,
+        formateurId,
         eleveId, // <-- ajouté ici
       })
     ).unwrap();
@@ -86,7 +86,7 @@ const handleAddMatiere = async () => {
     toast.success("Matière ajoutée avec succès !");
     setMatiereName("");
     setDescription("");
-    setEnseignantId("");
+    setformateurId("");
     setEleveId(""); // reset
     handleCloseAdd();
     dispatch(fetchMatieres());
@@ -129,12 +129,12 @@ const handleAddMatiere = async () => {
   { id: "name", label: "Nom de la matière", align: "left" },
   { id: "description", label: "Description de la matière", align: "left" },
 {
-  id: "enseignant", 
+  id: "formateur", 
   label: "Collaborateur", 
   align: "left",
   render: (matiere) => 
-    matiere.enseignant
-      ? (matiere.enseignant.nom_prenom || matiere.enseignant.username || matiere.enseignant.email)
+    matiere.formateur
+      ? (matiere.formateur.nom_prenom || matiere.formateur.username || matiere.formateur.email)
       : "—"
 },
 
@@ -179,7 +179,7 @@ const handleDeleteConfirm = async () => {
           <ButtonComponent
             text={t('Ajouter une matière')}
             icon={<AddCircleOutline />}
-            color="#174090"
+            color="#008000"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>
@@ -234,28 +234,31 @@ const handleDeleteConfirm = async () => {
     <Typography sx={{ fontWeight: 500, color: "#174090" }}>
       {t("Formateur")}
     </Typography>
-    <FormControl fullWidth>
-      <InputLabel id="enseignant-select-label">
-        {t("Sélectionner un enseignant")}
-      </InputLabel>
-      <Select
-        labelId="enseignant-select-label"
-        value={enseignantId}
-        onChange={(e) => setEnseignantId(e.target.value)}
-      >
-        {enseignants.map((ens) => (
-          <MenuItem key={ens.id} value={ens.id}>
-            {ens.nom_prenom || ens.username || ens.email}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+  <FormControl fullWidth>
+  <InputLabel id="formateur-select-label">
+    {t("Sélectionner un formateur")}
+  </InputLabel>
+  <Select
+    labelId="formateur-select-label"
+    id="formateur-select"
+    value={formateurId}
+    onChange={(e) => setformateurId(e.target.value)}
+    label={t("Sélectionner un formateur")} // <-- important pour que le label flotte
+  >
+    {formateurs.map((ens) => (
+      <MenuItem key={ens.id} value={ens.id}>
+        {ens.nom_prenom || ens.username || ens.email}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
 <Typography sx={{ fontWeight: 500, color: "#174090" }}>
-  {t("Étudiant")}
+  {t("Collaborateur")}
 </Typography>
 <FormControl fullWidth>
   <InputLabel id="eleve-select-label">
-    {t("Sélectionner un étudiant")}
+    {t("Sélectionner un Collaborateur")}
   </InputLabel>
   <Select
     labelId="eleve-select-label"
@@ -274,7 +277,7 @@ const handleDeleteConfirm = async () => {
 
     <ButtonComponent
       text={t("Ajouter")}
-      color="#174090"
+      color="#008000"
       onClick={handleAddMatiere} // ✅ on utilise la fonction centrale
     />
   </Box>

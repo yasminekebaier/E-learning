@@ -202,24 +202,28 @@ const handleRessourceClick = (ressource) => {
 
   const fileUrl = `${API_BASE_URL}/Ressource/files/${ressource.contenuRes}`;
 
-  switch (ressource.typeRes.toLowerCase()) {
-    case "vidéo":
-    case "video":
-      setVideoUrl(fileUrl);       // définis l’URL
-      setOpenVideoModal(true);    // ouvre le modal
-      break;
-    case "pdf":
-    case "document":
-    case "doc":
-      const link = document.createElement("a");
-      link.href = fileUrl;
-      link.download = ressource.contenuRes;
-      link.click();
-      break;
-    default:
-      toast.info("Action non disponible pour ce type de ressource");
+  // Vérifie le type pour décider de l'action
+  const typeLower = ressource.typeRes.toLowerCase();
+
+  if (typeLower === "vidéo" || typeLower === "video") {
+    // Ouvrir dans le modal vidéo
+    setVideoUrl(fileUrl);
+    setOpenVideoModal(true);
+  } else {
+    // Forcer le téléchargement pour les autres types
+    const link = document.createElement("a");
+    link.href = fileUrl;
+
+    // nom du fichier pour le téléchargement
+    link.download = ressource.contenuRes;
+
+    // pour certains navigateurs, il faut l'ajouter au DOM
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 };
+
 useEffect(() => {
   refreshRessourcesAvecRelations();
 }, [dispatch]);
@@ -266,7 +270,7 @@ useEffect(() => {
           <ButtonComponent
             text={t('Déposez une ressource')}
             icon={<AddCircleOutline />}
-            color="#174090"
+            color="#008000"
             onClick={() => setOpenAddModal(true)}
           />
         </Box>

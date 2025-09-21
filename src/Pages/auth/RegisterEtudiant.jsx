@@ -383,7 +383,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                     px: 4,
                     textTransform: "none",
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#008000' }
+                    '&:hover': { backgroundColor: '#174090' }
                   }}
                 >
                   ‹ Précédent
@@ -399,7 +399,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                     px: 4,
                     fontWeight: 'bold',
                     textTransform: "none",
-                    '&:hover': { backgroundColor: '#008000' }
+                    '&:hover': { backgroundColor: '#174090' }
                   }}
                 >
                   Suivant ›
@@ -448,7 +448,7 @@ KeySafe est la plateforme de formation TPSS conçue pour chaque collaborateur de
                     borderRadius: '20px',
                     px: 4,
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#008000' }
+                    '&:hover': { backgroundColor: '#174090' }
                   }}
                 >
                   ‹ Précédent

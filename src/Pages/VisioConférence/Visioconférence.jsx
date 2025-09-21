@@ -217,7 +217,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
 </FormControl>
 
           <Grid item xs={12} sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          {/*   <Button onClick={handleGenerateLink} variant="contained" sx={{ bgcolor: "#174090", textTransform: "none", borderRadius: "8px" }}>
+          {/*   <Button onClick={handleGenerateLink} variant="contained" sx={{ bgcolor: "#008000", textTransform: "none", borderRadius: "8px" }}>
               Générer un lien Meet
             </Button> */}
 
@@ -258,7 +258,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
           </Grid>
 
           <Grid item xs={12} textAlign="center">
-            <Button onClick={handlePlanify} variant="contained" sx={{ bgcolor: "#174090", textTransform: "none", borderRadius: "10px", px: 6 }}>
+            <Button onClick={handlePlanify} variant="contained" sx={{ bgcolor: "#008000", textTransform: "none", borderRadius: "10px", px: 6 }}>
               Planifier
             </Button>
           </Grid>

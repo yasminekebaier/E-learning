@@ -70,12 +70,7 @@ const Sidebar = ({ onMenuClick }) => {
       path: "/app/EvaluerQuizDevoirs",
       roles: ["ROLE_ENSEIGNANT"],
     },
-    {
-      text: t("VisioConférence"),
-      icon: <AssignmentTurnedInIcon />,
-      path: "/app/visioconférence",
-      roles: ["ROLE_ENSEIGNANT"],
-    },
+
     {
       text: t("Mes devoirs"),
       icon: <PictureInPictureIcon />,
@@ -88,12 +83,18 @@ const Sidebar = ({ onMenuClick }) => {
       path: "/app/matieres",
       roles: ["ROLE_ELEVE"],
     },
-    {
-      text: t("VisioConférence"),
-      icon: <AssignmentTurnedInIcon />,
-      path: "/app/VisioCnférenceEtudiant",
-      roles: ["ROLE_ELEVE"],
-    },
+   {
+  text: t("VisioConférence"),
+  icon: <PictureInPictureIcon />,
+  path: "/app/visioConference",  // tout en minuscule, sans accents
+  roles: ["ROLE_ENSEIGNANT"],
+},
+{
+  text: t("VisioConférence"),
+  icon: <PictureInPictureIcon />,
+  path: "/app/visioConferenceEtudiant",  // idem
+  roles: ["ROLE_ELEVE"],
+},
     {
       text: t("Message de descussion"),
       icon: <ChatIcon />,
@@ -141,11 +142,11 @@ const Sidebar = ({ onMenuClick }) => {
             onClick={toggleDrawer}
             sx={{
               backgroundColor: isRouteActive(item.path)
-                ? "#174090"
+                ? "#008000"
                 : "transparent",
               "&:hover": {
                 backgroundColor: isRouteActive(item.path)
-                  ? "#174090"
+                  ? "#008000"
                   : "#f0f0f0",
               },
               borderRadius: 2,
@@ -217,9 +218,9 @@ const Sidebar = ({ onMenuClick }) => {
                     onClick={toggleDrawer}
                     sx={{
                       pl: 4,
-                      backgroundColor: active ? "#174090" : "transparent",
+                      backgroundColor: active ? "#008000" : "transparent",
                       "&:hover": {
-                        backgroundColor: active ? "#174090" : "#f0f0f0",
+                        backgroundColor: active ? "#008000" : "#f0f0f0",
                       },
                       borderRadius: 2,
                       mb: 0.5,

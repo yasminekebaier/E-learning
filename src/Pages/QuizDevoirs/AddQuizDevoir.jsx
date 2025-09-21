@@ -127,7 +127,7 @@ const saveQuestionsToBackend = async () => {
       <StyledPaper sx={{ width: '95%', m: 1, p: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography sx={{ fontSize: 20, fontWeight: 'bold', color:"#174090" }}>Créez des quiz et devoirs</Typography>
-          <ButtonComponent text="Nouveau Quiz Devoir" icon={<AddCircleOutline />} color="#174090" onClick={() => setOpenQuizModal(true)} />
+          <ButtonComponent text="Nouveau Quiz Devoir" icon={<AddCircleOutline />} color="#008000" onClick={() => setOpenQuizModal(true)} />
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap={2} px={2} mt={2}>
@@ -326,25 +326,48 @@ const saveQuestionsToBackend = async () => {
       </CustomModal>
 
       {/* Modal Devoir / Upload */}
-      <CustomModal open={openDevoirModal} handleClose={handleCloseDevoirModal} title={`Ajouter une ressource pour: ${selectedQuiz?.titre}`} icon={<WorkIcon />}>
-        <Box sx={{ mt:2, display:'flex', flexDirection:'column', gap:2 }}>
-          <TextField label="Titre ressource" fullWidth value={resourceTitle} onChange={(e)=>setResourceTitle(e.target.value)}/>
-          <Button variant="outlined" component="label" sx={{ textTransform:'none' }}>
-            Choisir un fichier
-            <input type="file" hidden onChange={handleFileChange}/>
-          </Button>
-          {file && <Typography variant="body2">Fichier sélectionné : {file.name}</Typography>}
-          <ButtonComponent text="Ajouter Ressource" color="#174090" onClick={async ()=>{
-            if(!file){alert("Veuillez sélectionner un fichier !"); return;}
-            try {
-              await dispatch(AddDevoir({ quizDevoirId:selectedQuiz.id, file })).unwrap();
-              alert("Ressource ajoutée ✅");
-              setFile(null); setResourceTitle(""); handleCloseDevoirModal();
-              dispatch(fetchQuizsDevoir());
-            } catch(err){console.error(err); alert("Erreur ❌");}
-          }}/>
-        </Box>
-      </CustomModal>
+     {/* Modal Devoir / Upload */}
+<CustomModal open={openDevoirModal} handleClose={handleCloseDevoirModal} title={`Ajouter une ressource pour: ${selectedQuiz?.titre}`} icon={<WorkIcon />}>
+  <Box sx={{ mt:2, display:'flex', flexDirection:'column', gap:2 }}>
+    <TextField label="Titre ressource" fullWidth value={resourceTitle} onChange={(e)=>setResourceTitle(e.target.value)}/>
+    
+    <Button variant="outlined" component="label" sx={{ textTransform:'none' }}>
+      Choisir un fichier
+      <input type="file" hidden onChange={handleFileChange}/>
+    </Button>
+
+    {file && <Typography variant="body2">Fichier sélectionné : {file.name}</Typography>}
+
+    <ButtonComponent 
+      text="Ajouter Ressource" 
+      color="#008000" 
+      onClick={async ()=>{
+        if(!file){alert("Veuillez sélectionner un fichier !"); return;}
+        try {
+          await dispatch(AddDevoir({ quizDevoirId:selectedQuiz.id, file })).unwrap();
+          alert("Ressource ajoutée ✅");
+          setFile(null); setResourceTitle(""); 
+          handleCloseDevoirModal();
+          dispatch(fetchQuizsDevoir());
+        } catch(err){console.error(err); alert("Erreur ❌");}
+      }}
+    />
+
+    {/* Lien téléchargement si fichier déjà existant */}
+    {selectedQuiz?.devoir?.file && (
+      <a 
+        href={`http://localhost:8085/Devoirs/download/${selectedQuiz.devoir.file}`} 
+        download 
+        target="_blank" 
+        rel="noopener noreferrer"
+        style={{ textDecoration: 'none', color: '#1976d2' }}
+      >
+        Télécharger {selectedQuiz.devoir.file}
+      </a>
+    )}
+  </Box>
+</CustomModal>
+
     </>
   );
 };

@@ -38,7 +38,7 @@ const MesDevoirs = () => {
             sx={{
               padding: "15px",
               borderRadius: "12px",
-              borderLeft: `8px solid #174090`, // couleur fixe ou selon matière
+              borderLeft: `8px solid#174090`, // couleur fixe ou selon matière
               display: "flex",
               flexDirection: "column",
             }}

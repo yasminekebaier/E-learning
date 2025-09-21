@@ -27,12 +27,12 @@ const Home = () => {
         </Box>
         <Box sx={{ display: "flex", gap: 2 }}>
           <Link to={"/inscription"}>
-            <Button variant="contained" sx={{ bgcolor: "#008000", color: "white", textTransform: "none", borderRadius: "20px" }}>
+            <Button variant="contained" sx={{ bgcolor: "#174090", color: "white", textTransform: "none", borderRadius: "20px" }}>
               Inscription
             </Button>
           </Link>
           <Link to={"/LoginEtudiant"}>
-            <Button variant="outlined" sx={{ borderRadius: "20px", borderColor: "#008000", color: "#008000", textTransform: "none" }}>
+            <Button variant="outlined" sx={{ borderRadius: "20px", borderColor: "#174090", color: "#174090", textTransform: "none" }}>
               Connexion
             </Button>
           </Link>
@@ -78,7 +78,7 @@ const Home = () => {
               variant="contained"
               sx={{
                 mt: 3,
-                bgcolor: "#008000",
+                bgcolor: "#174090",
                 color: "white",
                 borderRadius: "25px",
                 textTransform: "none",
@@ -87,7 +87,7 @@ const Home = () => {
                 py: 1.5,
                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                 "&:hover": {
-                  bgcolor: "#008000",
+                  bgcolor: "#174090",
                   boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.3)",
                 },
               }}

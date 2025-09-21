@@ -94,13 +94,13 @@ const Profile = () => {
               <Divider sx={{ my: 3 }} />
               <Stack sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
                 <ButtonComponent
-                  color="#174090"
+                  color="#008000"
                   text={t("Modifier Profil")}
                   icon={<EditIcon />}
                   onClick={() => console.log("Edit profile clicked")}
                 />
                 <ButtonComponent
-                  color="#174090"
+                  color="#008000"
                   text={t("Modifier mot de passe")}
                   icon={<LockResetIcon />}
                   onClick={() => console.log("Change password clicked")}

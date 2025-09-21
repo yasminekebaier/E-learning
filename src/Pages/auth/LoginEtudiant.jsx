@@ -207,12 +207,12 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
             onClick={handleLogin}
             sx={{
               mt: 3,
-              backgroundColor: '#008000',
+              backgroundColor: '#174090',
               color: '#000',
               borderRadius: '20px',
               textTransform: 'none',
               fontWeight: 'bold',
-              '&:hover': { backgroundColor: '#008000' }
+              '&:hover': { backgroundColor: '#174090' }
             }}
           >
             Se connecter

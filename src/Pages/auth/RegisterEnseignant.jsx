@@ -156,10 +156,10 @@ const handleRegister = async () => {
       color: '#ccc', // étapes non actives
     },
     '& .MuiStepIcon-root.Mui-completed': {
-      color: '#174090', // étapes complétées
+      color: '#008000', // étapes complétées
     },
     '& .MuiStepIcon-root.Mui-active': {
-      color: '#174090', // étape active (cercle)
+      color: '#008000', // étape active (cercle)
     },
   }}
 >
@@ -189,12 +189,12 @@ const handleRegister = async () => {
                 <TextField label="Confirmer le mot de passe *" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} fullWidth />
               </Box>
               
-              <Button variant="outlined" sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
+              <Button variant="outlined" sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"60%"}}  component="label" >
                 📎 Joindre un CV
                 <input type="file" hidden onChange={handleFileChange} />
               </Button>
               <Box mt={2} textAlign="right">
-                <Button variant="contained" sx={{backgroundColor:"#174090",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
+                <Button variant="contained" sx={{backgroundColor:"#008000",borderRadius:"15px",textTransform:"none"}}  onClick={handleNext}>Suivant</Button>
               </Box>
             </Box>
           )}
@@ -207,7 +207,10 @@ const handleRegister = async () => {
                 {/* <Typography><strong>Matricule:</strong> {formData.matricule}</Typography> */}
                 <Typography><strong>Numéro de téléphone:</strong> {formData.phone}</Typography>
                 <Typography><strong>Email académique:</strong> {formData.email}</Typography>
-                <Typography><strong>Mot de passe:</strong> {formData.password}</Typography>
+                <Typography>
+  <strong>Mot de passe:</strong> {'•'.repeat(formData.password.length)}
+</Typography>
+
                 <Typography><strong>CV:</strong> {formData.file ? formData.file.name : 'Non fourni'}</Typography>
               </Box>
               <Box mt={2} bgcolor="#e3f2fd" p={2} borderRadius="8px">
@@ -215,10 +218,10 @@ const handleRegister = async () => {
                 Je confirme que les informations ci-dessus sont exactes et que je suis un formateur autorisé par mon établissement à utiliser KeySafe.                </Typography>
               </Box>
               <Box mt={4} display="flex" justifyContent="space-between">
-                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
-                <Button variant="contained" color="#174090"
+                <Button variant="outlined" onClick={handleBack}sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}} >← Précédent</Button>
+                <Button variant="contained" color="#008000"
                  onClick={handleRegister}
-                 sx={{backgroundColor:"#174090",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
+                 sx={{backgroundColor:"#008000",color:"white",borderRadius:"20px",width:"40%"}}>Valider</Button>
               </Box>
             </>
           )}

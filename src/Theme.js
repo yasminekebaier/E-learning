@@ -12,7 +12,7 @@ palette:{
     main: "#52307c",
   },
   tertiary: {
-    main: "#174090", // Couleur #174090 en exemple
+    main: "#174090", // Couleur#174090 en exemple
 },
 },
 typography:{
