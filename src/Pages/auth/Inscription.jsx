@@ -55,8 +55,8 @@ const Inscription = () => {
           position: "absolute",
           top: 20,
           left: 20,
-          height: "80px",
-          width:"180px"
+          width: "190px", height: "auto",
+          backgroundColor: "#a7b0beff",
         }}
       />
 
@@ -66,7 +66,7 @@ const Inscription = () => {
         sx={{
           marginBottom: 5,
           fontWeight: "bold",
-          fontSize: "18px",
+          fontSize: "22px",
         }}
       >
         Lire à son rythme : une clé pour la réussite
@@ -109,7 +109,7 @@ const Inscription = () => {
                   sx={{
                     backgroundColor: "#008000",
                     textTransform: "none",
-                    color: "#000",
+                    color: "#f5faff",
                     fontWeight: "bold",
                     borderRadius: "25px",
                     padding: "8px 16px",
