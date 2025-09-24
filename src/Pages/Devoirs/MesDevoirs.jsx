@@ -59,16 +59,21 @@ const MesDevoirs = () => {
                   {devoir.dateLimite}
                 </Typography>
               </Box>
-              {devoir.devoir?.file && (
-                <Box mt={1}>
-                  <Typography variant="body2">
-                    Fichier :{" "}
-                    <a href={`http://localhost:8085/files/${devoir.devoir.file}`} target="_blank" rel="noopener noreferrer">
-                      {devoir.devoir.file}
-                    </a>
-                  </Typography>
-                </Box>
-              )}
+           {devoir.devoir?.file && (
+  <Box mt={1}>
+    <Typography variant="body2">
+      Fichier :{" "}
+      <a
+        href={`http://localhost:8085/api/devoirquiz/download-devoir/${devoir.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {devoir.devoir.file}
+      </a>
+    </Typography>
+  </Box>
+)}
+
             </Box>
           </Paper>
         ))}

@@ -19,6 +19,7 @@ import registerEnseignant from "../../assets/registerEnseignant.png";
 import { RegisterEnseignantAction } from "../../redux/actions/userActions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import { ToastContainer,toast } from "react-toastify";
 
 const specialties = [
   "LOGISTIQUE_ET_SUPPLY_CHAIN",
@@ -81,7 +82,7 @@ const RegisterEnseignant = () => {
       const result = unwrapResult(resultAction);
 
       console.log("Inscription réussie :", result);
-      alert("Inscription réussie !");
+     toast.info("📧 Un email de confirmation sera envoyé, contenant les informations de connexion.");
     } catch (err) {
       console.error("Erreur lors de l'inscription :", err);
       alert("Une erreur est survenue. Veuillez réessayer.");
@@ -90,6 +91,7 @@ const RegisterEnseignant = () => {
 
   return (
     <>
+     <ToastContainer position="top-right" autoClose={5000} />
       <Grid
         sx={{
           backgroundColor: "#1A9BC3",

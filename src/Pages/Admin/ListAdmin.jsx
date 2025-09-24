@@ -18,7 +18,7 @@ import { GridSearchIcon, GridDeleteIcon } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useDispatch, useSelector } from "react-redux";
-import { FetchAllUsers, ConfirmUser } from "../../redux/actions/userActions";
+import { FetchAllUsers, ConfirmUser, AddAdmin } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import UpdateModal from "../../Components/Global/UpdateModel";
 import { ButtonComponent } from "../../Components/Global/ButtonComponent";
@@ -29,6 +29,11 @@ const ListAdmin = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector((state) => state.user);
+const [newAdminData, setNewAdminData] = useState({
+  nom_prenom_admin: "",
+  email: "",
+  password: "",
+});
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("newest");
@@ -42,6 +47,10 @@ const ListAdmin = () => {
     setSelectedUser(user);
     setOpenModal(true);
   };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setNewAdminData((prev) => ({ ...prev, [name]: value }));
+};
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -51,6 +60,26 @@ const ListAdmin = () => {
   useEffect(() => {
     dispatch(FetchAllUsers());
   }, [dispatch]);
+const handleAddAdmin = async () => {
+  if (!newAdminData.nom_prenom_admin || !newAdminData.email) {
+    toast.error("Veuillez remplir tous les champs !");
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append("nom_prenom_admin", newAdminData.nom_prenom_admin);
+    formData.append("email", newAdminData.email);
+formData.append("password", newAdminData.password);
+    await dispatch(AddAdmin(formData)).unwrap();
+    toast.success("✅ Administrateur ajouté avec succès !");
+    setOpenAddModal(false);
+    setNewAdminData({ nom_prenom_admin: "", email: "", password: "" });
+    dispatch(FetchAllUsers());
+  } catch (err) {
+    toast.error(err || "❌ Erreur lors de l'ajout de l'administrateur !");
+  }
+};
 
   const handleActivate = async (email) => {
     try {
@@ -192,15 +221,44 @@ const ListAdmin = () => {
         </Box>
       </StyledPaper>
 <CustomModal
- open={openAddModal}
-        handleClose={() => setOpenAddModal(false)}
-        title={t("Ajouter un administrateur")}  icon={<AddCircleOutline />}>
-        <Box component="form" sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-           <TextField label="Nom et prénom" fullWidth />
-           <TextField label="Email" fullWidth />   
-         </Box>
-       
+  open={openAddModal}
+  handleClose={() => setOpenAddModal(false)}
+  title={t("Ajouter un administrateur")}
+  icon={<AddCircleOutline />}
+>
+  <Box
+    component="form"
+    sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}
+  >
+    <TextField
+      label="Nom et prénom"
+      fullWidth
+      name="nom_prenom_admin"
+      value={newAdminData.nom_prenom_admin}
+      onChange={handleChange}
+    />
+    <TextField
+      label="Email"
+      fullWidth
+      name="email"
+      value={newAdminData.email}
+      onChange={handleChange}
+    />
+      <TextField
+      label="Password"
+      fullWidth
+      name="password"
+      value={newAdminData.password}
+      onChange={handleChange}
+    />
+    <ButtonComponent
+      text="Ajouter"
+      color="#008000"
+      onClick={handleAddAdmin}
+    />
+  </Box>
 </CustomModal>
+
       {/* Modal pour modifier l'admin */}
       <UpdateModal
         open={openModal}

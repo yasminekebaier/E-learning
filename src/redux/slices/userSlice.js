@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction, AddAdmin } from "../actions/userActions";
+import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction, AddAdmin, ResetPasswords, VerifyResetCode, SendResetCode } from "../actions/userActions";
 
 const initialState = {
   CurrentUser: null,
@@ -164,20 +164,43 @@ const userSlice = createSlice({
         state.successMessage = null;
       })
       .addCase(AddAdmin.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = false;
-        state.successMessage = action.payload.message || "Compte activé avec succès ✅";
+  state.loading = false;
+  state.error = false;
+  state.successMessage = action.payload.message || "Administrateur ajouté avec succès ✅";
 
-        // Mettre à jour la liste des utilisateurs si nécessaire
-        state.users = state.users.map(user =>
-          user.email === action.meta.arg ? { ...user, situation: "ACTIF" } : user
-        );
-      })
+  // Ajouter le nouvel admin à la liste
+  if (action.payload.data) {
+    state.users.push(action.payload.data);
+  }
+})
+
       .addCase(AddAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload || "Erreur lors de l'activation ❌";
-      });
+      })
+          // SEND CODE
+    .addCase(SendResetCode.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(SendResetCode.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+    })
+    .addCase(SendResetCode.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    // VERIFY CODE
+    .addCase(VerifyResetCode.fulfilled, (state, action) => {
+      state.codeValid = action.payload.valid;
+    })
+
+    // RESET PASSWORD
+    .addCase(ResetPasswords.fulfilled, (state, action) => {
+      state.message = action.payload.message;
+    });
 
   },
 });

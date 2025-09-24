@@ -27,13 +27,15 @@ const EvaluationModal = ({ open, handleClose, selectedRow, onSubmit }) => {
     <Modal open={open} onClose={handleClose}>
       <Box
         sx={{
-          width: 500,
+          width: 700,
           bgcolor: "white",
           p: 4,
           mx: "auto",
-          mt: "10%",
+          mt: "5%",
           borderRadius: 3,
           boxShadow: 24,
+          maxHeight: "90vh",
+          overflowY: "auto",
         }}
       >
         <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -44,19 +46,59 @@ const EvaluationModal = ({ open, handleClose, selectedRow, onSubmit }) => {
 
         {/* Infos principales */}
         <Typography variant="body1">
-          <b>Étudiant :</b> {selectedRow.Etudiant || "N/A"}
+          <b>Étudiant :</b> {selectedRow?.Etudiant?.username || "N/A"}
         </Typography>
         <Typography variant="body1">
-          <b>Classe :</b> {selectedRow.classe}
+          <b>Classe :</b> {selectedRow?.classe || "-"}
         </Typography>
         <Typography variant="body1">
-          <b>Type :</b> {selectedRow.type}
+          <b>Type :</b> {selectedRow?.type}
         </Typography>
         <Typography variant="body1">
-          <b>Date limite :</b> {selectedRow.dateLimite}
+          <b>Date limite :</b>{" "}
+          {selectedRow?.dateLimite
+            ? new Date(selectedRow.dateLimite).toLocaleDateString()
+            : "-"}
         </Typography>
 
         <Divider sx={{ my: 2 }} />
+
+        {/* Affichage des réponses de l’étudiant */}
+        {selectedRow?.questions?.map((q, index) => {
+         // Récupérer la réponse de l'étudiant (si elle existe)
+const studentChoiceId = selectedRow?.reponses?.[q.id];
+const studentChoice = q.choices?.find(c => c.id === studentChoiceId);
+
+// Récupérer la réponse correcte à partir de correctAnswerIndex
+const correctChoice = q.choices?.[q.correctAnswerIndex];
+
+
+          return (
+            <Box key={q.id} sx={{ mb: 2 }}>
+              <Typography fontWeight="bold">
+                Q{index + 1}. {q.content}
+              </Typography>
+          <Typography>
+  ✅ Réponse correcte :{" "}
+  <span style={{ color: "green" }}>
+    {correctChoice?.content || "Non défini"}
+  </span>
+</Typography>
+<Typography>
+  📝 Réponse étudiant :{" "}
+  <span
+    style={{
+      color: studentChoiceId === correctChoice?.id ? "green" : "red",
+    }}
+  >
+    {studentChoice?.content || "Non répondu"}
+  </span>
+</Typography>
+
+              <Divider sx={{ my: 1 }} />
+            </Box>
+          );
+        })}
 
         {/* Note */}
         <TextField

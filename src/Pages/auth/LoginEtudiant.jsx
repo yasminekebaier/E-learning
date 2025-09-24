@@ -56,19 +56,22 @@ const handleFlagClick = (e) => setLangMenu(e.currentTarget);
     const role = user.role?.replace("ROLE_", "").toUpperCase();
 
     switch (role) {
-      case "ENSEIGNANT":
-        navigate("/app/GestionCours"); // page prof
-        break;
-      case "ELEVE":
-        navigate("/app/matieres"); // page élève
-        break;
-      case "ADMIN":
-        navigate("/app/acceuiladmin"); // page admin
-        break;
-      default:
-        navigate("/"); // fallback
-        break;
-    }
+  case "ENSEIGNANT":
+    navigate("/app/GestionCours");
+    break;
+  case "ELEVE":
+    navigate("/app/matieres");
+    break;
+  case "ADMIN":
+    navigate("/app/acceuiladmin");
+    break;
+  case "SUPRADMIN":
+    navigate("/app/admin");   // ⚠️ pas de break ici
+  default:
+    navigate("/"); // fallback
+    break;
+}
+
 
   } catch (error) {
     console.error("Erreur de connexion :", error);

@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Button,
+  Divider,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
@@ -28,6 +29,8 @@ import "react-toastify/dist/ReactToastify.css";
 import MailIcon from "@mui/icons-material/Mail";
 
 import { TextField} from "@mui/material";
+import { fetchNotifications, markAsRead } from "../redux/actions/NotificationAction";
+import { useEffect } from "react";
 
 const Navbar = () => {
   // Séparation des états des menus
@@ -40,6 +43,10 @@ const Navbar = () => {
   // Menu langue
   const handleFlagClick = (e) => setLangMenu(e.currentTarget);
   const handleFlagClose = () => setLangMenu(null);
+
+const { items: notifications } = useSelector((state) => state.notifications);
+
+
 
   // Changement de langue
   const handleLanguageChange = (lang) => {
@@ -54,6 +61,19 @@ const Navbar = () => {
   const username = CurrentUser?.username || CurrentUser?.user?.username;
   const userEmail = CurrentUser?.email || CurrentUser?.user?.email;
   const userRole = CurrentUser?.role || CurrentUser?.user?.role;
+  const [notifMenu, setNotifMenu] = useState(null);
+
+const handleNotifClose = () => setNotifMenu(null);
+ const unreadCount = useSelector((state) => 
+    state.notifications.items.filter(n => !n.read).length
+);
+
+// Charger les notifications quand la navbar se monte
+useEffect(() => {
+  if (CurrentUser?.id) {
+    dispatch(fetchNotifications(CurrentUser.id));
+  }
+}, [dispatch, CurrentUser]);
   // Déconnexion
   const handleLogout = async () => {
     try {
@@ -65,6 +85,18 @@ const Navbar = () => {
       toast.error("Erreur lors de la déconnexion");
     }
   };
+const handleNotifClick = async (event) => {
+    setNotifMenu(event.currentTarget); // Ouvre le menu
+    if (CurrentUser?.id) {
+        // Marquer toutes les notifications comme lues
+        await Promise.all(
+            notifications.filter(n => !n.read).map(n => dispatch(markAsRead(n.id)))
+        );
+        // Recharger les notifications
+        dispatch(fetchNotifications(CurrentUser.id));
+    }
+};
+
   return (
     <>
       <ToastContainer position="top-right" autoClose={3000} />
@@ -121,11 +153,63 @@ const Navbar = () => {
 </Box>
 
 {/* Notifications */}
-<IconButton>
-  <Badge badgeContent={3} color="error">
-    <NotificationsIcon />
-  </Badge>
-</IconButton>
+{/* Notifications */}
+   <IconButton onClick={handleNotifClick}>
+      <Badge badgeContent={unreadCount} color="error">
+        <NotificationsIcon />
+      </Badge>
+    </IconButton>
+
+<Menu
+  anchorEl={notifMenu}
+  open={Boolean(notifMenu)}
+  onClose={handleNotifClose}
+  anchorOrigin={{
+    vertical: "bottom",
+    horizontal: "right",
+  }}
+  transformOrigin={{
+    vertical: "top",
+    horizontal: "right",
+  }}
+  PaperProps={{
+    sx: {
+      maxHeight: 400, // Scroll si beaucoup de notifications
+      width: 350,     // Menu plus large
+      borderRadius: 1,
+      p: 1,
+    },
+  }}
+>
+  {notifications.length > 0 ? (
+    <Box sx={{ overflowY: "auto" }}>
+      {notifications.map((notif) => (
+        <Box key={notif.id}>
+          <MenuItem sx={{ flexDirection: "column", alignItems: "flex-start" }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, whiteSpace: "normal" }}
+            >
+              {notif.message}
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: "green", mt: 0.3 }}
+            >
+              {new Date(notif.createdAt).toLocaleString()}
+            </Typography>
+          </MenuItem>
+          <Divider sx={{ my: 0.5 }} />
+        </Box>
+      ))}
+    </Box>
+  ) : (
+    <MenuItem>Aucune notification</MenuItem>
+  )}
+</Menu>
+
+
+
 
 {/* Messages */}
 <IconButton component={Link} to="/app/message">

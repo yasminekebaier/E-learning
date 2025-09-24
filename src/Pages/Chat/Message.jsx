@@ -115,8 +115,11 @@ const getUserDisplayName = (user) => {
       {/* Zone de chat */}
       <Box flex={1} display="flex" flexDirection="column" bgcolor="#fafafa">
         <Box p={2} bgcolor="white" borderBottom="1px solid #ddd">
-          <Typography variant="h6">{selectedContact?.name || "Sélectionner un contact"}</Typography>
-        </Box>
+  <Typography variant="h6">
+    {selectedContact ? getUserDisplayName(selectedContact) : "Sélectionner un contact"}
+  </Typography>
+</Box>
+
 
         {/* Messages */}
         <Box flex={1} p={2} overflow="auto">

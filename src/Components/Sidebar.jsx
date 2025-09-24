@@ -26,6 +26,7 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
+
 const Sidebar = ({ onMenuClick }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -44,7 +45,7 @@ const Sidebar = ({ onMenuClick }) => {
       text: t("Acceuil"),
       icon: <HomeIcon />,
       path: "/app/acceuiladmin",
-      roles: ["ROLE_ADMIN"],
+      roles: ["ROLE_ADMIN","ROLE_SUPRADMIN"],
     },
     {
       text: t("Gestion des cours"),
@@ -107,12 +108,23 @@ const Sidebar = ({ onMenuClick }) => {
       path: "/app/gestionmatiere",
       roles: ["ROLE_ADMIN"],
     },
-
+  {
+    text: t("Réclamations"),
+    icon: <AssignmentIcon />,
+    path: "/app/reclamations",
+    roles: ["ROLE_ELEVE", "ROLE_ENSEIGNANT"],
+  },
+  {
+    text: t("Liste des réclamations"),
+    icon: <ListIcon />,
+    path: "/app/listReclamations",
+    roles: ["ROLE_ADMIN", "ROLE_SUPRADMIN"],
+  },
     {
       text: t("Compte"),
       icon: <AccountCircleIcon />,
       path: "/app/profile",
-      roles: ["ROLE_ENSEIGNANT", "ROLE_ELEVE", "ROLE_ADMIN"],
+      roles: ["ROLE_ENSEIGNANT", "ROLE_ELEVE", "ROLE_ADMIN","ROLE_SUPRADMIN"],
     },
   ];
 
@@ -176,73 +188,76 @@ const Sidebar = ({ onMenuClick }) => {
         </ListItem>
       ))}
 
-      {/* Menu Admin */}
-      {userRole === "ROLE_ADMIN" && (
-        <>
-          <ListItem disablePadding>
-            <ListItemButton onClick={handleAdminMenuClick}>
-              <ListItemIcon
-                sx={{ color: "#174090", minWidth: "auto", marginRight: "8px" }}
-              >
-                <GroupIcon />
-              </ListItemIcon>
+    {/* Menu Admin */}
+
+{(userRole === "ROLE_ADMIN" || userRole === "ROLE_SUPRADMIN") && (
+  <>
+    <ListItem disablePadding>
+      <ListItemButton onClick={handleAdminMenuClick}>
+        <ListItemIcon
+          sx={{ color: "#174090", minWidth: "auto", marginRight: "8px" }}
+        >
+          <GroupIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Gestion des utilisateurs"
+          primaryTypographyProps={{
+            style: { color: "#174090", fontWeight: "bold" },
+          }}
+        />
+        {openAdminMenu ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+    </ListItem>
+
+    <Collapse in={openAdminMenu} timeout="auto" unmountOnExit>
+      <List component="div" disablePadding>
+        {["eleves", "enseignants", "admin"].map((route) => {
+          const labelMap = {
+            eleves: "Liste des collaborateurs",
+            enseignants: "Liste des formateurs",
+            admin: "Liste des administrateurs",
+          };
+
+          // ⚠️ Seul SUPRADMIN voit le lien "admin"
+          if (route === "admin" && userRole !== "ROLE_SUPRADMIN") return null;
+
+          const path = `/app/${route}`;
+          const active = isRouteActive(path);
+
+          return (
+            <ListItemButton
+              key={route}
+              component={RouterLink}
+              to={path}
+              onClick={toggleDrawer}
+              sx={{
+                pl: 4,
+                backgroundColor: active ? "#008000" : "transparent",
+                "&:hover": {
+                  backgroundColor: active ? "#008000" : "#f0f0f0",
+                },
+                borderRadius: 2,
+                mb: 0.5,
+                transition: "background-color 0.3s ease",
+              }}
+            >
               <ListItemText
-                primary="Gestion des utilisateurs"
+                primary={labelMap[route]}
                 primaryTypographyProps={{
                   style: {
-                    color: "#174090",
+                    color: active ? "#fff" : "#174090",
                     fontWeight: "bold",
                   },
                 }}
               />
-              {openAdminMenu ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-          </ListItem>
+          );
+        })}
+      </List>
+    </Collapse>
+  </>
+)}
 
-          <Collapse in={openAdminMenu} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {["eleves", "enseignants", "admin"].map((route) => {
-                const labelMap = {
-                  eleves: "Liste des collaborateurs",
-                  enseignants: "Liste des formateurs",
-                  admin: "Liste des administrateurs",
-                };
-                const path = `/app/${route}`;
-                const active = isRouteActive(path);
-
-                return (
-                  <ListItemButton
-                    key={route}
-                    component={RouterLink}
-                    to={path}
-                    onClick={toggleDrawer}
-                    sx={{
-                      pl: 4,
-                      backgroundColor: active ? "#008000" : "transparent",
-                      "&:hover": {
-                        backgroundColor: active ? "#008000" : "#f0f0f0",
-                      },
-                      borderRadius: 2,
-                      mb: 0.5,
-                      transition: "background-color 0.3s ease",
-                    }}
-                  >
-                    <ListItemText
-                      primary={labelMap[route]}
-                      primaryTypographyProps={{
-                        style: {
-                          color: active ? "#fff" : "#174090",
-                          fontWeight: "bold",
-                        },
-                      }}
-                    />
-                  </ListItemButton>
-                );
-              })}
-            </List>
-          </Collapse>
-        </>
-      )}
     </List>
   );
 

@@ -9,7 +9,10 @@ import coursReducer from './slices/CoursSlice.js';
 import quizDevoirReducer from "./slices/QuizSlice.js";
 import visioConferencesReducer from "./slices/VisioSlice.js";
 import MessagesReducer from "./slices/ChatSlice.js";
-
+import feedbackReducer from './slices/feedbackSlice.js';
+import specialityReducer from './slices/SpecialitySlice.js';
+import notificationsReducer from './slices/NotificationSlice.js';
+import reclamationReducer from './slices/reclamationSlice.js';
 const appReducer = combineReducers({
     user: userReducer,
     ressources: RessourcesReducer,
@@ -17,7 +20,11 @@ const appReducer = combineReducers({
     cours: coursReducer,
     quizDevoir: quizDevoirReducer,
     visioConferences: visioConferencesReducer,
-    Messages: MessagesReducer
+    Messages: MessagesReducer,
+    feedback:feedbackReducer,
+   speciality:specialityReducer,
+   notifications:notificationsReducer,
+   reclamations:reclamationReducer
 });
 
 const rootReducer = (state, action) => {

@@ -5,7 +5,7 @@ import keysafe from "../../assets/keysafe.jpg";
 import enseignat from "../../assets/enseignat.png";
 import adminstrateur from "../../assets/adminstrateur.png";
 import etudiant from "../../assets/etudiant.png";
-import inscrigauche from "../../assets/inscrigauche.png";
+import inscrigreen from "../../assets/inscrigreen.png";
 
 const roles = [
   {
@@ -129,7 +129,7 @@ const Inscription = () => {
 
       {/* Image pile de livres */}
       <img
-        src={inscrigauche}
+        src={inscrigreen}
         alt="Books"
         style={{
           position: "absolute",

@@ -23,6 +23,11 @@ import GestionMatiere from './Pages/Admin/GestionMatiere';
 import MesCours from './Pages/cours/MesCours';
 import GestionCours from './Pages/cours/GestionCours';
 import Message from './Pages/Chat/Message';
+import ListReclamation from './Pages/Admin/ListReclamation';
+import Reclamation from './Pages/Reclamation/Reclamation';
+import ForgetPassword from './Pages/auth/ForgetPassword';
+import VerifyCode from './Pages/auth/VerifyCode';
+import ResetPassword from './Pages/auth/ResetPassword';
 
 function App() {
   return (
@@ -35,12 +40,15 @@ function App() {
         <Route path="/registerEtudiant" element={<RegisterEtudiant />} />
         <Route path="/LoginEtudiant" element={<LoginEtudiant />} />
         <Route path="/inscription" element={<Inscription />} />
-
+ <Route path="/" element={<LoginEtudiant />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/verify-code" element={<VerifyCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* Pages protégées */}
         <Route
           path="/app"
           element={
-            <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
+            <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN","ROLE_SUPRADMIN"]}>
               <Layout />
             </PrivateRoute>
           }
@@ -72,7 +80,7 @@ function App() {
               <Route
             path="profile"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN","ROLE_SUPRADMIN"]}>
               <Profile/>
               </PrivateRoute>
             }
@@ -81,7 +89,7 @@ function App() {
  <Route
             path="eleves"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN","ROLE_SUPRADMIN"]}>
                 <ListEleve/>
               </PrivateRoute>
             }
@@ -89,7 +97,7 @@ function App() {
            <Route
             path="enseignants"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN","ROLE_SUPRADMIN"]}>
                 <ListEnseignant/>
               </PrivateRoute>
             }
@@ -97,7 +105,7 @@ function App() {
             <Route
             path="acceuiladmin"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN","ROLE_SUPRADMIN"]}>
               <Acceuil/>
               </PrivateRoute>
             }
@@ -105,7 +113,7 @@ function App() {
            <Route
             path="admin"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_SUPRADMIN"]}>
               <ListAdmin/>
               </PrivateRoute>
             }
@@ -113,7 +121,7 @@ function App() {
            <Route
             path="profile"
             element={
-              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN"]}>
+              <PrivateRoute rolesAllowed={["ROLE_ENSEIGNANT", "ROLE_ELEVE","ROLE_ADMIN","ROLE_SUPRADMIN"]}>
               <Profile/>
               </PrivateRoute>
             }
@@ -123,6 +131,14 @@ function App() {
             element={
               <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
               <GestionMatiere/>
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="listReclamations"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ADMIN"]}>
+              <ListReclamation/>
               </PrivateRoute>
             }
           />
@@ -164,6 +180,13 @@ function App() {
             element={
               <PrivateRoute rolesAllowed={["ROLE_ELEVE","ROLE_ENSEIGNANT"]}>
                 <Message />
+              </PrivateRoute>
+            }/>
+             <Route
+            path="reclamations"
+            element={
+              <PrivateRoute rolesAllowed={["ROLE_ELEVE","ROLE_ENSEIGNANT"]}>
+                <Reclamation />
               </PrivateRoute>
             }/>
              <Route

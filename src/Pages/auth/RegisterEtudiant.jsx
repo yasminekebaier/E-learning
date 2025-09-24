@@ -20,6 +20,7 @@ import registerEtudiant1 from "../../assets/registerEtudiant1.png";
 import { GridCheckCircleIcon } from "@mui/x-data-grid";
 import { RegisterAction } from "../../redux/actions/userActions";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { toast, ToastContainer } from "react-toastify";
 
 // const situations = ["SCOLARISEE", "NON_SCOLARISEE"];
 // const niveaux = ["PRIMAIRE", "SECONDAIRE", "AUTRE"];
@@ -43,24 +44,25 @@ const RegisterEtudiant = () => {
     Niveau_SCOLAIRE: "",
   });
 
-  const handleRegister = async () => {
-    if (formData.password !== formData.confirmPassword) {
-      alert("Les mots de passe ne correspondent pas !");
-      return;
-    }
+ const handleRegister = async () => {
+  if (formData.password !== formData.confirmPassword) {
+    toast.error("Les mots de passe ne correspondent pas !");
+    return;
+  }
 
-    try {
-      console.log("Form data envoyé :", formData);
-      const resultAction = await dispatch(RegisterAction(formData));
-      const result = unwrapResult(resultAction);
+  try {
+    console.log("Form data envoyé :", formData);
+    const resultAction = await dispatch(RegisterAction(formData));
+    const result = unwrapResult(resultAction);
 
-      console.log("Inscription réussie :", result);
-      alert("Inscription réussie !");
-    } catch (err) {
-      console.error("Erreur lors de l'inscription :", err);
-      alert("Une erreur est survenue. Veuillez réessayer.");
-    }
-  };
+    console.log("Inscription réussie :", result);
+    toast.info("📧 Un email de confirmation sera envoyé, contenant les informations de connexion.");
+  } catch (err) {
+    console.error("Erreur lors de l'inscription :", err);
+    toast.error("Une erreur est survenue. Veuillez réessayer.");
+  }
+};
+
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () =>
@@ -75,6 +77,8 @@ const RegisterEtudiant = () => {
   };
 
   return (
+    <>
+     <ToastContainer position="top-right" autoClose={5000} />
     <Grid
       sx={{
         display: "flex",
@@ -575,6 +579,7 @@ const RegisterEtudiant = () => {
         </Paper>
       </Box>
     </Grid>
+    </>
   );
 };
 

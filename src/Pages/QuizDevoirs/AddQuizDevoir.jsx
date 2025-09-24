@@ -7,11 +7,9 @@ import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import QuizIcon from '@mui/icons-material/Quiz';
 import WorkIcon from '@mui/icons-material/Work';
-import EditIcon from '@mui/icons-material/Edit';
 import { StyledPaper } from '../../Components/Global/Style';
 import { ButtonComponent } from '../../Components/Global/ButtonComponent';
 import CustomModal from '../../Components/Global/ModelComponent';
-import UpdateModal from '../../Components/Global/UpdateModel';
 import { useTranslation } from 'react-i18next';
 import { 
   fetchQuizsDevoir, AddQuizDevoirs, AddDevoir, AddQuestions 
@@ -24,7 +22,7 @@ const AddQuizDevoir = () => {
   const { t } = useTranslation();
 
   // Redux state
-  const { quizs, loading, error } = useSelector(state => state.quizDevoir);
+  const { quizs } = useSelector(state => state.quizDevoir);
   const { cours } = useSelector(state => state.cours);
 
   // Pagination
@@ -40,12 +38,10 @@ const AddQuizDevoir = () => {
   const [openQuizModal, setOpenQuizModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openDevoirModal, setOpenDevoirModal] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
 
   const handleCloseQuizModal = () => setOpenQuizModal(false);
   const handleCloseDetailModal = () => { setActiveStep(0); setOpenDetailModal(false); };
   const handleCloseDevoirModal = () => setOpenDevoirModal(false);
-  const handleCloseUpdate = () => setOpenUpdate(false);
 
   // Form states
   const [newQuiz, setNewQuiz] = useState({
@@ -72,14 +68,13 @@ const AddQuizDevoir = () => {
   }, [dispatch]);
 
   // Questions handlers
- const handleCurrentQuestionChange = (field, value) => {
-  const newQ = { ...currentQuestion };
-  if (field === "texte") newQ.texte = value;
-  else if (field.startsWith("option")) newQ.options[parseInt(field.slice(-1))] = value;
-  else if (field === "correctAnswerIndex") newQ.correctAnswerIndex = Number(value); // <-- important
-  setCurrentQuestion(newQ);
-};
-
+  const handleCurrentQuestionChange = (field, value) => {
+    const newQ = { ...currentQuestion };
+    if (field === "texte") newQ.texte = value;
+    else if (field.startsWith("option")) newQ.options[parseInt(field.slice(-1))] = value;
+    else if (field === "correctAnswerIndex") newQ.correctAnswerIndex = Number(value);
+    setCurrentQuestion(newQ);
+  };
 
   const addCurrentQuestion = () => {
     setQuestions([...questions, currentQuestion]);
@@ -87,31 +82,70 @@ const AddQuizDevoir = () => {
     setActiveStep(1);
   };
 
-const saveQuestionsToBackend = async () => {
-  if (!selectedQuiz || questions.length === 0) return;
+  const saveQuestionsToBackend = async () => {
+    if (!selectedQuiz || questions.length === 0) return;
+    const quizId = selectedQuiz?.quiz?.id || selectedQuiz?.id;
+    if (!quizId) {
+      console.error("Quiz ID introuvable !", selectedQuiz);
+      alert("Erreur : Quiz non défini");
+      return;
+    }
 
-  const quizId = selectedQuiz?.quiz?.id || selectedQuiz?.id; // <-- fallback sur id de AssignmentQuiz si quiz null
-  if (!quizId) {
-    console.error("Quiz ID introuvable !", selectedQuiz);
-    alert("Erreur : Quiz non défini");
+    try {
+      const formattedQuestions = questions.map(q => ({
+        content: q.texte,
+        correctAnswerIndex: q.correctAnswerIndex,
+        choices: q.options.map((opt, index) => ({
+          text: opt,
+          index: index
+        }))
+      }));
+      await dispatch(AddQuestions({ quizId, questions: formattedQuestions })).unwrap();
+
+      alert("Questions enregistrées ✅");
+      setCurrentQuestion({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
+      handleCloseDetailModal();
+      dispatch(fetchQuizsDevoir());
+    } catch (err) {
+      console.error("Erreur backend:", err);
+      alert("Erreur lors de l'enregistrement ❌");
+    }
+  };
+
+const handleDownloadDevoir = async (devoirQuizId) => {
+  if (!devoirQuizId) {
+    console.error("DevoirQuiz ID introuvable !");
+    alert("Erreur : devoir introuvable");
     return;
   }
 
   try {
-    await dispatch(AddQuestions({ quizId, questions })).unwrap();
-    alert("Questions enregistrées ✅");
+    const token = localStorage.getItem("token"); 
+    const response = await fetch(`http://localhost:8085/api/devoirquiz/download-devoir/${devoirQuizId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
+    if (!response.ok) throw new Error("Erreur téléchargement");
 
-    setCurrentQuestion({ texte: "", options: ["", "", "", ""], correctAnswerIndex: 0 });
-    handleCloseDetailModal();
-    dispatch(fetchQuizsDevoir());
-  } catch (err) {
-    console.error("Erreur backend:", err);
-    alert("Erreur lors de l'enregistrement ❌");
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = selectedQuiz?.devoir?.file || "devoir.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error(error);
+    alert("Erreur lors du téléchargement.");
   }
 };
-
-
 
 
 
@@ -119,7 +153,6 @@ const saveQuestionsToBackend = async () => {
   const handleNextStep = () => setActiveStep(prev => Math.min(prev + 1, steps.length - 1));
   const handleBackStep = () => setActiveStep(prev => Math.max(prev - 1, 0));
 
-  // File handler
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
   return (
@@ -145,16 +178,25 @@ const saveQuestionsToBackend = async () => {
                   <Box mt={2} sx={{ display: 'flex', flexDirection: 'column', gap: 1, color: "#174090" }}>
                     <Typography><strong>Cours:</strong> {item.cours?.nom || "N/A"}</Typography>
                     <Typography><strong>Date limite:</strong> {item.dateLimite || "N/A"}</Typography>
-                    {item.type === 'QUIZ' ? (
-                      <Typography><strong>Durée:</strong> {item.duree || "N/A"} minutes</Typography>
-                    ) : (
-                      <Typography>
-                        <strong>Fichier:</strong>{" "}
-                        {item.devoir?.file ? (
-                          <a href={`http://localhost:8085/files/${item.devoir.file}`} target="_blank" rel="noopener noreferrer">{item.devoir.file}</a>
-                        ) : "Aucun fichier"}
-                      </Typography>
-                    )}
+                    <Typography><strong>Titre:</strong> {item.quiz?.titre || "N/A"} minutes</Typography>
+
+{item.type === 'QUIZ' ? (
+  <Typography>{item.questions?.length || 0} questions</Typography>
+) : (
+  item.devoir?.file ? (
+    <Button 
+      variant="outlined" 
+      disabled={!item.devoir}
+      onClick={() => handleDownloadDevoir(item.id)}
+    >
+      Télécharger {item.devoir?.file || ""}
+    </Button>
+  ) : (
+    <Typography>Pas de fichier</Typography>
+  )
+)}
+
+
                   </Box>
 
                   <Divider sx={{ my: 1 }} />
@@ -164,9 +206,7 @@ const saveQuestionsToBackend = async () => {
                       <Typography>{item.questions?.length || 0} questions</Typography>
                     ) : (
                       item.devoir?.file ? (
-                        <a href={`http://localhost:8085/files/${item.devoir.file}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                          {item.devoir.file}
-                        </a>
+                        <Typography>Voir / Télécharger</Typography>
                       ) : <Typography>Pas de fichier</Typography>
                     )}
 
@@ -246,61 +286,45 @@ const saveQuestionsToBackend = async () => {
               </>
             )}
 
-        {activeStep === 1 && (
-  <>
-    <Typography variant="h6">Questions Existantes</Typography>
+            {activeStep === 1 && (
+              <>
+                <Typography variant="h6">Questions Existantes</Typography>
+                {(selectedQuiz?.questions && selectedQuiz.questions.length > 0) ? (
+                  selectedQuiz.questions.map((q, i) => (
+                    <Box key={q.id || i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
+                      <Typography>{`Q${i + 1}: ${q.content}`}</Typography>
+                      {q.choices.map((choice, j) => (
+                        <li key={j}>
+                          {choice.content} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
+                        </li>
+                      ))}
+                    </Box>
+                  ))
+                ) : (
+                  (questions.length === 0 ? (
+                    <Typography>Aucune question ajoutée.</Typography>
+                  ) : (
+                    questions.map((q, i) => (
+                      <Box key={i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
+                        <Typography>{`Q${i + 1}: ${q.texte}`}</Typography>
+                        <ul>
+                          {q.options.map((opt, j) => (
+                            <li key={j}>
+                              {opt} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
+                            </li>
+                          ))}
+                        </ul>
+                      </Box>
+                    ))
+                  ))
+                )}
 
-    {(selectedQuiz?.questions && selectedQuiz.questions.length > 0) ? (
-      selectedQuiz.questions.map((q, i) => (
-        <Box key={q.id || i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
-          <Typography>{`Q${i + 1}: ${q.content}`}</Typography>
-          {q.choices && q.choices.length > 0 && (
-            <ul>
-              {q.choices.map((choice, j) => (
-                <li key={j}>
-                  {choice.text} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </Box>
-      ))
-    ) : (
-      (questions.length === 0 ? (
-        <Typography>Aucune question ajoutée.</Typography>
-      ) : (
-        questions.map((q, i) => (
-          <Box key={i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
-            <Typography>{`Q${i + 1}: ${q.texte}`}</Typography>
-            <ul>
-              {q.options.map((opt, j) => (
-                <li key={j}>
-                  {opt} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
-                </li>
-              ))}
-            </ul>
-          </Box>
-        ))
-      ))
-    )}
-
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-      <Button
-        sx={{ color: "white", backgroundColor: "#174090" }}
-        onClick={handleBackStep}
-      >
-        Retour
-      </Button>
-      <Button
-        sx={{ color: "white", backgroundColor: "#174090" }}
-        onClick={handleNextStep}
-      >
-        Ajouter une question
-      </Button>
-    </Box>
-  </>
-)}
-
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                  <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleBackStep}>Retour</Button>
+                  <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleNextStep}>Ajouter une question</Button>
+                </Box>
+              </>
+            )}
 
             {activeStep === 2 && (
               <>
@@ -326,47 +350,43 @@ const saveQuestionsToBackend = async () => {
       </CustomModal>
 
       {/* Modal Devoir / Upload */}
-     {/* Modal Devoir / Upload */}
-<CustomModal open={openDevoirModal} handleClose={handleCloseDevoirModal} title={`Ajouter une ressource pour: ${selectedQuiz?.titre}`} icon={<WorkIcon />}>
-  <Box sx={{ mt:2, display:'flex', flexDirection:'column', gap:2 }}>
-    <TextField label="Titre ressource" fullWidth value={resourceTitle} onChange={(e)=>setResourceTitle(e.target.value)}/>
-    
-    <Button variant="outlined" component="label" sx={{ textTransform:'none' }}>
-      Choisir un fichier
-      <input type="file" hidden onChange={handleFileChange}/>
-    </Button>
+      <CustomModal open={openDevoirModal} handleClose={handleCloseDevoirModal} title={`Ajouter une ressource pour: ${selectedQuiz?.titre}`} icon={<WorkIcon />}>
+        <Box sx={{ mt:2, display:'flex', flexDirection:'column', gap:2 }}>
+          <TextField label="Titre ressource" fullWidth value={resourceTitle} onChange={(e)=>setResourceTitle(e.target.value)}/>
+          
+          <Button variant="outlined" component="label" sx={{ textTransform:'none' }}>
+            Choisir un fichier
+            <input type="file" hidden onChange={handleFileChange}/>
+          </Button>
 
-    {file && <Typography variant="body2">Fichier sélectionné : {file.name}</Typography>}
+          {file && <Typography variant="body2">Fichier sélectionné : {file.name}</Typography>}
 
-    <ButtonComponent 
-      text="Ajouter Ressource" 
-      color="#008000" 
-      onClick={async ()=>{
-        if(!file){alert("Veuillez sélectionner un fichier !"); return;}
-        try {
-          await dispatch(AddDevoir({ quizDevoirId:selectedQuiz.id, file })).unwrap();
-          alert("Ressource ajoutée ✅");
-          setFile(null); setResourceTitle(""); 
-          handleCloseDevoirModal();
-          dispatch(fetchQuizsDevoir());
-        } catch(err){console.error(err); alert("Erreur ❌");}
-      }}
-    />
+          <ButtonComponent 
+            text="Ajouter Ressource" 
+            color="#008000" 
+            onClick={async ()=>{
+              if(!file){alert("Veuillez sélectionner un fichier !"); return;}
+              try {
+                await dispatch(AddDevoir({ quizDevoirId:selectedQuiz.id, file })).unwrap();
+                alert("Ressource ajoutée ✅");
+                setFile(null); setResourceTitle(""); 
+                handleCloseDevoirModal();
+                dispatch(fetchQuizsDevoir());
+              } catch(err){console.error(err); alert("Erreur ❌");}
+            }}
+          />
 
-    {/* Lien téléchargement si fichier déjà existant */}
-    {selectedQuiz?.devoir?.file && (
-      <a 
-        href={`http://localhost:8085/Devoirs/download/${selectedQuiz.devoir.file}`} 
-        download 
-        target="_blank" 
-        rel="noopener noreferrer"
-        style={{ textDecoration: 'none', color: '#1976d2' }}
-      >
-        Télécharger {selectedQuiz.devoir.file}
-      </a>
-    )}
-  </Box>
-</CustomModal>
+          {selectedQuiz?.devoir?.id && (
+            <Button 
+              variant="outlined" 
+              onClick={() => handleDownloadDevoir(selectedQuiz.devoir.id)}
+              sx={{ textTransform: 'none', color: '#1976d2' }}
+            >
+              Télécharger {selectedQuiz.devoir.file}
+            </Button>
+          )}
+        </Box>
+      </CustomModal>
 
     </>
   );

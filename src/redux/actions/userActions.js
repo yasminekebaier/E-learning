@@ -168,5 +168,50 @@ export const FetchUserProfile = createAsyncThunk(
       }
     }
   );
+  // ====== Forget Password (envoi du code) ======
+export const SendResetCode = createAsyncThunk(
+  "auth/sendResetCode",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8085/User/send-code?email=${email}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// ====== Verify Reset Code ======
+export const VerifyResetCode = createAsyncThunk(
+  "auth/verifyResetCode",
+  async ({ email, code }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8085/User/verify-code?email=${email}&code=${code}`
+      );
+      return response.data; // { valid: true/false }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// ====== Reset Password ======
+export const ResetPasswords = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ email, code, newPassword }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8085/User/reset-password?email=${email}&code=${code}&newPassword=${newPassword}`
+      );
+      return response.data; // { message: "Password reset success" }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 
 
