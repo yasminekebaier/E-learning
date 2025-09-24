@@ -54,6 +54,29 @@ const calculerNombreAvis = (coursId) => {
   const matieresEnseignant = matieres.filter(
     (m) => m.enseignant && m.enseignant.id === CurrentUser?.id
   );
+const API_BASE_URL = "http://localhost:8085"; // ou ta base URL
+
+const handleRessourceClick = (ressource) => {
+  if (!ressource || !ressource.typeRes) return;
+
+  const fileUrl = `${API_BASE_URL}/Ressource/files/${ressource.contenuRes}`;
+  const videoExtensions = ["mp4", "webm", "ogg", "mov", "avi", "mkv"];
+  const isVideo =
+    ressource.typeRes.toLowerCase() === "vidéo" ||
+    videoExtensions.some((ext) => ressource.contenuRes.toLowerCase().endsWith(ext));
+
+  if (isVideo) {
+    // Ici tu peux ouvrir un modal vidéo comme dans MesCours
+    window.open(fileUrl, "_blank");
+  } else {
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = ressource.contenuRes;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
 
   // Cours filtrés
   const coursFiltres = selectedMatiereId
@@ -110,28 +133,37 @@ const calculerNombreAvis = (coursId) => {
             coursFiltres.map((coursItem) => (
               <Card key={coursItem.id} sx={{ borderRadius: 2, boxShadow: 3, mb: 2 }}>
                 <CardContent>
+                  <Box sx={{display:"flex" ,flexDirection:"row",justifyContent:"space-between"}}>
+                    <Box>
                   <Typography variant="h6" color="green">{coursItem.nom}</Typography>
                   <Typography variant="body2" color="text.secondary">{coursItem.description}</Typography>
-                  <Divider sx={{ my: 1 }} />
-
-                  {/* Note moyenne */}
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-               <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-  <Typography variant="body2" sx={{ mr: 1 }}>Note :</Typography>
+                  </Box>
+                  <Box>
+              <Box sx={{display:"flex" ,flexDirection:"row",justifyContent:"space-between"}}>    
   <Rating value={calculerMoyenne(coursItem.id)} precision={0.5} readOnly />
-  <Typography variant="body2" sx={{ ml: 1 }}>
+  <Typography variant="body2" sx={{  }}>
     ({calculerNombreAvis(coursItem.id)})
   </Typography>
-</Box>
-
-                  </Box>
-
-                  {/* Bouton avis */}
+  </Box>  
+                   {/* Bouton avis */}
                   <ButtonComponent
                     text="Voir les avis"
                     color="#1976d2"
                     onClick={() => handleOpenFeedbackModal(coursItem.id)}
                   />
+                  </Box>
+                  </Box>
+                  <Divider sx={{ my: 1 }} />
+
+                  {/* Note moyenne */}
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+               <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+  
+</Box>
+
+                  </Box>
+
+                 
 
                   {/* Ressources */}
                   {coursItem.ressources && coursItem.ressources.length > 0 ? (
@@ -147,22 +179,15 @@ const calculerNombreAvis = (coursId) => {
                         }
 
                         return (
-                          <ListItem key={res.id}>
-                            <ListItemIcon>{icon}</ListItemIcon>
-                            <ListItemText
-                              primary={res.titreRes}
-                              secondary={
-                                <a
-                                  href={res.fichier}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  style={{ color: "#1976d2", textDecoration: "underline" }}
-                                >
-                                  {res.contenuRes}
-                                </a>
-                              }
-                            />
-                          </ListItem>
+                        <ListItem
+  key={res.id}
+  sx={{ py: 0.5, cursor: "pointer" }}
+  onClick={() => handleRessourceClick(res)}
+>
+  <ListItemIcon>{icon}</ListItemIcon>
+  <ListItemText primary={res.titreRes} />
+</ListItem>
+
                         );
                       })}
                     </List>
