@@ -112,6 +112,7 @@ export const AddQuestions = createAsyncThunk(
           Authorization: `Bearer ${token}`
         }
       });
+      console.log("laréponse de l'api ",questions)
       return questions;
     } catch (err) {
       console.error(err.response?.data || err.message);
@@ -136,7 +137,7 @@ export const submitQuiz = createAsyncThunk(
           },
         }
       );
-
+console.log("la réponse de l'étudiant",res.data)
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Erreur lors de la soumission du quiz");

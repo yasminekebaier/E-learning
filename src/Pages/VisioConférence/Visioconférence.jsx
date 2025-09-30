@@ -142,6 +142,20 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
       }
     }
   ];
+const visiosWithStatus = visioConferences.map(visio => {
+  const now = dayjs();
+  const dateDebut = dayjs(visio.dateDebut);
+  const dateFin = dayjs(visio.dateFin);
+
+  let status = "À venir"; // statut par défaut
+  if (now.isAfter(dateDebut) && now.isBefore(dateFin)) {
+    status = "En cours";
+  } else if (now.isAfter(dateFin)) {
+    status = "Terminé";
+  }
+
+  return { ...visio, status };
+});
 
   return (
     <Box p={4}>
@@ -201,7 +215,7 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
             />
           </Grid>
 <FormControl fullWidth sx={{ mb: 2 }}>
-  <InputLabel>Élève</InputLabel>
+  <InputLabel>Collaborateur</InputLabel>
   <Select
     name="eleveId"
     value={formData.eleveId}
@@ -265,7 +279,8 @@ if (!formData.url.startsWith("https://meet.google.com/")) {
         </Grid>
       </Paper>
 
-      <TableComponent rows={visioConferences} columns={columns} actions={actions} />
+     <TableComponent rows={visiosWithStatus} columns={columns} actions={actions} />
+
     </Box>
   );
 };

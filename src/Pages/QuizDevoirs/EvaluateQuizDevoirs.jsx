@@ -20,7 +20,8 @@ import { ButtonComponent } from "../../Components/Global/ButtonComponent";
 import EvaluationModal from "../../Components/Global/EvaluationModal";
 import { useDispatch, useSelector } from "react-redux";
 import { evaluateQuiz, fetchQuizsDevoir } from "../../redux/actions/QuizActions";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 const EvaluateQuizDevoirs = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -107,7 +108,44 @@ const EvaluateQuizDevoirs = () => {
       },
     },
   ];
+const exportToExcel = () => {
+  // Construire les données à exporter
+  const data = quizDevoirs.map(item => ({
+    Titre: item.titre,
+    Type: item.type,
+    Détails:
+      item.type === "QUIZ"
+        ? item.questions?.length
+          ? `${item.questions.length} questions`
+          : "Aucune question"
+        : item.assignment?.file || "Pas de fichier",
+    Soumission: item.createdAt
+      ? new Date(item.createdAt).toLocaleDateString()
+      : item.dateLimite
+      ? new Date(item.dateLimite).toLocaleDateString()
+      : "-",
+    Statut: item.statut,
+  }));
 
+  // Créer une feuille de calcul
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // Créer un classeur
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "QuizDevoirs");
+
+  // Générer un fichier Excel
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const blob = new Blob([excelBuffer], {
+    type: "application/octet-stream",
+  });
+
+  saveAs(blob, "quiz_devoirs.xlsx");
+};
   return (
     <StyledPaper sx={{ padding: 3 }}>
       <Typography sx={{ fontSize: 20, fontWeight: 'bold', color:"#174090", mb: 3 }}>
@@ -152,12 +190,13 @@ const EvaluateQuizDevoirs = () => {
         >
           {t("Filtrer")}
         </Button>
-        <ButtonComponent
-          text={t("Exporter les notes")}
-          icon={<DownloadIcon />}
-          color="#3F51B5"
-          onClick={() => console.log("Exporter")}
-        />
+      <ButtonComponent
+  text={t("Exporter les notes")}
+  icon={<DownloadIcon />}
+  color="#3F51B5"
+  onClick={exportToExcel}
+/>
+
       </Box>
 
       {/* Table dynamique */}

@@ -164,23 +164,19 @@ const ListEnseignant = () => {
   return (
     <>
       <StyledPaper elevation={3} sx={{ p: 2 }}>
+         <Typography
+            sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold",marginBottom:"20px" }}
+          >
+            {t("Liste des enseignants")}
+          </Typography>
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
           mb={2}
         >
-          <Typography
-            sx={{ fontSize: "20px", color: "#174090", fontWeight: "bold" }}
-          >
-            {t("Liste des enseignants")}
-          </Typography>
-          <ButtonComponent
-            text={t("Gérer les spécialités")}
-            icon={<AddCircleOutline />}
-            color="#008000"
-            onClick={() => setOpenAddModal(true)}
-          />
+         
+        
           <TextField
             size="small"
             label={t("Rechercher un enseignant")}
@@ -198,6 +194,12 @@ const ListEnseignant = () => {
               ),
               sx: { borderRadius: "16px", fontSize: "1rem" },
             }}
+          />
+            <ButtonComponent
+            text={t("Gérer les spécialités")}
+            icon={<AddCircleOutline />}
+            color="#008000"
+            onClick={() => setOpenAddModal(true)}
           />
         </Box>
 

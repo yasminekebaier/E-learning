@@ -8,9 +8,7 @@ import { fetchMatieres } from "../../redux/actions/MatiéreAction";
 const MesMatieres = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { matieres, loading, error } = useSelector(state => state.matiere);
-
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
 

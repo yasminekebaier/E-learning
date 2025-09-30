@@ -143,34 +143,43 @@ const rowsWithIcons = filteredRows.map(row => ({
     setRessourcesName(titreRes);
     setOpenDelete(true);
   };
-  const handleDeleteConfirm = async () => {
-    try {
-      await dispatch(DeleteRessourcesAction(RessourcesIdToDelete));
-      dispatch(fetchRessources());
-      setOpenDelete(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const handleDeleteConfirm = async () => {
+  try {
+    await dispatch(DeleteRessourcesAction({ RessourcesIdToDelete })).unwrap();
+    toast.success(`Ressource "${RessourcesName}" supprimée !`);
 
-  const handleOpenUpdate = (id, titre, type, niveau) => {
-    setResId(id);
-    setUpdatedtitreRes(titre);
-    setUpdatetypeRes(type);
-    setUpdateNiveau(niveau);
-    setOpenUpdate(true);
-  };
+    // 🔄 Recharge proprement la liste fusionnée
+    await refreshRessourcesAvecRelations();
+
+    setOpenDelete(false);
+  } catch (error) {
+    console.error(error);
+    toast.error("Erreur lors de la suppression !");
+  }
+};
+
+
+
 const updateRessource = async () => {
   try {
-    await dispatch(UpdateRessourceAction({ ResId, Title: updatedtitreRes, Type: updatedTypeRes, HoursNumber: UpdatedNiveau })).unwrap();
+    const payload = { RessourceId: ResId };
+
+    if (updatedtitreRes) payload.titreRes = updatedtitreRes;
+    if (updatedTypeRes) payload.typeRes = updatedTypeRes;
+    if (UpdatedNiveau) payload.niveau = UpdatedNiveau;
+    if (coursId) payload.coursId = coursId;
+    if (file) payload.file = file;
+
+    await dispatch(UpdateRessourceAction(payload)).unwrap();
+
     toast.success("Ressource modifiée !");
     setOpenUpdate(false);
-
-    refreshRessourcesAvecRelations(); // ✅ met à jour l'affichage
+    refreshRessourcesAvecRelations();
   } catch (error) {
     toast.error("Erreur lors de la modification !");
   }
 };
+
 
 
 const handleAddRessource = async () => {
@@ -230,6 +239,15 @@ useEffect(() => {
 
 ;
 
+const handleOpenUpdate = (id, titre, type, niveau, coursId) => {
+  setResId(id);
+  setUpdatedtitreRes(titre);
+setUpdatetypeRes(type);
+setUpdateNiveau(niveau);
+setCoursId(coursId);
+
+  setOpenUpdate(true);
+};
 
 
 
@@ -379,14 +397,104 @@ useEffect(() => {
       </DeleteModel>
 
       {/* Modal modification */}
-      <UpdateModal open={openUpdate} handleClose={() => setOpenUpdate(false)} title={t("Modifier cette Ressource")} icon={<EditIcon />}>
-        <Box display="flex" flexDirection="column" gap={2}>
-          <TextField label={t("Titre")} value={updatedtitreRes} onChange={e => setUpdatedtitreRes(e.target.value)} />
-          <TextField label={t("Type")} value={updatedTypeRes} onChange={e => setUpdatetypeRes(e.target.value)} />
-          <TextField label={t("Niveau")} value={UpdatedNiveau} onChange={e => setUpdateNiveau(e.target.value)} />
-          <ButtonComponent text={t("Modifier")} color="#1A9BC3" onClick={updateRessource} />
-        </Box>
-      </UpdateModal>
+<UpdateModal 
+  open={openUpdate} 
+  handleClose={() => setOpenUpdate(false)} 
+  title={t("Modifier cette Ressource")} 
+  icon={<EditIcon />}
+>
+  <Box display="flex" flexDirection="column" gap={2}>
+    {/* Titre */}
+    <TextField 
+      label={t("Titre")} 
+      value={updatedtitreRes} 
+      onChange={e => setUpdatedtitreRes(e.target.value)} 
+    />
+
+    {/* Type */}
+   <FormControl fullWidth size="small">
+  <InputLabel id="type-label">{t("Type")}</InputLabel>
+  <Select
+    labelId="type-label"
+    id="type-select"
+    value={updatedTypeRes || ""}
+    label={t("Type")}   // ✅ obligatoire
+    onChange={(e) => setUpdatetypeRes(e.target.value)}
+  >
+    <MenuItem value="PDF">PDF</MenuItem>
+    <MenuItem value="Vidéo">Vidéo</MenuItem>
+    <MenuItem value="Quiz">Quiz</MenuItem>
+    <MenuItem value="Document">Document</MenuItem>
+  </Select>
+</FormControl>
+
+
+
+    {/* Niveau */}
+<FormControl fullWidth size="small">
+  <InputLabel id="niveau-label">{t("Niveau")}</InputLabel>
+  <Select
+    labelId="niveau-label"
+    id="niveau-select"
+    value={UpdatedNiveau || ""}
+    label={t("Niveau")}   // ✅ obligatoire
+    onChange={(e) => setUpdateNiveau(e.target.value)}
+  >
+    {niveaux.map((n) => (
+      <MenuItem key={n} value={n}>
+        {t(n)}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
+
+
+    {/* Cours */}
+<FormControl fullWidth size="small">
+  <InputLabel id="cours-label">{t("Cours")}</InputLabel>
+  <Select
+    labelId="cours-label"
+    id="cours-select"
+    value={coursId || ""}
+    label={t("Cours")}   // ✅ obligatoire
+    onChange={(e) => setCoursId(Number(e.target.value))}
+  >
+    {cours.map((c) => (
+      <MenuItem key={c.id} value={c.id}>
+        {c.nom}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
+
+
+    {/* Fichier (optionnel si on veut remplacer) */}
+    <Box sx={{border:"1px dashed grey",p:2,borderRadius:2,textAlign:"center",backgroundColor:"#f9f9f9"}}>
+      <Typography variant="body2" sx={{mb:1}}>
+        {file ? file.name : t("Glisser-déposez un fichier ici ou ")}
+      </Typography>
+      <Button 
+        variant="contained" 
+        component="label"
+        sx={{textTransform:"none",bgcolor:"#0f9f0fff","&:hover":{bgcolor:"#0f9f0fff"}}}
+      >
+        {t("Parcourir")}
+        <input type="file" hidden onChange={e => setFile(e.target.files[0])} />
+      </Button>
+    </Box>
+
+    {/* Bouton modifier */}
+    <ButtonComponent 
+      text={t("Modifier")} 
+      color="#1A9BC3" 
+      onClick={updateRessource} 
+    />
+  </Box>
+</UpdateModal>
+
+
       {/* Modal pour l'apercu de vidéo */}
    <Dialog open={openVideoModal} onClose={() => setOpenVideoModal(false)} maxWidth="md" fullWidth>
   <DialogTitle>Lecture de la vidéo</DialogTitle>

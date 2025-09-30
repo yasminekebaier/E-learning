@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction, AddAdmin, ResetPasswords, VerifyResetCode, SendResetCode } from "../actions/userActions";
+import { FetchUserProfile, LoginAction, LogoutAction, RegisterAction, FetchAllUsers, ConfirmUser, RegisterEnseignantAction, AddAdmin, ResetPasswords, VerifyResetCode, SendResetCode, UpdateUserProfile } from "../actions/userActions";
 
 const initialState = {
   CurrentUser: null,
@@ -200,7 +200,19 @@ const userSlice = createSlice({
     // RESET PASSWORD
     .addCase(ResetPasswords.fulfilled, (state, action) => {
       state.message = action.payload.message;
-    });
+    })
+      .addCase(UpdateUserProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.CurrentUser = action.payload;
+      })
+      .addCase(UpdateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload;
+      });
 
   },
 });

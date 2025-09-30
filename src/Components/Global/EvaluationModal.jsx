@@ -1,12 +1,22 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Divider
-} from "@mui/material";
+import { Modal, Box, Typography, TextField, Button, Divider, IconButton, Grid } from "@mui/material";
+import GridCloseIcon from "@mui/icons-material/Close";
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  minWidth: "60%",
+  minHeight: "60%",
+  maxHeight: "100%",
+  bgcolor: '#F4FAFF',
+  boxShadow: 10,
+  borderRadius: '10px',
+  overflowY: 'auto',
+ 
+  p: 3,
+};
 
 const EvaluationModal = ({ open, handleClose, selectedRow, onSubmit }) => {
   const [note, setNote] = useState("");
@@ -25,109 +35,107 @@ const EvaluationModal = ({ open, handleClose, selectedRow, onSubmit }) => {
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box
-        sx={{
-          width: 700,
-          bgcolor: "white",
-          p: 4,
-          mx: "auto",
-          mt: "5%",
-          borderRadius: 3,
-          boxShadow: 24,
-          maxHeight: "90vh",
-          overflowY: "auto",
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold" gutterBottom>
+      <Box sx={style}>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: -7,
+            top: -7,
+            backgroundColor: '#f2f2f2',
+            color: "#174090",
+          }}
+        >
+          <GridCloseIcon />
+        </IconButton>
+
+        <Grid sx={{ textAlign: "center", color: "#174090" }}>
+          {/* Optionnel : tu peux mettre une icône ici */}
+        </Grid>
+
+        <Typography sx={{ textAlign: "center", color: "#174090", fontSize: 20, mb: 2 }}>
           Évaluer : {selectedRow.titre}
         </Typography>
 
-        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ maxHeight: "70vh", overflowY: "auto" }}>
+          {/* Infos principales */}
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            <b>Étudiant :</b> {selectedRow?.Etudiant?.username || "N/A"}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            <b>Classe :</b> {selectedRow?.classe || "-"}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            <b>Type :</b> {selectedRow?.type}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            <b>Date limite :</b>{" "}
+            {selectedRow?.dateLimite
+              ? new Date(selectedRow.dateLimite).toLocaleDateString()
+              : "-"}
+          </Typography>
 
-        {/* Infos principales */}
-        <Typography variant="body1">
-          <b>Étudiant :</b> {selectedRow?.Etudiant?.username || "N/A"}
-        </Typography>
-        <Typography variant="body1">
-          <b>Classe :</b> {selectedRow?.classe || "-"}
-        </Typography>
-        <Typography variant="body1">
-          <b>Type :</b> {selectedRow?.type}
-        </Typography>
-        <Typography variant="body1">
-          <b>Date limite :</b>{" "}
-          {selectedRow?.dateLimite
-            ? new Date(selectedRow.dateLimite).toLocaleDateString()
-            : "-"}
-        </Typography>
+          <Divider sx={{ my: 2 }} />
 
-        <Divider sx={{ my: 2 }} />
+          {/* Affichage des réponses */}
+          {selectedRow?.questions?.map((q, index) => {
+            const studentChoiceIndex = selectedRow?.reponses?.[q.id];
+            const studentChoice = q.choices?.find(c => c.index === studentChoiceIndex);
+            const correctChoice = q.choices?.find(c => c.index === q.correctChoice?.index);
 
-        {/* Affichage des réponses de l’étudiant */}
-        {selectedRow?.questions?.map((q, index) => {
-         // Récupérer la réponse de l'étudiant (si elle existe)
-const studentChoiceId = selectedRow?.reponses?.[q.id];
-const studentChoice = q.choices?.find(c => c.id === studentChoiceId);
+            return (
+              <Box key={q.id} sx={{ mb: 2 }}>
+                <Typography fontWeight="bold">
+                  Q{index + 1}. {q.content}
+                </Typography>
 
-// Récupérer la réponse correcte à partir de correctAnswerIndex
-const correctChoice = q.choices?.[q.correctAnswerIndex];
+                <Typography>
+                  ✅ Réponse correcte : {correctChoice?.content || "Non défini"}
+                </Typography>
 
+                <Typography>
+                  📝 Réponse étudiant :{" "}
+                  <span style={{ color: studentChoiceIndex === correctChoice?.index ? "green" : "red" }}>
+                    {studentChoice?.content || "Non répondu"}
+                  </span>
+                </Typography>
 
-          return (
-            <Box key={q.id} sx={{ mb: 2 }}>
-              <Typography fontWeight="bold">
-                Q{index + 1}. {q.content}
-              </Typography>
-          <Typography>
-  ✅ Réponse correcte :{" "}
-  <span style={{ color: "green" }}>
-    {correctChoice?.content || "Non défini"}
-  </span>
-</Typography>
-<Typography>
-  📝 Réponse étudiant :{" "}
-  <span
-    style={{
-      color: studentChoiceId === correctChoice?.id ? "green" : "red",
-    }}
-  >
-    {studentChoice?.content || "Non répondu"}
-  </span>
-</Typography>
+                <Divider sx={{ my: 1 }} />
+              </Box>
+            );
+          })}
 
-              <Divider sx={{ my: 1 }} />
-            </Box>
-          );
-        })}
+          {/* Note */}
+          <TextField
+            label="Note (/20)"
+            type="number"
+            fullWidth
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            sx={{ mb: 2 }}
+          />
 
-        {/* Note */}
-        <TextField
-          label="Note (/20)"
-          type="number"
-          fullWidth
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          sx={{ mb: 2 }}
-        />
+          {/* Feedback */}
+          <TextField
+            label="Remarques"
+            multiline
+            rows={3}
+            fullWidth
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            sx={{ mb: 2 }}
+          />
 
-        {/* Feedback */}
-        <TextField
-          label="Remarques"
-          multiline
-          rows={3}
-          fullWidth
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button variant="outlined" color="secondary" onClick={handleClose}>
-            Annuler
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSave}>
-            Enregistrer
-          </Button>
+          {/* Boutons */}
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button variant="outlined" color="secondary" onClick={handleClose}>
+              Annuler
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Enregistrer
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Modal>

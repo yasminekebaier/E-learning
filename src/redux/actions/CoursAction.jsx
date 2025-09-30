@@ -109,3 +109,43 @@ export const DeleteCours = createAsyncThunk(
     }
   }
 );
+export const UpdateCours = createAsyncThunk(
+  "Cours/updateCours",
+  async ({ id, coursData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const payload = {
+        nom: coursData.nom,
+        description: coursData.description,
+        etat: coursData.etat,
+        type: coursData.type,
+        datedebut: coursData.datedebut ? new Date(coursData.datedebut).toISOString() : null,
+        datefin: coursData.datefin ? new Date(coursData.datefin).toISOString() : null,
+        nbrhour: Number(coursData.nbrhour),
+        prix: Number(coursData.prix),
+        nomformateur: coursData.nomformateur,
+        creepar: coursData.creepar,
+        ressources: coursData.ressources || []
+      };
+
+      const response = await axios.put(
+        `http://localhost:8085/Cours/update/${id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+

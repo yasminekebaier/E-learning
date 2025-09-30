@@ -212,6 +212,38 @@ export const ResetPasswords = createAsyncThunk(
     }
   }
 );
+export const UpdateUserProfile = createAsyncThunk(
+  "user/updateProfile",
+  async ({ id, userData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const formData = new FormData();
+      for (const key in userData) {
+        formData.append(key, userData[key]);
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data", // Form-data
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const res = await axios.put(
+        `http://localhost:8085/User/update/${id}`,
+        formData,
+        config
+      );
+
+      return res.data;
+    } catch (err) {
+     return rejectWithValue(err.response?.data?.message || err.message);
+
+    }
+  }
+);
+
 
 
 

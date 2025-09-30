@@ -16,6 +16,7 @@ import {
 } from '../../redux/actions/QuizActions';
 import { fetchCours } from '../../redux/actions/CoursAction';
 import { useDispatch, useSelector } from 'react-redux';
+import PaginationComponent from '../../Components/Global/PaginationComponent';
 
 const AddQuizDevoir = () => {
   const dispatch = useDispatch();
@@ -55,6 +56,12 @@ const AddQuizDevoir = () => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [file, setFile] = useState(null);
   const [resourceTitle, setResourceTitle] = useState("");
+
+const questionsPerPage = 2; // ici on affiche 2 questions par page
+
+const handleChangePage = (event, value) => {
+  setPage(value);
+};
 
   // Stepper & Questions
   const [activeStep, setActiveStep] = useState(0);
@@ -100,6 +107,7 @@ const AddQuizDevoir = () => {
           index: index
         }))
       }));
+      console.log("question envoyée",formattedQuestions)
       await dispatch(AddQuestions({ quizId, questions: formattedQuestions })).unwrap();
 
       alert("Questions enregistrées ✅");
@@ -154,6 +162,10 @@ const handleDownloadDevoir = async (devoirQuizId) => {
   const handleBackStep = () => setActiveStep(prev => Math.max(prev - 1, 0));
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
+const questionsList = selectedQuiz?.questions?.length > 0 ? selectedQuiz.questions : questions;
+const startIndex = (page - 1) * questionsPerPage;
+const paginatedQuestions = questionsList.slice(startIndex, startIndex + questionsPerPage);
+
 
   return (
     <>
@@ -267,8 +279,13 @@ const handleDownloadDevoir = async (devoirQuizId) => {
       </CustomModal>
 
       {/* Modal Détails Quiz/Step */}
-      <CustomModal open={openDetailModal} handleClose={handleCloseDetailModal} title={selectedQuiz ? `Quiz: ${selectedQuiz.type}` : ""} icon={<AddCircleOutline />}>
-        <Box sx={{ width: '100%', mt: 2 }}>
+      <CustomModal open={openDetailModal} handleClose={handleCloseDetailModal} title={selectedQuiz ? `Quiz: ${selectedQuiz.type}` : ""} >
+         <Box sx={{
+    width: "100%",    // largeur fixe
+    height: "590px",   // hauteur fixe
+    maxHeight: "90vh", // limite pour écran petit
+                    // padding
+  }}>
           <Stepper activeStep={activeStep}>
             {steps.map(label => <Step key={label}><StepLabel>{label}</StepLabel></Step>)}
           </Stepper>
@@ -277,7 +294,7 @@ const handleDownloadDevoir = async (devoirQuizId) => {
             {activeStep === 0 && (
               <>
                 <Typography variant="h6">Détails du Quiz</Typography>
-                <Typography><strong>Classe:</strong> {selectedQuiz?.classe || "N/A"}</Typography>
+                <Typography><strong>Titre:</strong> {selectedQuiz?.titre || "N/A"}</Typography>
                 <Typography><strong>Date limite:</strong> {selectedQuiz?.dateLimite || "N/A"}</Typography>
                 <Typography><strong>Durée:</strong> {selectedQuiz?.duree || "N/A"} minutes</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
@@ -286,45 +303,50 @@ const handleDownloadDevoir = async (devoirQuizId) => {
               </>
             )}
 
-            {activeStep === 1 && (
-              <>
-                <Typography variant="h6">Questions Existantes</Typography>
-                {(selectedQuiz?.questions && selectedQuiz.questions.length > 0) ? (
-                  selectedQuiz.questions.map((q, i) => (
-                    <Box key={q.id || i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
-                      <Typography>{`Q${i + 1}: ${q.content}`}</Typography>
-                      {q.choices.map((choice, j) => (
-                        <li key={j}>
-                          {choice.content} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
-                        </li>
-                      ))}
-                    </Box>
-                  ))
-                ) : (
-                  (questions.length === 0 ? (
-                    <Typography>Aucune question ajoutée.</Typography>
-                  ) : (
-                    questions.map((q, i) => (
-                      <Box key={i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
-                        <Typography>{`Q${i + 1}: ${q.texte}`}</Typography>
-                        <ul>
-                          {q.options.map((opt, j) => (
-                            <li key={j}>
-                              {opt} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
-                            </li>
-                          ))}
-                        </ul>
-                      </Box>
-                    ))
-                  ))
-                )}
+{activeStep === 1 && (
+  <>
+    <Typography variant="h6">Questions Existantes</Typography>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                  <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleBackStep}>Retour</Button>
-                  <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleNextStep}>Ajouter une question</Button>
-                </Box>
-              </>
-            )}
+  {paginatedQuestions.map((q, i) => {
+  const questionText = typeof q.content === "string"
+    ? q.content
+    : q.content?.content || q.texte || JSON.stringify(q.content);
+
+  return (
+    <Box key={q.id || i} sx={{ border: "1px solid #ccc", p: 1, mb: 1 }}>
+      <Typography>{`Q${startIndex + i + 1}: ${questionText}`}</Typography>
+      <ul>
+        {(q.choices || q.options || []).map((choice, j) => {
+          const choiceText = typeof choice === "string"
+            ? choice
+            : choice.content || JSON.stringify(choice);
+
+          return (
+            <li key={j}>
+              {choiceText} {j === q.correctAnswerIndex && <strong>(✔)</strong>}
+            </li>
+          );
+        })}
+      </ul>
+    </Box>
+  );
+})}
+
+
+    {/* Pagination */}
+    <PaginationComponent
+      count={Math.ceil(questionsList.length / questionsPerPage)}
+      page={page}
+      onChange={handleChangePage}
+    />
+
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+      <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleBackStep}>Retour</Button>
+      <Button sx={{ color: "white", backgroundColor: "#174090" }} onClick={handleNextStep}>Ajouter une question</Button>
+    </Box>
+  </>
+)}
+
 
             {activeStep === 2 && (
               <>

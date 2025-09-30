@@ -73,9 +73,9 @@ const rowsWithData = (users || []).map((user) => ({
   date_naissance: user.date_naissance
     ? new Date(user.date_naissance).toLocaleDateString("fr-FR")
     : "-",
-  niveau: user.niveau || "-",
+  address: user.address || "-",
   situation: user.situation || "-",
-  Photo: user.photo || null,
+  phone: user.phone || null,
   confirm: user.confirm,
   actions: (
     <Box display="flex" gap={1} justifyContent="center">
@@ -123,9 +123,9 @@ const columns = [
   // { id: "nom_prenom_parent", label: t("Parent"), align: "center" },
   { id: "nom_prenom_eleve", label: t("Collaborateur"), align: "left" },
   { id: "date_naissance", label: t("Né(e) le"), align: "left" },
-  { id: "niveau", label: t("Niveau"), align: "center" },
+  { id: "address", label: t("Address"), align: "center" },
 
-  { id: "Photo", label: t("Photo"), align: "center" },
+  { id: "phone", label: t("Phone"), align: "center" },
   { id: "actions", label: t("Actions"), align: "center" }, // <-- clé correspondante
 ];
 

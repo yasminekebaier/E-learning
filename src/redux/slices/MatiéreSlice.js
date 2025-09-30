@@ -44,9 +44,11 @@ const matiereSlice = createSlice({
       state.error = null;
     });
     builder.addCase(DeleteMatieres.fulfilled, (state, action) => {
+      state.matieres = state.matieres.filter(
+        (matiere) => matiere.id !== action.payload
+      );
       state.loading = false;
-      state.matieres = state.matieres.filter((m) => m.id !== action.payload);
-    });
+    })
     builder.addCase(DeleteMatieres.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;

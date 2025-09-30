@@ -81,25 +81,24 @@ export const DeleteRessourcesAction =createAsyncThunk(
 })
 export const UpdateRessourceAction = createAsyncThunk(
   "Ressource/updateRessource",
-  async ({ RessourceId, typeRes, titreRes ,Matiere,niveau}, { rejectWithValue }) => {
+  async ({ RessourceId, titreRes, typeRes, niveau, coursId, file }, { rejectWithValue }) => {
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+      const formData = new FormData();
+      formData.append("titreRes", titreRes);
+      formData.append("typeRes", typeRes);
+      formData.append("niveau", niveau);
+      formData.append("idCours", coursId);
+      if (file) formData.append("file", file);
+
       const response = await axios.put(
         `http://localhost:8085/Ressource/update/${RessourceId}`,
-        { typeRes, titreRes ,Matiere,niveau},
-        config
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
+
       return response.data;
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
-)
+);

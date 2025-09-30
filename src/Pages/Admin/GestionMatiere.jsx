@@ -18,7 +18,7 @@ import { Add, AddCircleOutline, Delete, Edit } from "@mui/icons-material";
 
 import { toast } from "react-toastify";
 import UpdateModal from "../../Components/Global/UpdateModel";
-import { AddMatiéres, DeleteMatieres, fetchMatieres } from "../../redux/actions/MatiéreAction";
+import { AddMatiéres, DeleteMatieres, fetchMatieres, UpdateMatiere } from "../../redux/actions/MatiéreAction";
 import { ButtonComponent } from "../../Components/Global/ButtonComponent";
 import { useTranslation } from "react-i18next";
 import CustomModal from "../../Components/Global/ModelComponent";
@@ -30,7 +30,6 @@ const GestionMatiere = () => {
   const dispatch = useDispatch();
   const { matieres, loading, error } = useSelector((state) => state.matiere);
 const handleCloseAdd= () => setOpenAddModal(false)
- 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -38,9 +37,13 @@ const handleCloseAdd= () => setOpenAddModal(false)
   const [selectedMatiere, setSelectedMatiere] = useState(null);
 const { t } = useTranslation();
 const { users } = useSelector((state) => state.user);
+const [updatedName, setUpdatedName] = useState("");
+const [updatedDescription, setUpdatedDescription] = useState("");
+const [updatedFormateurId, setUpdatedFormateurId] = useState("");
+const [updatedEleveId, setUpdatedEleveId] = useState("");
 
 // on filtre pour ne garder que les formateurs
-const formateurs = users.filter((u) => u.role === "formateur");
+const formateurs = users.filter((u) => u.role === "ENSEIGNANT");
 
 // état pour la sélection
 const [formateurId, setformateurId] = useState("");
@@ -97,21 +100,51 @@ const handleAddMatiere = async () => {
 
 
 
- const handleDeleteMatiere = async (id) => {
-  try {
-    await dispatch(DeleteMatieres(id)).unwrap();
-    toast.success("Matière supprimée !");
-    dispatch(fetchMatieres());
-  } catch (err) {
-    toast.error(err || "Erreur lors de la suppression");
+const handleUpdateMatiere = (e) => {
+  e.preventDefault(); // Empêche le refresh
+  if (!updatedName.trim()) {
+    return toast.error("Veuillez saisir le nom de la matière");
   }
+  dispatch(UpdateMatiere({
+    id: selectedMatiere.id,
+    name: updatedName,
+    description: updatedDescription,
+    formateurId: updatedFormateurId,
+    eleveId: updatedEleveId
+  }))
+    .unwrap()
+    .then(() => {
+      toast.success("Matière mise à jour !");
+      handleCloseModal();
+      dispatch(fetchMatieres());
+    })
+    .catch((err) => toast.error(err || "Erreur lors de la mise à jour"));
+};
+
+const handleDeleteMatiereConfirm = (e) => {
+  e.preventDefault(); // Empêche le refresh
+  if (!MatiéresIdToDelete) return;
+  dispatch(DeleteMatieres(MatiéresIdToDelete))
+    .unwrap()
+    .then(() => {
+      toast.success("Matière supprimée !");
+      setOpenDelete(false);
+      dispatch(fetchMatieres());
+    })
+    .catch((err) => toast.error(err || "Erreur lors de la suppression"));
 };
 
 
-  const handleOpenModal = (matiere) => {
-    setSelectedMatiere(matiere);
-    setOpenModal(true);
-  };
+
+ const handleOpenModal = (matiere) => {
+  setSelectedMatiere(matiere);
+  setUpdatedName(matiere.name);
+  setUpdatedDescription(matiere.description || "");
+  setUpdatedFormateurId(matiere.enseignant?.id || "");
+  setUpdatedEleveId(matiere.eleve?.id || "");
+  setOpenModal(true);
+};
+
 
   const handleCloseModal = () => {
     setSelectedMatiere(null);
@@ -129,12 +162,12 @@ const handleAddMatiere = async () => {
   { id: "name", label: "Nom de la matière", align: "left" },
   { id: "description", label: "Description de la matière", align: "left" },
 {
-  id: "formateur", 
+  id: "enseignant", 
   label: "Collaborateur", 
   align: "left",
   render: (matiere) => 
-    matiere.formateur
-      ? (matiere.formateur.nom_prenom || matiere.formateur.username || matiere.formateur.email)
+    matiere.enseignant
+      ? (matiere.enseignant.nom_prenom || matiere.enseignant.username || matiere.enseignant.email)
       : "—"
 },
 
@@ -158,15 +191,18 @@ const handleAddMatiere = async () => {
 
 ];
 const handleDeleteConfirm = async () => {
+  console.log("Suppression de la matière ID :", MatiéresIdToDelete);
   try {
     await dispatch(DeleteMatieres(MatiéresIdToDelete)).unwrap();
     toast.success("Matière supprimée !");
-    dispatch(fetchMatieres());
     setOpenDelete(false); // ferme le modal
+    // plus besoin de fetchMatieres() si reducer est mis à jour
   } catch (error) {
+    console.error(error);
     toast.error("Erreur lors de la suppression de la matière");
   }
-}
+};
+
 
 
 
@@ -286,20 +322,65 @@ const handleDeleteConfirm = async () => {
 
       {/* Modal pour modification */}
       <UpdateModal
-        open={openModal}
-        handleClose={handleCloseModal}
-        title={`Modifier la matière : ${selectedMatiere?.name || ""}`}
-      >
-        {selectedMatiere && (
-          <Box component="form" sx={{ mt: 2 }}>
-            <TextField
-              fullWidth
-              label="Nom de la matière"
-              defaultValue={selectedMatiere.name}
-            />
-          </Box>
-        )}
-      </UpdateModal>
+  open={openModal}
+  handleClose={handleCloseModal}
+  title={`Modifier la matière : ${selectedMatiere?.name || ""}`}
+>
+  {selectedMatiere && (
+    <Box component="form" sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+      <TextField
+        fullWidth
+        label="Nom de la matière"
+        value={updatedName}
+        onChange={(e) => setUpdatedName(e.target.value)}
+      />
+
+      <TextField
+        fullWidth
+        label="Description"
+        value={updatedDescription}
+        onChange={(e) => setUpdatedDescription(e.target.value)}
+      />
+
+      <FormControl fullWidth>
+        <InputLabel>Formateur</InputLabel>
+        <Select
+          value={updatedFormateurId}
+          onChange={(e) => setUpdatedFormateurId(e.target.value)}
+        >
+          {formateurs.map((ens) => (
+            <MenuItem key={ens.id} value={ens.id}>
+              {ens.nom_prenom || ens.username || ens.email}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth>
+        <InputLabel>Collaborateur</InputLabel>
+        <Select
+          value={updatedEleveId}
+          onChange={(e) => setUpdatedEleveId(e.target.value)}
+        >
+          {users.filter(u => u.role === "ELEVE").map((eleve) => (
+            <MenuItem key={eleve.id} value={eleve.id}>
+              {eleve.nom_prenom || eleve.username || eleve.email}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+  <ButtonComponent
+  type="button" // important
+  text="Mettre à jour"
+  color="#f9a825"
+  onClick={handleUpdateMatiere}
+/>
+
+    </Box>
+  )}
+</UpdateModal>
+
            {/* Modal suppression */}
       <DeleteModel
         open={openDelete}
@@ -311,7 +392,13 @@ const handleDeleteConfirm = async () => {
           {t("Êtes-vous sûr de vouloir supprimer cet matiére ?")}
         </Typography>
         <Box style={{ display: 'flex', justifyContent: 'center', marginTop: "25px" }}>
-          <ButtonComponent onClick={handleDeleteConfirm} text={t("Supprimer")} color="#E1000F" />
+         <ButtonComponent
+  type="button" // important
+  onClick={handleDeleteMatiereConfirm}
+  text={t("Supprimer")}
+  color="#E1000F"
+/>
+
         </Box>
       </DeleteModel>
     </StyledPaper>
